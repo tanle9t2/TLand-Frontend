@@ -1,0 +1,32 @@
+export const caculatePrice = (price, square) => {
+    return formatVietnamMoney(price * square)
+};
+export const caculateSquare = (dimension) => {
+    return dimension[0] * dimension[1];
+};
+export const formatVietnamMoney = (amount) => {
+    if (typeof amount !== 'number' || isNaN(amount)) return '0 đồng';
+
+    if (amount >= 1_000_000_000) {
+        return (amount / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + ' tỷ';
+    } else if (amount >= 1_000_000) {
+        return (amount / 1_000_000).toFixed(2).replace(/\.00$/, '') + ' triệu';
+    } else {
+        return amount.toLocaleString('vi-VN') + ' đồng';
+    }
+}
+export const getTimeDifferenceFromNow = (createdAt) => {
+    const now = new Date();
+    const created = new Date(createdAt);
+
+    const diffMs = now - created;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffDay > 0) return `${diffDay} ngày trước`;
+    if (diffHour > 0) return `${diffHour} giờ trước`;
+    if (diffMin > 0) return `${diffMin} phút trước`;
+    return `${diffSec} giây trước`;
+}

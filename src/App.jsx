@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import AppLayout from "./ui/Applayout"
 import HomePage from "./pages/HomePage"
+import PostDetailPage from "./pages/PostDetailPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,7 @@ function App() {
             }
           >
             <Route index element={<HomePage />} />
+            <Route path="post/:postId" element={<PostDetailPage />} />
 
           </Route>
 

@@ -46,10 +46,10 @@ function HomePage() {
                 <h1 className="font-bold pl-3 py-5 text-3xl">Cho thuê bất động sản</h1>
                 <AssetForSell />
             </Section>
-            <Section>
+            {/* <Section>
                 <h1 className="font-bold pl-3 py-5 text-3xl">Dự án được quan tâm</h1>
                 <ProjectList />
-            </Section>
+            </Section> */}
 
         </div>
     )

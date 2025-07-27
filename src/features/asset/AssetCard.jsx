@@ -6,45 +6,69 @@ import Typography from '@mui/material/Typography';
 import Button from '../../ui/Button';
 
 import { CiHeart } from "react-icons/ci";
+import { caculatePrice, caculateSquare, formatVietnamMoney, getTimeDifferenceFromNow } from '../../utils/helper';
+import { useNavigate } from 'react-router-dom';
 function AssetCard({ asset }) {
-    const { title, properties, price, location, createdAt, image } = asset
+    const { id, title, properties, createdAt, assetDetail } = asset
+    const navigate = useNavigate()
     return (
-        <Card className='mx-3 first:ml-0 last:mr-0 cursor-pointer hover:scale-105 transform transition duration-500' sx={{ maxWidth: 345 }}>
+        <Card onClick={() => navigate(`/post/${id}`)} className='mx-3 first:ml-0 last:mr-0 cursor-pointer hover:scale-105 transform transition duration-500' sx={{ maxWidth: 250 }}>
             <CardMedia
                 component="img"
-                alt="green iguana"
-                height="140"
-                image={image}
+                alt={title}
+                sx={{ height: 169, width: 250, objectFit: "fit" }}
+                image={assetDetail?.contents[0].url}
             />
             <CardContent>
-                <Typography className='line-clamp-2 ' sx={{ fontSize: '16px', fontWeight: 'bold' }} gutterBottom component="div">
+                <Typography
+                    className="line-clamp-2 overflow-hidden"
+                    sx={{
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        lineHeight: '1.5rem', // 24px
+                        height: '3rem',       // 2 lines × 1.5rem = 3rem (48px)
+                    }}
+                    gutterBottom
+                    component="div"
+                >
                     {title}
                 </Typography>
+
                 <Typography variant="body1" sx={{ fontSize: '15px' }}>
                     {properties}
                 </Typography>
                 <Typography className='flex' variant="body1" sx={{ color: 'text.secondary' }}>
-                    <p className='font-bold  text-2xl'>
+                    <span className='font-bold  text-2xl'>
                         <span className='mr-2 text-red-500'>
-                            {price}
+                            {caculatePrice(assetDetail.pricePerSquare, caculateSquare(assetDetail.dimension))}
                         </span>
                         <span className='mx-2'>
-                            11tr/m2
+                            {formatVietnamMoney(assetDetail.pricePerSquare)}/m2
                         </span>
                         <span className='mx-2'>
-                            175m2
+                            {caculateSquare(assetDetail.dimension)}m2
                         </span>
-                    </p>
+                    </span>
                 </Typography>
-                <Typography className='flex' variant="body1" sx={{ marginTop: "10px", color: 'text.secondary' }}>
+                <div className='flex items-start justify-between mt-2'>
                     <div>
-                        <p className='font-bold text-2xl'>{location}</p>
-                        <p className='font-bold text-2xl'>{createdAt}</p>
+                        <Typography variant="body1" sx={{
+                            fontWeight: 'bold',
+                            lineHeight: '1.5rem',
+                            height: '3rem',
+                        }} className='font-bold text-2xl'>
+                            {`${assetDetail.address}, ${assetDetail.ward}, ${assetDetail.province}`}
+                        </Typography>
+                        <Typography variant="body2" className='font-bold text-2xl'>
+                            {getTimeDifferenceFromNow(createdAt)}
+                        </Typography>
                     </div>
-                    <CardActions className='ml-auto'>
-                        <Button variant='secondary'><CiHeart size={19} fill='black' /></Button>
+                    <CardActions>
+                        <Button variant='secondary'>
+                            <CiHeart size={19} fill='black' />
+                        </Button>
                     </CardActions>
-                </Typography>
+                </div>
             </CardContent>
         </Card>
     );
