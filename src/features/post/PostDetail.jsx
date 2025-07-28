@@ -26,7 +26,7 @@ const properties = {
 }
 
 function PostDetail({ post }) {
-    const { id, createdAt, title, assetDetail } = post;
+    const { createdAt, title, assetDetail } = post;
     console.log(assetDetail.description.split("\n"))
     return (
         <Section>

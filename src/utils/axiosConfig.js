@@ -21,6 +21,9 @@ import { BASE_URL } from "./Url";
 export const API = axios.create({
   baseURL: BASE_URL,
 });
+export const ADDRESS_API = axios.create({
+  baseURL: "https://tinhthanhpho.com/api/v1/"
+})
 
 // export const AUTH_REQUEST = axios.create({
 //   baseURL: BASE_URL,
