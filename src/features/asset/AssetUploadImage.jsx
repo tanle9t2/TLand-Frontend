@@ -2,9 +2,9 @@ import { useRef, useState } from "react";
 import { IoCameraOutline } from "react-icons/io5";
 import Button from "../../ui/Button";
 import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
-import useUploadMedia from "../asset/useUploadMedia";
+import useUploadMedia from "./useUploadMedia";
 
-function PostCreatedUploadImage({ assetId, setAssetId }) {
+function AssetUploadImage({ assetId, setAssetId }) {
     const { isPending, uploadImage } = useUploadMedia()
     const fileInputRef = useRef();
     const [images, setImages] = useState([]);
@@ -49,7 +49,7 @@ function PostCreatedUploadImage({ assetId, setAssetId }) {
             <input
                 ref={fileInputRef}
                 type="file"
-                accept=""
+                accept="image/*"
                 onChange={handleImageUpload}
                 className="hidden"
             />
@@ -90,4 +90,4 @@ function PostCreatedUploadImage({ assetId, setAssetId }) {
     )
 }
 
-export default PostCreatedUploadImage
+export default AssetUploadImage

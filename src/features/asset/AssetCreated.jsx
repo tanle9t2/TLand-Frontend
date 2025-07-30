@@ -1,14 +1,16 @@
-import { useEffect } from "react";
-import PostCreatedUploadImage from "./PostCreatedUploadImage"
-import PostCreatedUploadVideo from "./PostCreatedUploadVideo"
-import PostCreatedForm from "./PostCreatedForm";
+import { useEffect } from "react"
+import PostCreatedForm from "./AssetCreatedForm";
 import { useForm } from "react-hook-form";
 import Button from "../../ui/Button";
-import useCreateAsset from "../asset/useCreateAsset";
+import useCreateAsset from "./useCreateAsset";
 import toast from "react-hot-toast";
+import FullPageSpinner from "../../ui/FullPageSpinner";
+import AssetUploadImage from "./AssetUploadImage";
+import AssetUploadVideo from "./AssetUploadVideo";
+import { useNavigate } from "react-router-dom";
 
 
-function PostCreated() {
+function AssetCreated() {
     const {
         register,
         handleSubmit,
@@ -18,15 +20,16 @@ function PostCreated() {
         clearErrors,
         formState: { errors },
     } = useForm();
+    const navigate = useNavigate()
     const { isPending, createAsset } = useCreateAsset()
-
+    if (isPending)
+        return <FullPageSpinner />
     const onSubmit = (data) => {
         const {
             assetId,
             address,
             width,
             length,
-            type,
             category,
             landArea,
             usableArea,
@@ -45,7 +48,6 @@ function PostCreated() {
             id: assetId,
             province: address.province,
             category: category.id,
-            type,
             ward: address.ward,
             address: address.detail,
             dimension: [width, length],
@@ -60,9 +62,12 @@ function PostCreated() {
             usableArea,
             properties: cleanedProperties
         };
-        console.log(request)
+
         createAsset({ request }, {
-            onSuccess: () => toast.success("Successfully creat asset"),
+            onSuccess: () => {
+                navigate(`/asset/${assetId}`)
+                toast.success("Successfully creat asset")
+            },
             onError: (error) => toast.error(error.message)
         })
 
@@ -93,10 +98,10 @@ function PostCreated() {
             <div >
                 <h1 className="text-3xl font-bold mb-5" > Hình ảnh và Video sản phẩm</h1>
                 <div className="w-full mb-5">
-                    <PostCreatedUploadImage assetId={watch("assetId")} setAssetId={setAssetId} />
+                    <AssetUploadImage assetId={watch("assetId")} setAssetId={setAssetId} />
                 </div>
                 <div>
-                    <PostCreatedUploadVideo />
+                    <AssetUploadVideo />
                 </div>
             </div>
             <PostCreatedForm
@@ -118,4 +123,4 @@ function PostCreated() {
     )
 }
 
-export default PostCreated
+export default AssetCreated

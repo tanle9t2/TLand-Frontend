@@ -8,8 +8,8 @@ import Button from '../../ui/Button';
 import { CiHeart } from "react-icons/ci";
 import { caculatePrice, caculateSquare, formatVietnamMoney, getTimeDifferenceFromNow } from '../../utils/helper';
 import { useNavigate } from 'react-router-dom';
-function AssetCard({ asset }) {
-    const { id, title, properties, createdAt, assetDetail } = asset
+function PostCard({ post }) {
+    const { id, title, properties, createdAt, assetDetail } = post
     const navigate = useNavigate()
     return (
         <Card onClick={() => navigate(`/post/${id}`)} className='mx-3 first:ml-0 last:mr-0 cursor-pointer hover:scale-105 transform transition duration-500' sx={{ maxWidth: 250 }}>
@@ -74,4 +74,4 @@ function AssetCard({ asset }) {
     );
 }
 
-export default AssetCard
+export default PostCard

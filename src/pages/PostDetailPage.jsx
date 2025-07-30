@@ -1,4 +1,4 @@
-import AssetForRent from "../features/asset/AssetForRent";
+import AssetForRent from "../features/post/PostForRent";
 import Post from "../features/post/Post";
 import Comment from "../ui/Comment";
 import Contact from "../ui/Contact";

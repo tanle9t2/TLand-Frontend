@@ -1,7 +1,7 @@
 import ErrorMessage from "../../ui/ErrorMessage";
 import { DIRECT_ASSET, HOUSE_TYPE, INTERIOR_STATUS, LEGAL_INFO, PROPERTY_FEATURES } from "../../utils/constant";
 
-function PostCreateFormDetail({ register, errors }) {
+function AssetCreateFormDetail({ register, errors }) {
 
     return (
         <>
@@ -208,4 +208,4 @@ function PostCreateFormDetail({ register, errors }) {
     )
 }
 
-export default PostCreateFormDetail
+export default AssetCreateFormDetail

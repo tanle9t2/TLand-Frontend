@@ -4,13 +4,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import ModalSelectAddress from "../../ui/ModalSelectAddress";
-import PostCreateFormDetail from "./PostCreateFormDetail";
+import PostCreateFormDetail from "./AssetCreateFormDetail";
 import Button from "../../ui/Button";
 import { Controller } from "react-hook-form";
 import ErrorMessage from "../../ui/ErrorMessage";
 import ModalSelectCategory from "../../ui/ModalSelectCategory";
 
-function PostCreatedForm({ register, errors, handleOnChangeAddress, watch, setCategory }) {
+function AssetCreatedForm({ register, errors, handleOnChangeAddress, watch, setCategory }) {
 
     return (
         <div className="p-4">
@@ -42,4 +42,4 @@ function PostCreatedForm({ register, errors, handleOnChangeAddress, watch, setCa
     )
 }
 
-export default PostCreatedForm
+export default AssetCreatedForm

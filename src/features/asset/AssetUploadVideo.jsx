@@ -5,7 +5,7 @@ import Button from "../../ui/Button";
 import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
 import { IoIosArrowForward } from "react-icons/io";
 
-function PostCreatedUpload() {
+function AssetUploadVideo() {
     const [videoThumbnail, setVideoThumbnail] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
 
@@ -69,4 +69,4 @@ function PostCreatedUpload() {
     )
 }
 
-export default PostCreatedUpload
+export default AssetUploadVideo

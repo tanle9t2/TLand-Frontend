@@ -27,7 +27,6 @@ const properties = {
 
 function PostDetail({ post }) {
     const { createdAt, title, assetDetail } = post;
-    console.log(assetDetail.description.split("\n"))
     return (
         <Section>
             <div className="p-5 text-2xl">
