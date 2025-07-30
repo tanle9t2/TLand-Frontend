@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import MyCarousel from "../../ui/MyCarousel";
+import MyCarousel from "./MyCarousel";
 
-function PostThumb({ images }) {
+function Thumbnail({ images }) {
     const [index, setIndex] = useState(0)
     function handleOnMouseEnter(e) {
         setIndex(parseInt(e.target.id))
@@ -47,4 +47,4 @@ function PostThumb({ images }) {
     )
 }
 
-export default PostThumb
+export default Thumbnail

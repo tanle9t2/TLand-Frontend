@@ -21,7 +21,7 @@ function PostCreatedUpload() {
         video.src = videoURL;
         video.crossOrigin = "anonymous";
         video.muted = true;
-        video.currentTime = 1; // capture at 1 second
+        video.currentTime = 1;
 
         video.addEventListener("loadeddata", () => {
             const canvas = document.createElement("canvas");

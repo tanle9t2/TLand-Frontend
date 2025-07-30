@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage"
 
 import PostDetailPage from "./pages/PostDetailPage"
 import PostCreatedHome from "./pages/PostCreatedPage"
+import AssetPage from "./pages/AssetPage"
 
 
 const queryClient = new QueryClient({
@@ -29,6 +30,7 @@ function App() {
             <Route index element={<HomePage />} />
 
             <Route path="post/:postId" element={<PostDetailPage />} />
+            <Route path="asset/:assetId" element={<AssetPage />} />
             <Route path="create" element={<PostCreatedHome />} />
 
           </Route >

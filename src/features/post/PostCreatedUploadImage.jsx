@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { IoCameraOutline } from "react-icons/io5";
 import Button from "../../ui/Button";
 import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
+import useUploadMedia from "../asset/useUploadMedia";
 
-function PostCreatedUploadImage() {
+function PostCreatedUploadImage({ assetId, setAssetId }) {
+    const { isPending, uploadImage } = useUploadMedia()
     const fileInputRef = useRef();
     const [images, setImages] = useState([]);
     const handleButtonClick = (e) => {
@@ -11,24 +13,21 @@ function PostCreatedUploadImage() {
         fileInputRef.current.click();
     };
     const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = files.map((file) => ({
-            src: URL.createObjectURL(file),
-            file,
-        }));
-        if (images.length + newImages.length <= MAX_IMAGE_UPLOAD) {
-            setImages([...images, ...newImages]);
+        const file = e.target.files[0];
 
-        } else {
-            alert('Maximum 9 images allowed!');
+        if (images.length + 1 <= MAX_IMAGE_UPLOAD) {
+            uploadImage({ assetId, file }, {
+                onSuccess: ({ data }) => {
+                    setAssetId(data.assetId)
+                    setImages([...images, data.url]);
+                }
+            })
         }
 
     };
     function handleOnRemoveImage(index) {
         setImages(images => images.filter((item, idx) => index !== idx))
     }
-
-
 
     if (images.length === 0)
         return <label
@@ -37,7 +36,6 @@ function PostCreatedUploadImage() {
             <input
                 type="file"
                 accept="image/*"
-                multiple
                 onChange={handleImageUpload}
                 className="hidden"
             />
@@ -52,7 +50,6 @@ function PostCreatedUploadImage() {
                 ref={fileInputRef}
                 type="file"
                 accept=""
-                multiple
                 onChange={handleImageUpload}
                 className="hidden"
             />
@@ -68,7 +65,7 @@ function PostCreatedUploadImage() {
                             </div>
                         )}
                         <img
-                            src={img.src}
+                            src={img}
                             alt={`Product ${index}`}
                             className="w-[100px] h-[100px] object-cover"
                         />

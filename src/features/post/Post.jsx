@@ -1,7 +1,7 @@
 import SyncLoader from "react-spinners/SyncLoader";
 import PostDetail from "./PostDetail"
-import PostThumb from "./PostThumb"
 import useGetPost from "./useGetPost"
+import Thumbnail from "../../ui/Thumbnail";
 
 function Post() {
     const { isLoading, post } = useGetPost();
@@ -11,7 +11,7 @@ function Post() {
 
     return (
         <div className="overflow-hidden">
-            <PostThumb images={assetDetail.contents} />
+            <Thumbnail images={assetDetail.contents} />
             <PostDetail post={post} />
         </div>
     )

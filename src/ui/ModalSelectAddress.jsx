@@ -7,6 +7,8 @@ import Button from "./Button";
 import useGetProvince from "../features/asset/useGetProvince";
 import SyncLoader from "react-spinners/SyncLoader";
 import useGetWards from "../features/asset/useGetWards";
+import { useForm } from "react-hook-form";
+import ErrorMessage from "./ErrorMessage";
 
 const style = {
     position: 'absolute',
@@ -21,49 +23,48 @@ const style = {
     overflow: "hidden",
     minHeight: "330px"
 };
-function ModalSelectAddress() {
+function ModalSelectAddress({ address, setAddress }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [provinceCode, setProvinceCode] = useState(null)
-    const [address, setAddress] = useState({
-        "province": null,
-        "ward": null,
-        "addresDetail": "",
+    const {
+        register,
+        getValues,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            province: address?.province || "",
+            ward: address?.ward || "",
+            detail: address?.addresDetail || "",
+        },
     });
     const { isLoading, provinces } = useGetProvince()
     const { isLoading: isLoadingWard, wards } = useGetWards(provinceCode)
 
+    function onSubmit() {
+        const address = {
+            province: getValues().province,
+            ward: getValues().ward,
+            detail: getValues().detail
+        }
+        setAddress(address)
+        setOpen(false)
+    }
+
     function handleUpdateProvince(e) {
         const value = e.target.value;
-        const province = provinces.find(p => p.name === value);
-        setAddress(prev => ({
-            ...prev,
-            ["province"]: value
-        }));
+        const province = provinces.find(p => `${p.type} ${p.name}` === value);
         setProvinceCode(province.code)
-    };
-    function handleUpdateWard(e) {
-        const value = e.target.value
-        setAddress(prev => ({
-            ...prev,
-            ["ward"]: value
-        }));
-    };
-    function handleUpdateDetail(e) {
-        const value = e.target.value
-        setAddress(prev => ({
-            ...prev,
-            ["addresDetail"]: value
-        }));
     };
 
 
     return (
         <div>
             <div className='relative'>
-                <div onClick={handleOpen} className='text-2xl px-5 py-5 rounded-md border-2 w-full border-gray-300' >
-                    <p >Địa chỉ</p>
+                <div onClick={handleOpen} className='text-2xl px-5 py-5 rounded-md w-full border' >
+                    <p >{address ? `${address.detail}, ${address.ward}, ${address.province}` : "Địa chỉ"}</p>
                 </div>
                 <span className='absolute top-[30%]  right-3 text-5xl'><MdArrowDropDown /></span>
             </div>
@@ -81,60 +82,71 @@ function ModalSelectAddress() {
                     </div>
                     <div className="flex flex-col justify-center items-center">
                         {isLoading || isLoadingWard ? <SyncLoader /> :
-                            <form className="px-8 py-5 w-full">
+                            <form onSubmit={handleSubmit(onSubmit)} className="px-8 py-5 w-full">
                                 <div className="my-5">
                                     <label htmlFor="province" className="block mb-2 text-2xl font-bold">
                                         Chọn tỉnh, thành phố
                                     </label>
                                     <select
+                                        onChange={handleUpdateProvince}
                                         id="province"
-                                        name="province"
-                                        value={address.province}
-                                        onChange={(e) => handleUpdateProvince(e)}
+                                        {...register("province", {
+                                            required: "Vui lòng chọn tỉnh",
+                                            onChange: (e) => handleUpdateProvince(e),
+                                        })}
                                         className="w-full p-6 border border-gray-300 rounded text-2xl"
                                     >
                                         <option value="">Chọn tỉnh, thành phố</option>
-                                        {provinces.map(item => (
-                                            <option key={item.code} value={item.name}>
-                                                {item.name}
+                                        {provinces.map((item) => (
+                                            <option key={item.code} value={`${item.type} ${item.name}`}>
+                                                {item.type} {item.name}
                                             </option>
                                         ))}
-
                                     </select>
+                                    {errors.province && (
+                                        <ErrorMessage message={errors.province.message} />
+                                    )}
                                 </div>
+
                                 <div className="my-5">
                                     <label htmlFor="ward" className="block mb-2 text-2xl font-bold">
                                         Chọn phường, xã
                                     </label>
                                     <select
                                         id="ward"
-                                        name="ward"
-                                        value={address.ward}
-                                        onChange={(e) => handleUpdateWard(e)}
+                                        {...register("ward", { required: "Vui lòng chọn phường/xã" })}
                                         className="w-full p-6 border border-gray-300 rounded text-2xl"
                                     >
                                         <option value="">Chọn phường, xã</option>
-                                        {wards?.map(item => <option value={`${item.type} ${item.name}`}>{`${item.type} ${item.name}`}</option>)}
+                                        {wards?.map((item, index) => (
+                                            <option key={index} value={`${item.type} ${item.name}`}>
+                                                {`${item.type} ${item.name}`}
+                                            </option>
+                                        ))}
                                     </select>
+                                    {errors.ward && (
+                                        <ErrorMessage message={errors.ward.message} />
+                                    )}
                                 </div>
+
                                 <div className="my-5">
                                     <label htmlFor="detail" className="block mb-2 text-2xl font-bold">
                                         Số nhà, tên đường
                                     </label>
                                     <input
                                         id="detail"
-                                        name="detail"
-                                        value={address.addresDetail}
-                                        onChange={(e) => handleUpdateDetail(e)}
+                                        {...register("detail", {
+                                            required: "Vui lòng nhập số nhà và tên đường",
+                                        })}
                                         className="w-full p-6 border border-gray-300 rounded text-2xl"
                                         placeholder="Số nhà, tên đường"
                                     />
+                                    {errors.detail && (
+                                        <ErrorMessage message={errors.detail.message} />
+                                    )}
                                 </div>
-                                <Button
-                                    type="submit"
-                                    variant="primary"
-                                    className="w-full"
-                                >
+
+                                <Button type="submit" variant="primary" className="w-full">
                                     Xong
                                 </Button>
                             </form>

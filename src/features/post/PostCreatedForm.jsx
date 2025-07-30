@@ -1,75 +1,44 @@
-import { useState } from "react"
-import ModalCreate from "../../ui/ModalCreate"
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import ModalSelectAddress from "../../ui/ModalSelectAddress";
+import PostCreateFormDetail from "./PostCreateFormDetail";
+import Button from "../../ui/Button";
+import { Controller } from "react-hook-form";
+import ErrorMessage from "../../ui/ErrorMessage";
+import ModalSelectCategory from "../../ui/ModalSelectCategory";
 
-function PostCreatedForm() {
-    const [catgory, setCategory] = useState(null)
+function PostCreatedForm({ register, errors, handleOnChangeAddress, watch, setCategory }) {
+
     return (
         <div className="p-4">
-            <ModalCreate category={catgory} setCategory={setCategory} />
-
-            {/* Check type */}
-            <div className="my-5 ">
-                <FormControl>
-                    <FormLabel sx={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        color: "black"
-                    }}
-                        id="demo-row-radio-buttons-group-label">Loại hình</FormLabel>
-                    <RadioGroup
-                        row
-
-                        name="row-radio-buttons-group"
-                        sx={{
-                            fontSize: "20px"
-                        }}
-
-                    >
-                        <FormControlLabel
-                            value="RENT"
-                            control={
-                                <Radio
-                                    sx={{
-                                        color: '#e11d48',
-                                        '&.Mui-checked': {
-                                            color: '#e11d48',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Cho thuê"
-                            sx={{ '& .MuiFormControlLabel-label': { fontSize: '20px' } }}
-                        />
-                        <FormControlLabel
-                            value="SALE"
-                            control={
-                                <Radio
-                                    sx={{
-                                        color: '#e11d48',
-                                        '&.Mui-checked': {
-                                            color: '#e11d48',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Bán"
-                            sx={{ '& .MuiFormControlLabel-label': { fontSize: '20px' } }}
-                        />
-
-                    </RadioGroup>
-                </FormControl>
+            {/* Category */}
+            <div>
+                <ModalSelectCategory category={watch("category")} setCategory={setCategory} />
+                {errors.category && (
+                    <ErrorMessage message={errors.category.message} />
+                )}
             </div>
+
+            {/*Address*/}
             <div className="my-5">
-                <h1 className="text-3xl font-bold">Địa chỉ BĐS</h1>
-                <ModalSelectAddress />
+                <h1 className="text-3xl font-bold mb-2">Địa chỉ BĐS</h1>
+                <ModalSelectAddress address={watch("address")} setAddress={handleOnChangeAddress} />
+                {errors.address && (
+                    <ErrorMessage message={errors.address.message} />
+                )}
+            </div>
+
+            {/*form detail*/}
+            <div>
+                <PostCreateFormDetail register={register} errors={errors} />
+
+
             </div>
         </div>
+
     )
 }
 

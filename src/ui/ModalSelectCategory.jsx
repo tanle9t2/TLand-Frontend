@@ -23,7 +23,7 @@ const style = {
     overflow: "hidden",
     minHeight: "330px"
 };
-function ModalCreate({ category, setCategory }) {
+function ModalSelectCategory({ category, setCategory }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -36,7 +36,7 @@ function ModalCreate({ category, setCategory }) {
     return (
         <div>
             <div className='relative'>
-                <div onClick={handleOpen} className='text-2xl px-5 py-5 rounded-md border-2 w-full border-gray-300' >
+                <div onClick={handleOpen} className='text-2xl px-5 py-5 rounded-md border w-ful' >
                     <p className='w-full h-9 mt-3 truncate'>{category?.name}</p>
                 </div>
                 <p className='absolute w-fit top-2 left-5 text-xl text-gray-500'>Danh mục bất động sản</p>
@@ -72,4 +72,4 @@ function ModalCreate({ category, setCategory }) {
     );
 }
 
-export default ModalCreate
+export default ModalSelectCategory
