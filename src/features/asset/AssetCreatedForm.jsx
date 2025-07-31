@@ -34,8 +34,6 @@ function AssetCreatedForm({ register, errors, handleOnChangeAddress, watch, setC
             {/*form detail*/}
             <div>
                 <PostCreateFormDetail register={register} errors={errors} />
-
-
             </div>
         </div>
 

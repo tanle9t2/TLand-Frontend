@@ -7,7 +7,7 @@ function AppLayout() {
     return (
         <div className="min-h-screen  bg-white">
             <Navbar />
-            <main className="bg-gray-50 px-[250px]">
+            <main className="py-5 bg-gray-50 px-[250px]">
                 <Outlet />
             </main>
             <Footer />

@@ -30,3 +30,10 @@ export const getTimeDifferenceFromNow = (createdAt) => {
     if (diffMin > 0) return `${diffMin} phút trước`;
     return `${diffSec} giây trước`;
 }
+export const convertDate = (date) => {
+    const iso = new Date(date);
+
+    // Format: "MMM dd yyyy"
+    const options = { month: 'short', day: '2-digit', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(iso);
+}

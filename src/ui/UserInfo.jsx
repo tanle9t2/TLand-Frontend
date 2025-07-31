@@ -1,12 +1,71 @@
+import { useState } from "react";
+import { RiVipDiamondLine } from "react-icons/ri";
+import { MdHistory } from "react-icons/md";
+import { BiBuildingHouse } from "react-icons/bi";
+import { CiSettings } from "react-icons/ci";
+import { FaRegHeart } from "react-icons/fa";
 function UserInfo() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
-        <div className="flex items-center space-x-3">
+        <div
+            onMouseEnter={() => setIsMenuOpen(true)}
+            onMouseLeave={() => {
+                setIsMenuOpen(false);
+            }}
+            className="flex relative items-center">
             <img
                 src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full object-cover"
             />
-            <span className="ml-3 text-xl font-medium text-gray-800">John Doe</span>
+            <span className="ml-3 text-xl font-medium text-gray-800">Lê Tân</span>
+            {isMenuOpen && <div className="absolute z-20 top-[30px] w-120 right-0 mx-auto bg-white shadow-lg rounded-lg">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 mb-4">
+                    <div className="flex">
+                        <img
+                            src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
+                            alt="User Avatar"
+                            className="w-[48px] h-[48px] rounded-[50%] mr-2"
+                        />
+                        <div>
+                            <h2 className="text-xl font-semibold">Lê Tân</h2>
+                            <p className="text-yellow-500 text-xl">0.0 ★★★★ (Chưa có đánh giá)</p>
+                            <p className="text-gray-500 text-xl">0 Người theo dõi | 0 Đang theo dõi</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className="pt-2">
+                    <div className="p-4 bg-gray-200">
+                        <h3 className=" text-gray-700 font-bold">Tiện ích</h3>
+                    </div>
+                    <ul className="space-y-2">
+                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><BiBuildingHouse /></span> Xem tài sản
+                        </li>
+                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><CiSettings /></span> Chỉnh sửa tài khoản
+                        </li>
+                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><FaRegHeart /></span> Tin đăng đã lưu
+                        </li>
+                    </ul>
+
+                    <div className="p-4 bg-gray-200">
+                        <h3 className=" text-gray-700 font-bold">Dịch vụ khác</h3>
+                    </div>
+                    <ul className="space-y-2">
+                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><RiVipDiamondLine /></span> Gói PRO Mới
+                        </li>
+                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><MdHistory /></span> Lịch sử giao dịch
+                        </li>
+                    </ul>
+                </div>
+            </div>}
         </div>
     )
 }

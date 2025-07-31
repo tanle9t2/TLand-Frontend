@@ -33,7 +33,6 @@ function HomePage() {
                         data.map((item, index) => <CardCategory key={index} title={item.title} icon={item.icon} content={item.content} />)
                     }
                 </div>
-
             </Section>
             <Section>
                 <h1 className="font-bold pl-3 py-5 text-3xl">Mua bán bất động sản</h1>

@@ -22,6 +22,13 @@ function AssetCreated() {
     } = useForm();
     const navigate = useNavigate()
     const { isPending, createAsset } = useCreateAsset()
+
+    useEffect(() => {
+        register("category", { required: "Vui lòng chọn danh mục" });
+        register("assetId");
+        register("address", { required: "Vui lòng cung cấp địa chỉ" });
+    }, [register]);
+
     if (isPending)
         return <FullPageSpinner />
     const onSubmit = (data) => {
@@ -86,11 +93,6 @@ function AssetCreated() {
         setValue("address", address);
         clearErrors("address");
     }
-    useEffect(() => {
-        register("category", { required: "Vui lòng chọn danh mục" });
-        register("assetId");
-        register("address", { required: "Vui lòng cung cấp địa chỉ" });
-    }, [register]);
 
 
     return (

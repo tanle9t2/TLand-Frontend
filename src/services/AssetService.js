@@ -8,6 +8,12 @@ export async function getAsset(assetId) {
     const res = await API.get(`/asset-service/api/v1/asset/${assetId}`)
     return res.data;
 }
+export async function getAssets({ page, size }) {
+    const res = await API.get(`/asset-service/api/v1/assets`, {
+        params: { page, size }
+    })
+    return res.data;
+}
 
 
 export async function uploadAssetImage(assetId, file) {

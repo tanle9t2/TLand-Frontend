@@ -7,6 +7,10 @@ import HomePage from "./pages/HomePage"
 import PostDetailPage from "./pages/PostDetailPage"
 import AssetPage from "./pages/AssetPage"
 import AssetCreatedPage from "./pages/AssetCreatedPage"
+import AssetList from "./features/asset/AssetList"
+import PostCreated from "./features/post/PostCreated"
+import FormCreateLayout from "./ui/FormCreateLayout"
+import PostCreateWithAsset from "./features/post/PostCreateWithAsset"
 
 
 const queryClient = new QueryClient({
@@ -31,8 +35,14 @@ function App() {
 
             <Route path="post/:postId" element={<PostDetailPage />} />
             <Route path="asset/:assetId" element={<AssetPage />} />
-            <Route path="create" element={<AssetCreatedPage />} />
+            <Route path="asset" element={<AssetList />} />
+            <Route path="create-asset" element={<AssetCreatedPage />} />
+            <Route path="create-post" element={<PostCreated />} />
 
+            <Route path="create" element={<FormCreateLayout />} >
+              <Route path="1" element={<PostCreateWithAsset />} />
+              <Route path="2" />
+            </Route>
           </Route >
 
         </Routes >

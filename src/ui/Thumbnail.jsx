@@ -9,9 +9,7 @@ function Thumbnail({ images }) {
         setIndex(parseInt(e.target.id))
     }
     function handleOnClickPrev() {
-        setIndex(index => (index - 1) % images.length)
-
-
+        setIndex(index => (index - 1) < 0 ? images.length - 1 : index - 1)
     }
     function handleOnClickNext() {
         setIndex(index => (index + 1) % images.length)
