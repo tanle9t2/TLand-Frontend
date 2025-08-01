@@ -4,6 +4,7 @@ import { MdHistory } from "react-icons/md";
 import { BiBuildingHouse } from "react-icons/bi";
 import { CiSettings } from "react-icons/ci";
 import { FaRegHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 function UserInfo() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
@@ -12,14 +13,16 @@ function UserInfo() {
             onMouseLeave={() => {
                 setIsMenuOpen(false);
             }}
-            className="flex relative items-center">
+            className="flex items-center relative">
             <img
                 src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full object-cover"
             />
             <span className="ml-3 text-xl font-medium text-gray-800">Lê Tân</span>
-            {isMenuOpen && <div className="absolute z-20 top-[30px] w-120 right-0 mx-auto bg-white shadow-lg rounded-lg">
+            {isMenuOpen && <div className="absolute z-20 top-[30px] w-120 right-0 mx-auto bg-white shadow-lg rounded-lg
+                    before:content-[''] before:absolute before:-top-3 before:right-4 before:w-[84px]
+                    before:border-12 before:border-transparent before:border-b-white before:z-[-1]">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 mb-4">
                     <div className="flex">
@@ -42,9 +45,11 @@ function UserInfo() {
                         <h3 className=" text-gray-700 font-bold">Tiện ích</h3>
                     </div>
                     <ul className="space-y-2">
-                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
-                            <span className="mr-2"><BiBuildingHouse /></span> Xem tài sản
-                        </li>
+                        <Link to="/asset">
+                            <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                                <span className="mr-2"><BiBuildingHouse /></span> Xem tài sản
+                            </li>
+                        </Link>
                         <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
                             <span className="mr-2"><CiSettings /></span> Chỉnh sửa tài khoản
                         </li>

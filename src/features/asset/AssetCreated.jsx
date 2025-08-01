@@ -7,10 +7,14 @@ import toast from "react-hot-toast";
 import FullPageSpinner from "../../ui/FullPageSpinner";
 import AssetUploadImage from "./AssetUploadImage";
 import AssetUploadVideo from "./AssetUploadVideo";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 function AssetCreated() {
+    const { state } = useLocation();
+    const draft = state?.draft || {};
+    const { properties = {}, address, province, contents, ward, ...restDraft } = draft;
+
     const {
         register,
         handleSubmit,
@@ -19,7 +23,17 @@ function AssetCreated() {
         watch,
         clearErrors,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            ...restDraft,
+            ...properties, // <--- flatten all properties into top-level
+            address: {
+                detail: address,
+                province,
+                ward,
+            },
+        },
+    });
     const navigate = useNavigate()
     const { isPending, createAsset } = useCreateAsset()
 
@@ -31,6 +45,10 @@ function AssetCreated() {
 
     if (isPending)
         return <FullPageSpinner />
+
+    const images = contents?.filter(media => media.contentType === "image").map(media => media.url);
+    const videos = contents?.filter(media => media.contentType === "video").map(media => media.url);
+
     const onSubmit = (data) => {
         const {
             assetId,
@@ -100,10 +118,10 @@ function AssetCreated() {
             <div >
                 <h1 className="text-3xl font-bold mb-5" > Hình ảnh và Video sản phẩm</h1>
                 <div className="w-full mb-5">
-                    <AssetUploadImage assetId={watch("assetId")} setAssetId={setAssetId} />
+                    <AssetUploadImage initImages={images} assetId={watch("assetId")} setAssetId={setAssetId} />
                 </div>
                 <div>
-                    <AssetUploadVideo />
+                    <AssetUploadVideo initVideos={videos} />
                 </div>
             </div>
             <PostCreatedForm

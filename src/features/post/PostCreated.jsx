@@ -4,25 +4,26 @@ import { Box, Modal } from "@mui/material";
 
 import MiniSpinner from "../../ui/MiniSpinner";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import useGetAssetInfinite from "../asset/useGetAssetInfinite";
+import PostCreateForm from "./PostCreateForm";
+import PostCreatedEmpty from "./PostCreatedEmpty";
 
 function PostCreated() {
-
+    const {
+        isLoading,
+        assets,
+        fetchNextPage,
+        hasMore,
+        page
+    } = useGetAssetInfinite()
+    if (isLoading) return <MiniSpinner />
     return (
-        <div className="bg-white ">
-            <h1 className="text-3xl font-bold p-5">Tin đăng</h1>
-            <div className="py-20">
-                <img className="w-[457px] h-[275px] mx-auto" src="/public/post-create-banner.png" />
-                <p className="text-4xl font-bold text-center mt-5">ĐĂNG NHANH - BÁN GỌN</p>
-            </div>
-            <div className="justify-around flex">
-                <Button>
-                    Tạo tin từ tài sản có sẵn
-                </Button>
-                <Button>
-                    Tạo tài sản mới
-                </Button>
-            </div>
-        </div>
+        assets.length ? <PostCreateForm assets={assets}
+            fetchNextPage={fetchNextPage}
+            hasMore={hasMore}
+            page={page} />
+            : <PostCreatedEmpty />
     )
 }
 

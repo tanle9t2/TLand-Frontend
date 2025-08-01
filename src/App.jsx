@@ -9,9 +9,7 @@ import AssetPage from "./pages/AssetPage"
 import AssetCreatedPage from "./pages/AssetCreatedPage"
 import AssetList from "./features/asset/AssetList"
 import PostCreated from "./features/post/PostCreated"
-import FormCreateLayout from "./ui/FormCreateLayout"
-import PostCreateWithAsset from "./features/post/PostCreateWithAsset"
-
+import AssetCreated from "./features/asset/AssetCreated"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,12 +35,10 @@ function App() {
             <Route path="asset/:assetId" element={<AssetPage />} />
             <Route path="asset" element={<AssetList />} />
             <Route path="create-asset" element={<AssetCreatedPage />} />
+            <Route path="create-asset/draft/:draftId" element={<AssetCreated />} />
+            <Route path="create-asset/new" element={<AssetCreated />} />
             <Route path="create-post" element={<PostCreated />} />
 
-            <Route path="create" element={<FormCreateLayout />} >
-              <Route path="1" element={<PostCreateWithAsset />} />
-              <Route path="2" />
-            </Route>
           </Route >
 
         </Routes >

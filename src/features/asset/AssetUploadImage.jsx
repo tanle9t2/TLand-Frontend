@@ -4,10 +4,10 @@ import Button from "../../ui/Button";
 import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
 import useUploadMedia from "./useUploadMedia";
 
-function AssetUploadImage({ assetId, setAssetId }) {
+function AssetUploadImage({ assetId, setAssetId, initImages = [] }) {
     const { isPending, uploadImage } = useUploadMedia()
     const fileInputRef = useRef();
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(initImages);
     const handleButtonClick = (e) => {
         e.preventDefault();
         fileInputRef.current.click();

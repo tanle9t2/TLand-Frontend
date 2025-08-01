@@ -6,7 +6,7 @@ import Button from "./Button";
 import UserInfo from "./UserInfo";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
-import { useState } from "react";
+
 const icons = [
   {
     icon: <IoMdNotificationsOutline />,
@@ -33,9 +33,11 @@ function Navbar() {
         ))}
       </ul>
       <UserInfo />
-      <Button variant="primary">
-        <span className="font-bold"> Đăng tin</span>
-      </Button>
+      <Link to="/create-post">
+        <Button variant="primary">
+          <span className="font-bold"> Đăng tin</span>
+        </Button>
+      </Link>
     </header>
 
   );

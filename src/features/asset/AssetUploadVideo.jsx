@@ -5,9 +5,9 @@ import Button from "../../ui/Button";
 import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
 import { IoIosArrowForward } from "react-icons/io";
 
-function AssetUploadVideo() {
+function AssetUploadVideo({ initVideos = [] }) {
     const [videoThumbnail, setVideoThumbnail] = useState(null);
-    const [videoFile, setVideoFile] = useState(null);
+    const [videoFile, setVideoFile] = useState(initVideos);
 
 
     const handleVideoUpload = (e) => {

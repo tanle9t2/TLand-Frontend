@@ -15,6 +15,12 @@ export async function getAssets({ page, size }) {
     return res.data;
 }
 
+export async function getAssetsDraft() {
+    const res = await API.get(`/asset-service/api/v1/assets/draft`)
+    return res.data;
+}
+
+
 
 export async function uploadAssetImage(assetId, file) {
     console.log(file)

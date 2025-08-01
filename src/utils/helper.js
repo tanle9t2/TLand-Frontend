@@ -37,3 +37,12 @@ export const convertDate = (date) => {
     const options = { month: 'short', day: '2-digit', year: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(iso);
 }
+export const formatWithDots = (number) => {
+
+    if (!number) return '';
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+export const removeDots = (formatted) => {
+
+    return formatted.replace(/\./g, "");
+};

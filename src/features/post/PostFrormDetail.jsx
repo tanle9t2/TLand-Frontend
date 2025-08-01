@@ -5,7 +5,8 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import ErrorMessage from '../../ui/ErrorMessage';
 import { Controller } from 'react-hook-form';
-function PostFrormDetail({ control, register, errors }) {
+import { formatWithDots, removeDots } from '../../utils/helper';
+function PostFrormDetail({ setValue, watch, control, register, errors }) {
     return (
         <div className="w-full">
             {/* Check type */}
@@ -24,6 +25,21 @@ function PostFrormDetail({ control, register, errors }) {
                         render={({ field }) => (
                             <RadioGroup row {...field}>
                                 <FormControlLabel
+                                    value="SELL"
+                                    control={
+                                        <Radio
+                                            sx={{
+                                                color: "#e11d48",
+                                                "&.Mui-checked": {
+                                                    color: "#e11d48",
+                                                },
+                                            }}
+                                        />
+                                    }
+                                    label="Bán"
+                                    sx={{ "& .MuiFormControlLabel-label": { fontSize: "20px" } }}
+                                />
+                                <FormControlLabel
                                     value="RENT"
                                     control={
                                         <Radio
@@ -38,25 +54,10 @@ function PostFrormDetail({ control, register, errors }) {
                                     label="Cho thuê"
                                     sx={{ "& .MuiFormControlLabel-label": { fontSize: "20px" } }}
                                 />
-                                <FormControlLabel
-                                    value="SALE"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color: "#e11d48",
-                                                "&.Mui-checked": {
-                                                    color: "#e11d48",
-                                                },
-                                            }}
-                                        />
-                                    }
-                                    label="Bán"
-                                    sx={{ "& .MuiFormControlLabel-label": { fontSize: "20px" } }}
-                                />
+
                             </RadioGroup>
                         )}
                     />
-
                     {errors.type && (
                         <ErrorMessage message={errors.type.message} />
                     )}
@@ -92,12 +93,22 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m2. Khu
             </section>
 
             <section>
-                <h2 className="text-3xl font-bold mb-4">Giá bán</h2>
+                <h2 className="text-3xl font-bold mb-4"> {watch("type") === "SELL" ? "Giá bán" : "Giá cho thuê theo tháng"}</h2>
                 <div className="text-2xl grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="md:col-span-2">
                         <input
-                            type="number"
-                            {...register("price", { required: "Vui lòng nhập giá" }, { valueAsNumber: true },)}
+                            type="text"
+                            inputMode="numeric"
+                            {...register("price", {
+                                required: "Vui lòng nhập giá",
+                                setValueAs: (value) => Number(removeDots(value)),
+                            })}
+                            value={formatWithDots(watch("price"))}
+                            onChange={(e) => {
+                                const rawValue = removeDots(e.target.value);
+                                if (!/^\d*$/.test(rawValue)) return;
+                                setValue("price", rawValue);
+                            }}
                             className="p-3 border rounded w-full"
                             placeholder="Giá"
                         />
@@ -105,9 +116,10 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m2. Khu
                             <ErrorMessage message={errors.price.message} />
                         )}
                     </div>
-
                 </div>
             </section>
+
+
         </div>
     )
 }
