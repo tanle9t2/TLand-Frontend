@@ -14,11 +14,11 @@ const DraftItem = ({ draft }) => {
                     <div className="mb-2 space-y-5">
                         <p className=" text-2xl truncate">
                             <span className='font-bold'>Danh mục bất động sản: </span>
-                            {category.name}
+                            {category ? category.name : "Chưa thiết lập"}
                         </p>
                         <p className=" text-2xl truncate">
                             <span className='font-bold'>Địa chỉ: </span>
-                            {`${address}, ${ward}, ${province}`}
+                            {address ? `${address}, ${ward}, ${province}` : "Chưa thiết lập"}
                         </p>
                     </div>
                 </div>
@@ -31,7 +31,7 @@ const DraftItem = ({ draft }) => {
                         state={{ draft }}
                     >
                         <Button variant='primary'>
-                            Tiếp tục tin nhám
+                            Tiếp tục tin nháp
                         </Button>
                     </Link>
 

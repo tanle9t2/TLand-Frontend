@@ -1,0 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
+import { getSummaryStatusPost } from "../../services/PostService";
+
+
+function useGetCountStatus() {
+    const { isLoading, data: counts } = useQuery({
+        queryKey: ["counts"], // include `type` to avoid cache collision
+        queryFn: () => getSummaryStatusPost(),
+    });
+
+    return { isLoading, counts };
+}
+
+export default useGetCountStatus;

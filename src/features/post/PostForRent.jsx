@@ -1,6 +1,7 @@
 import AssetList from "./PostList"
-import useGetPostsHome from "../asset/useGetPostsHome"
+
 import MiniSpinner from "../../ui/MiniSpinner";
+import useGetPostsHome from "./useGetPostsHome";
 
 function PostForRent() {
     const { isLoading, content } = useGetPostsHome("RENT");

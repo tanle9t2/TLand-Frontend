@@ -16,8 +16,8 @@ function ProjectCard({ info }) {
                 alt="green iguana"
                 height="140"
                 image={image}
-            />
-            <CardContent>
+            />n
+            <CardContet>
                 <Typography className='truncate' sx={{ fontSize: '16px', fontWeight: 'bold' }} gutterBottom component="div">
                     {title}
                 </Typography>
@@ -36,7 +36,7 @@ function ProjectCard({ info }) {
                     <p className=' flex items-center font-bold text-xl truncate'><span className='mr-2'><CiLocationOn /></span> {location}</p>
 
                 </Typography>
-            </CardContent>
+            </CardContet>
         </Card>
     );
 }

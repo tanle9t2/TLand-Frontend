@@ -1,14 +1,14 @@
-import SyncLoader from "react-spinners/SyncLoader";
+
 import AssetList from "./PostList"
-import useGetPostsHome from "../asset/useGetPostsHome";
+import useGetPostsHome from "./useGetPostsHome";
 import MiniSpinner from "../../ui/MiniSpinner";
 
 function PostForSell() {
-    const { isLoading, content } = useGetPostsHome("RENT");
+    const { isLoading, content, totalElements } = useGetPostsHome("SELL");
     if (isLoading) return <MiniSpinner />
 
     return (
-        <AssetList data={content} />
+        <AssetList data={content} totalElements={totalElements} />
     )
 }
 

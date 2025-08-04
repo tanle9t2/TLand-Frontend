@@ -18,14 +18,14 @@ function useGetAssets() {
     } = data ?? {};
     if (page + 1 < totalPages) {
         queryClient.prefetchQuery({
-            queryKey: ["bookings", page + 1],
+            queryKey: ["assets", page + 1],
             queryFn: () => getAssets({ page: page + 1 }),
         });
     }
 
     if (page > 1)
         queryClient.prefetchQuery({
-            queryKey: ["bookings", page - 1],
+            queryKey: ["assets", page - 1],
             queryFn: () => getAssets({ page: page - 1 }),
         });
 

@@ -1,3 +1,11 @@
+
+import { IoBedOutline, IoFlowerOutline } from "react-icons/io5";
+import { TbEscalator, TbBath } from "react-icons/tb";
+import { RiContractFill } from "react-icons/ri";
+import { BsDoorOpen, BsBuildings } from "react-icons/bs";
+import { RxDimensions } from "react-icons/rx";
+import { LuPackage2 } from "react-icons/lu";
+
 export const MAX_IMAGE_UPLOAD = 12
 export const PROPERTY_FEATURES = [
     "Hầm xe hơi",
@@ -38,3 +46,52 @@ export const INTERIOR_STATUS = [
     "Hoàn thiện cơ bản",
     "Bàn giao thô",
 ]
+
+export const POST_STATUS = {
+    "WAITING_PAYMENT": "Cần thanh toán",
+    "PAYMENT": "Đã thanh toán",
+    "HIDE": "Ẩn",
+    "SHOW": "Hiển thị",
+    "EXPIRED": "Hết hạn",
+    "REJECT": "Từ chối",
+    "DELETE": "Đã xóa",
+    "WAITING_ACCEPT": "Chờ duyệt"
+}
+export const PROPERTIES = {
+    bedrooms: {
+        icon: IoBedOutline,
+        label: "Số phòng ngủ: ",
+    },
+    floors: {
+        icon: TbEscalator,
+        label: "Tầng:",
+    },
+    bathrooms: {
+        icon: TbBath,
+        label: "Số phòng tắm: ",
+    },
+    legalDocs: {
+        icon: RiContractFill,
+        label: "Thông tin pháp lý",
+    },
+    mainDirection: {
+        icon: BsDoorOpen,
+        label: "Hướng cửa: ",
+    },
+    houseType: {
+        icon: BsBuildings,
+        label: "Loại hình căn hộ: ",
+    },
+    dimension: {
+        icon: RxDimensions,
+        label: "Diện tích: ",
+    },
+    interiorStatus: {
+        icon: LuPackage2,
+        label: "Nội thất: ",
+    },
+    hasGarden: {
+        icon: IoFlowerOutline,
+        label: "Sân vườn: ",
+    },
+};

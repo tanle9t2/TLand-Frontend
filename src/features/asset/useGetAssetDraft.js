@@ -4,8 +4,9 @@ import { getAssetsDraft } from "../../services/AssetService";
 
 function useGetAssetDraft() {
     const { isLoading, data: drafts } = useQuery({
-        queryKey: ["draft"], // include `type` to avoid cache collision
+        queryKey: ["draft"],
         queryFn: () => getAssetsDraft(),
+        staleTime: 0,
     });
 
 

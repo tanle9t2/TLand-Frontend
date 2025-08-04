@@ -10,6 +10,7 @@ import AssetCreatedPage from "./pages/AssetCreatedPage"
 import AssetList from "./features/asset/AssetList"
 import PostCreated from "./features/post/PostCreated"
 import AssetCreated from "./features/asset/AssetCreated"
+import PostManagement from "./features/post/PostManagement"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,8 @@ function App() {
             <Route path="create-asset/draft/:draftId" element={<AssetCreated />} />
             <Route path="create-asset/new" element={<AssetCreated />} />
             <Route path="create-post" element={<PostCreated />} />
+            <Route path="my-ads" element={<PostManagement />} />
+            <Route path="my-ads/:status" element={<PostManagement />} />
 
           </Route >
 

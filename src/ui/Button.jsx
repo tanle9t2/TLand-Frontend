@@ -18,7 +18,7 @@ function Button({ type = "button", children, onClick, disabled = false, classNam
         'px-4 py-2 rounded-md',
         variants[variant],
         className,
-        disabled ? '!cursor-not-allowed opacity-80 cursor-not-allowed' : 'cursor-pointer'
+        disabled ? 'opacity-80 cursor-not-allowed' : 'cursor-pointer'
       )}
     >
       {children}

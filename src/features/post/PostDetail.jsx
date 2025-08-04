@@ -1,40 +1,27 @@
 import { CiClock2, CiLocationOn } from "react-icons/ci"
 import Section from "../../ui/Section"
-import { caculatePrice, caculateSquare, getTimeDifferenceFromNow } from "../../utils/helper";
+import { caculatePrice, caculateSquare, formatVietnamMoney, getTimeDifferenceFromNow } from "../../utils/helper";
 import { IoFlowerOutline } from "react-icons/io5";
 import { TbEscalator } from "react-icons/tb";
 import { BsBuildings } from "react-icons/bs";
 import { RxDimensions } from "react-icons/rx";
+import { FaPage4 } from "react-icons/fa";
+import { PROPERTIES } from "../../utils/constant";
 
-const properties = {
-    floors: {
-        icon: <TbEscalator />,
-        label: "Tầng: "
-    },
-    style: {
-        icon: <BsBuildings />,
-        label: "Loại hình căn hộ: "
-    },
-    dimension: {
-        icon: <RxDimensions />,
-        label: "Diện tích: "
-    },
-    hasGarden: {
-        icon: <IoFlowerOutline />,
-        label: "Sân vườn: "
-    }
-}
 
 function PostDetail({ post }) {
-    const { createdAt, title, assetDetail } = post;
+    const { price, type, createdAt, title, assetDetail } = post;
+    const square = caculateSquare(assetDetail.dimension);
     return (
         <Section>
             <div className="p-5 text-2xl">
                 <h2 className="text-3xl font-bold mb-6">
                     {title}
                 </h2>
+                <p></p>
                 <div className="text-red-600 mb-4 font-bold">
-                    {caculatePrice(assetDetail.pricePerSquare, caculateSquare(assetDetail.dimension))}/tháng · {caculateSquare(assetDetail.dimension)}m²</div>
+                    {formatVietnamMoney(price)}{type === "RENT" && '/tháng'} · {square}m²
+                </div>
                 <div className="text-gray-600 flex items-center">
                     <span className="mr-2"><CiLocationOn /></span>
                     {`${assetDetail.address}, ${assetDetail.ward}, ${assetDetail.province}`}
@@ -45,15 +32,21 @@ function PostDetail({ post }) {
                 </div>
 
                 <ul className="text-2xl pt-4">
-                    {Object.entries(assetDetail.properties).map(([key, value]) => (
-                        <li key={key} className="grid py-3 grid-cols-[24rem_auto] border-b border-gray-300">
-                            <span className="flex items-center gap-2">
-                                {properties[key]?.icon}
-                                {properties[key]?.label}
-                            </span>
-                            <span className="font-bold">{value}</span>
-                        </li>
-                    ))}
+                    {Object.entries(assetDetail.properties).map(([key, value]) => {
+                        const Icon = PROPERTIES[key]?.icon;
+                        return (
+                            <li
+                                key={key}
+                                className="grid py-3 grid-cols-[24rem_auto] border-b border-gray-300"
+                            >
+                                <span className="flex items-center gap-2">
+                                    {Icon && <Icon />}
+                                    {PROPERTIES[key]?.label}
+                                </span>
+                                <span className="font-bold">{value}</span>
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
 
@@ -63,7 +56,7 @@ function PostDetail({ post }) {
                     <h3 className="font-semibold">SĐT Liên hệ: </h3>
                     <p className="ml-4">0935 39 xxxx</p>
                 </div>
-                {assetDetail.description.split("\n").map(item => item.trim() === "" ? <br /> : <p>{item}</p>)}
+                {assetDetail.description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
             </div>
 
 
