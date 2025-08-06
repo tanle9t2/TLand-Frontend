@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdMore } from "react-icons/io";
 import { HiOutlineSearch } from "react-icons/hi";
 
@@ -8,15 +8,26 @@ import { POST_STATUS } from "../../utils/constant";
 import PostMangeEmpty from "./PostMangeEmpty";
 import PaginationStack from "../../ui/PaginationStack"
 import useGetPostByStatus from "./useGetPostByStatus";
-import { convertDate, formatVietnamMoney } from "../../utils/helper";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import PostMangementItem from "./PostMangementItem";
+import { useDebounce } from "../../hooks/useDebounce";
 
 function PostManagement() {
     const { status } = useParams();
     const [activeTab, setActiveTab] = useState(status);
     const { isLoading, counts } = useGetCountStatus();
+    const [searParams, setSearhParams] = useSearchParams()
+    const [kw, setKw] = useState("")
+    const debounceKW = useDebounce(kw)
+
+
     const { isLoading: isLoadingPost, posts, totalPages, page } = useGetPostByStatus();
+
+    useEffect(() => {
+        searParams.set("kw", debounceKW)
+        setSearhParams(searParams)
+    }, [debounceKW, searParams, setSearhParams]);
+
     if (isLoading || isLoadingPost) return <MiniSpinner />
     return (
         <div className="bg-white min-h-screen">
@@ -40,6 +51,8 @@ function PostManagement() {
                     <div className="flex text-2xl  items-center gap-4">
                         <div className="relative">
                             <input
+                                onChange={(e) => setKw(e.target.value)}
+                                value={kw}
                                 type="text"
                                 placeholder="Tìm tin đăng của bạn..."
                                 className="pl-10 pr-20 py-5 border border-gray-200 rounded-lg focus:outline-none"

@@ -11,6 +11,7 @@ import AssetList from "./features/asset/AssetList"
 import PostCreated from "./features/post/PostCreated"
 import AssetCreated from "./features/asset/AssetCreated"
 import PostManagement from "./features/post/PostManagement"
+import PostUpdateFormData from "./features/post/PostUpdateFormData"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +42,7 @@ function App() {
             <Route path="create-post" element={<PostCreated />} />
             <Route path="my-ads" element={<PostManagement />} />
             <Route path="my-ads/:status" element={<PostManagement />} />
+            <Route path="my-ads/update/:postId" element={<PostUpdateFormData />} />
 
           </Route >
 

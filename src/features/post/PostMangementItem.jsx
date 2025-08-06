@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { Box, Modal } from "@mui/material";
-
+import useDeletePost from "./useDeletePost";
+import toast from "react-hot-toast";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -29,17 +30,25 @@ function PostMangementItem({ post }) {
     const { id, posterUrl, title, createdAt, price } = post
     const [isShowMenu, setIsShowMenu] = useState(false);
     const [isShowDelete, setIsShowdelete] = useState(false)
+
+
+    const { isPending, deletePost } = useDeletePost()
     function handleOnClose() {
         setIsShowMenu(false)
-        setIsShowdelete(false)
     }
-
     const ref = useOutsideClick(handleOnClose);
     function handleOnClickDelete() {
         setIsShowdelete(true)
     }
     function handleOnCloseDelete() {
         setIsShowdelete(false);
+    }
+    function hanndleOnConfirm() {
+        deletePost({ id },
+            {
+                onSuccess: () => toast.success("Xóa bài đăng thành công")
+            }
+        )
     }
     return (
         <div
@@ -64,23 +73,26 @@ function PostMangementItem({ post }) {
                 </div>
             </Link>
             <div ref={ref} className="ml-auto relative">
-                <span onClick={(e) => { e.preventDefault(); setIsShowMenu(true) }} className="text-4xl">
+                <span onClick={() => { setIsShowMenu(true) }} className="text-4xl">
                     <IoMdMore />
                 </span>
-                {isShowMenu && <div className="absolute rounded-lg w-64 right-0 text-2xl bg-white shadow-lg z-10">
-                    <p className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><CiEdit /></span> Chỉnh sửa</p>
-                    <p onClick={() => handleOnClickDelete()} className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><MdDeleteOutline /></span> Xóa</p>
-                    <Modal
-                        open={isShowDelete}
-                        onClose={handleOnCloseDelete}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={style}>
-                            <ConfirmDelete />
-                        </Box >
-                    </Modal>
-                </div>}
+                {isShowMenu &&
+                    <div className="absolute rounded-lg w-64 right-0 text-2xl bg-white shadow-lg z-10">
+                        <Link to={`update/${id}`}>
+                            <p className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><CiEdit /></span> Chỉnh sửa</p>
+                        </Link>
+                        <p onClick={() => handleOnClickDelete()} className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><MdDeleteOutline /></span> Xóa</p>
+                    </div>}
+                <Modal
+                    open={isShowDelete}
+                    onClose={handleOnCloseDelete}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <ConfirmDelete disabled={isPending} onConfirm={(e) => hanndleOnConfirm(e)} />
+                    </Box >
+                </Modal>
             </div>
 
         </div>

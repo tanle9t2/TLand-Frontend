@@ -8,10 +8,10 @@ function useGetPostByStatus() {
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
     const page = searchParams.get("page") ? parseInt(searchParams.get("page")) : 0;
-
+    const kw = searchParams.get("kw") || "";
     const { isLoading, data } = useQuery({
-        queryKey: ["posts", status, page],
-        queryFn: () => getPostByStatus({ page, status }),
+        queryKey: ["posts", status, page, kw],
+        queryFn: () => getPostByStatus({ page, status, kw }),
     });
     const { content: posts = [],
         size,
@@ -20,15 +20,15 @@ function useGetPostByStatus() {
         isLast, } = data ?? {};
     if (page + 1 < totalPages) {
         queryClient.prefetchQuery({
-            queryKey: ["post", status, page + 1],
-            queryFn: () => getPostByStatus({ page: page + 1, status }),
+            queryKey: ["post", status, page + 1, kw],
+            queryFn: () => getPostByStatus({ page: page + 1, status, kw }),
         });
     }
 
     if (page > 1)
         queryClient.prefetchQuery({
-            queryKey: ["post", page - 1],
-            queryFn: () => getPostByStatus({ page: page - 1, status }),
+            queryKey: ["post", status, page - 1, kw],
+            queryFn: () => getPostByStatus({ page: page - 1, status, kw }),
         });
 
     return { isLoading, posts, page, size, totalElements, totalPages, isLast };

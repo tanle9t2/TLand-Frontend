@@ -50,6 +50,11 @@ function UserInfo() {
                                 <span className="mr-2"><BiBuildingHouse /></span> Xem tài sản
                             </li>
                         </Link>
+                        <Link to="/my-ads">
+                            <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                                <span className="mr-2"><BiBuildingHouse /></span> Quản lý tin đăng
+                            </li>
+                        </Link>
                         <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
                             <span className="mr-2"><CiSettings /></span> Chỉnh sửa tài khoản
                         </li>

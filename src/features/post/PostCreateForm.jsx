@@ -13,8 +13,6 @@ import useCreatePost from "./useCreatePost"
 import toast from "react-hot-toast"
 
 function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
-
-
     const { isPending, createPost } = useCreatePost()
     const {
         register,

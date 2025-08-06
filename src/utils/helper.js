@@ -43,6 +43,7 @@ export const formatWithDots = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 export const removeDots = (formatted) => {
-
-    return formatted.replace(/\./g, "");
+    if (typeof formatted === 'string')
+        return formatted.replace(/\./g, "");
+    return formatted;
 };
