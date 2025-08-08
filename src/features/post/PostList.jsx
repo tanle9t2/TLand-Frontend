@@ -5,7 +5,7 @@ import AssetCard from "./PostCard"
 function PostList({ data, totalElements }) {
     return (
         <div>
-            <div className="flex border-t-gray-200 border-t-2 py-8">
+            <div className="grid grid-cols-5 place-items-center border-t-gray-200 border-t-2 py-8">
                 {data.map(item => <AssetCard key={item.id} post={item} />)}
             </div>
             {totalElements > 5 && <div className="py-5 flex justify-center">

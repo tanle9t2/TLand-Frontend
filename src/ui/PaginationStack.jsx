@@ -13,7 +13,7 @@ function PaginationStack({ currentPage, totalPage }) {
         <Stack spacing={2}>
             <Pagination
                 count={totalPage}
-                page={currentPage + 1}
+                page={currentPage}
                 shape="rounded"
                 onChange={(e, v) => handleOnClickPagniation(e, v)}
                 sx={{

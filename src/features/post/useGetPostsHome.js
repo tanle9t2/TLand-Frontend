@@ -4,7 +4,7 @@ import { getPosts } from "../../services/PostService";
 function useGetPostsHome(type) {
     const { isLoading, data } = useQuery({
         queryKey: ["posts", type], // include `type` to avoid cache collision
-        queryFn: () => getPosts(0, 4, type),
+        queryFn: () => getPosts(0, 5, type),
     });
 
     const {

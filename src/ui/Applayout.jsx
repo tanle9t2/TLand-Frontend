@@ -5,9 +5,9 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 function AppLayout() {
     return (
-        <div className="min-h-screen  bg-white">
+        <div className="min-h-screenbg-white">
             <Navbar />
-            <main className="py-5 bg-gray-50 px-[250px]">
+            <main className="py-5 bg-gray-50 px-[150px]">
                 <Outlet />
             </main>
             <Footer />

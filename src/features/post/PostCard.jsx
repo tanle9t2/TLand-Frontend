@@ -13,11 +13,11 @@ function PostCard({ post }) {
     const navigate = useNavigate()
     const square = caculateSquare(assetDetail.dimension);
     return (
-        <Card onClick={() => navigate(`/post/${id}`)} className='mx-3 first:ml-0 last:mr-0 cursor-pointer hover:scale-105 transform transition duration-500' sx={{ maxWidth: 250 }}>
+        <Card onClick={() => navigate(`/post/${id}`)} className='first:ml-0 flex-1 last:mr-0 cursor-pointer hover:scale-105 transform transition duration-500' sx={{ maxWidth: 220 }}>
             <CardMedia
                 component="img"
                 alt={title}
-                sx={{ height: 169, width: 250, objectFit: "fit" }}
+                sx={{ height: 220, width: 220, objectFit: "fit" }}
                 image={assetDetail?.contents[0].url}
             />
             <CardContent>

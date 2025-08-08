@@ -12,6 +12,7 @@ import PostCreated from "./features/post/PostCreated"
 import AssetCreated from "./features/asset/AssetCreated"
 import PostManagement from "./features/post/PostManagement"
 import PostUpdateFormData from "./features/post/PostUpdateFormData"
+import Search from "./features/search/Search"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,12 +33,14 @@ function App() {
             }
           >
             <Route index element={<HomePage />} />
-
+            <Route path="search" element={<Search />} />
             <Route path="post/:postId" element={<PostDetailPage />} />
             <Route path="asset/:assetId" element={<AssetPage />} />
             <Route path="asset" element={<AssetList />} />
+
             <Route path="create-asset" element={<AssetCreatedPage />} />
             <Route path="create-asset/draft/:draftId" element={<AssetCreated />} />
+            <Route path="asset/update/:assetId" element={<AssetCreated />} />
             <Route path="create-asset/new" element={<AssetCreated />} />
             <Route path="create-post" element={<PostCreated />} />
             <Route path="my-ads" element={<PostManagement />} />

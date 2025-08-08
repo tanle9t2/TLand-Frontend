@@ -29,6 +29,12 @@ export async function deletePost(id) {
     const res = await API.delete(`/post-service/api/v1/post/${id}`)
     return res.data;
 }
+export async function getHistory({ id, page, size }) {
+    const res = await API.get(`/post-service/api/v1/posts/history/${id}`, {
+        params: { page, size }
+    })
+    return res.data;
+}
 
 export async function getSummaryStatusPost() {
     const res = await API.get(`/post-service/api/v1/posts/status`)

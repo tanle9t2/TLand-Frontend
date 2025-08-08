@@ -11,9 +11,11 @@ import ErrorMessage from "../../ui/ErrorMessage"
 import InfiniteScroll from "react-infinite-scroll-component"
 import useCreatePost from "./useCreatePost"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
     const { isPending, createPost } = useCreatePost()
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -37,6 +39,7 @@ function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
         createPost({ request: data }, {
             onSuccess: () => {
                 toast.success("Tạo bài viết mới thành công")
+                navigate('/my-ads')
                 reset
             },
             onError: (error) => toast.error(error.message)
@@ -101,7 +104,7 @@ function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
                     <Button variant="secondary" className="w-80 mr-5">
                         Xem trước
                     </Button>
-                    <Button type="submit" form="post-form" variant="primary" className="w-80">
+                    <Button disabled={isPending} type="submit" form="post-form" variant="primary" className="w-80">
                         Đăng tin
                     </Button>
                 </div>

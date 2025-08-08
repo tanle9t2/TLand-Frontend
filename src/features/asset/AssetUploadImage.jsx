@@ -5,7 +5,7 @@ import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
 import useUploadMedia from "./useUploadMedia";
 
 function AssetUploadImage({ assetId, setAssetId, initImages = [] }) {
-    const { isPending, uploadImage } = useUploadMedia()
+    const { isPending, uploadMedia } = useUploadMedia()
     const fileInputRef = useRef();
     const [images, setImages] = useState(initImages);
     const handleButtonClick = (e) => {
@@ -16,7 +16,7 @@ function AssetUploadImage({ assetId, setAssetId, initImages = [] }) {
         const file = e.target.files[0];
 
         if (images.length + 1 <= MAX_IMAGE_UPLOAD) {
-            uploadImage({ assetId, file }, {
+            uploadMedia({ assetId, file }, {
                 onSuccess: ({ data }) => {
                     setAssetId(data.assetId)
                     setImages([...images, data.url]);
@@ -57,7 +57,7 @@ function AssetUploadImage({ assetId, setAssetId, initImages = [] }) {
                 {images.map((img, index) => (
                     <div
                         key={index}
-                        className="relative flex-none w-[100px] h-[119px] border-2 border-dashed border-gray-300 rounded p-1.5 text-center mb-2"
+                        className="relative flex-none w-[150px] h-[150px] border-2 border-dashed border-gray-300 rounded p-1.5 text-center mb-2"
                     >
                         {index === 0 && (
                             <div className="absolute top-0 left-0 z-10 bg-gray-300 text-md px-2 py-0.5">
@@ -67,7 +67,7 @@ function AssetUploadImage({ assetId, setAssetId, initImages = [] }) {
                         <img
                             src={img}
                             alt={`Product ${index}`}
-                            className="w-[100px] h-[100px] object-cover"
+                            className="w-full h-full object-cover"
                         />
                         <button
                             onClick={() => handleOnRemoveImage(index)}

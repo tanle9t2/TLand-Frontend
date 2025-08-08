@@ -64,7 +64,7 @@ function ModalSelectAddress({ address, setAddress }) {
         <div>
             <div className='relative'>
                 <div onClick={handleOpen} className='text-2xl px-5 py-5 rounded-md w-full border' >
-                    <p >{address ? `${address.detail}, ${address.ward}, ${address.province}` : "Địa chỉ"}</p>
+                    <p >{address?.detail ? `${address.detail}, ${address.ward}, ${address.province}` : "Địa chỉ"}</p>
                 </div>
                 <span className='absolute top-[30%]  right-3 text-5xl'><MdArrowDropDown /></span>
             </div>

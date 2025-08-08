@@ -29,8 +29,6 @@ function AssetList() {
                         <AssetItem asset={asset} />
                     </Link>
                 ))}
-
-
             </div>
             <div className="flex justify-center text-3xl">
                 <PaginationStack totalPage={totalPages} currentPage={page} onClick={handleOnClickPagniation} />

@@ -1,29 +1,22 @@
-import { useRef, useState } from "react";
-import { IoCameraOutline } from "react-icons/io5";
+import { useEffect, useState } from "react";
 import { GoDeviceCameraVideo } from "react-icons/go";
-import Button from "../../ui/Button";
-import { MAX_IMAGE_UPLOAD } from "../../utils/constant";
-import { IoIosArrowForward } from "react-icons/io";
+import useUploadMedia from "./useUploadMedia";
+import MiniSpinner from "../../ui/MiniSpinner";
 
-function AssetUploadVideo({ initVideos = [] }) {
+function AssetUploadVideo({ assetId = null, initVideos = [], setAssetId }) {
     const [videoThumbnail, setVideoThumbnail] = useState(null);
-    const [videoFile, setVideoFile] = useState(initVideos);
+    const { isPending, uploadMedia } = useUploadMedia()
 
-
-    const handleVideoUpload = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const videoURL = URL.createObjectURL(file);
-        setVideoFile(file);
-
+    function generateThumbnail(url) {
         const video = document.createElement("video");
-        video.src = videoURL;
+        video.src = url;
         video.crossOrigin = "anonymous";
         video.muted = true;
-        video.currentTime = 1;
-
         video.addEventListener("loadeddata", () => {
+            video.currentTime = 1;
+        });
+
+        video.addEventListener("seeked", () => {
             const canvas = document.createElement("canvas");
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -34,9 +27,28 @@ function AssetUploadVideo({ initVideos = [] }) {
         });
     };
 
+    const handleVideoUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        uploadMedia({ assetId, file }, {
+            onSuccess: ({ data }) => {
+                const { assetId, url } = data;
+                setAssetId(assetId);
+                generateThumbnail(url);
+            }
+        });
+    };
+
+    useEffect(() => {
+        if (initVideos.length > 0) {
+            generateThumbnail(initVideos[0]);
+        }
+    }, []);
+
     return (
         videoThumbnail ? <div
-            className="relative w-[130px] border-2 border-gray-300 rounded-sm p-1.5 text-center mb-2"
+            className="relative w-[250px] border-2 border-gray-300 rounded-sm p-1.5 text-center mb-2"
         >
             <button
                 onClick={() => setVideoThumbnail(null)}
@@ -55,15 +67,17 @@ function AssetUploadVideo({ initVideos = [] }) {
             <label
                 className="border-2 text-2xl bg-gray-100 cursor-pointer flex py-20 flex-col border-dashed border-rose-600"
             >
-                <input
-                    type="file"
-                    accept="video/*"
-                    multiple
-                    onChange={handleVideoUpload}
-                    className="hidden"
-                />
-                <span className="mx-auto text-9xl"> <GoDeviceCameraVideo /></span>
-                <p className="mx-auto">Đăng Video để bán nhanh hơn</p>
+                {isPending ? <MiniSpinner /> : <>
+                    <input
+                        type="file"
+                        accept="video/*"
+                        multiple
+                        onChange={handleVideoUpload}
+                        className="hidden"
+                    />
+                    <span className="mx-auto text-9xl"> <GoDeviceCameraVideo /></span>
+                    <p className="mx-auto">Đăng Video để bán nhanh hơn</p>
+                </>}
             </label>
 
     )

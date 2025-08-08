@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import PostCreatedForm from "./AssetCreatedForm";
+import AssetCreatedForm from "./AssetCreatedForm";
 import { useForm } from "react-hook-form";
 import Button from "../../ui/Button";
 import useCreateAsset from "./useCreateAsset";
@@ -12,8 +12,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AssetCreated() {
     const { state } = useLocation();
-    const draft = state?.draft || {};
-    const { properties = {}, address, province, contents, ward, ...restDraft } = draft;
+    const draft = state?.draft || state?.asset || {};
+
+    const { properties = {}, dimension, address, province, ward, contents, locationAsset, createdAt, attachedPostShow, userId, ...restDraft } = draft;
 
     const {
         register,
@@ -26,7 +27,10 @@ function AssetCreated() {
     } = useForm({
         defaultValues: {
             ...restDraft,
-            ...properties, // <--- flatten all properties into top-level
+            ...properties,
+            ...locationAsset,
+            width: dimension[0],
+            length: dimension[1],
             address: {
                 detail: address,
                 province,
@@ -39,7 +43,7 @@ function AssetCreated() {
 
     useEffect(() => {
         register("category", { required: "Vui lòng chọn danh mục" });
-        register("assetId");
+        register("id");
         register("address", { required: "Vui lòng cung cấp địa chỉ" });
     }, [register]);
 
@@ -48,10 +52,9 @@ function AssetCreated() {
 
     const images = contents?.filter(media => media.contentType === "image").map(media => media.url);
     const videos = contents?.filter(media => media.contentType === "video").map(media => media.url);
-
     const onSubmit = (data) => {
         const {
-            assetId,
+            id,
             address,
             width,
             length,
@@ -61,22 +64,21 @@ function AssetCreated() {
             apartmentCode,
             lotName,
             otherInfo,
-            price,
             ...rest
         } = data;
         const cleanedProperties = Object.fromEntries(
             Object.entries(rest).filter(([item, value]) => value !== "" && value !== null
             )
         );
+
+
         const request = {
-            userId: "eadd6456-a5ea-4d41-b71a-061541227b8d", //remove when having auth
-            id: assetId,
+            id,
             province: address.province,
             category: category.id,
             ward: address.ward,
             address: address.detail,
-            dimension: [width, length],
-            price: price,
+            dimension: width ? [width, length] : null,
             type: "PERSIST",
             otherInfo,
             locationAsset: {
@@ -90,7 +92,7 @@ function AssetCreated() {
 
         createAsset({ request }, {
             onSuccess: () => {
-                navigate(`/asset/${assetId}`)
+                navigate(`/asset/${id}`)
                 toast.success("Successfully creat asset")
             },
             onError: (error) => toast.error(error.message)
@@ -98,13 +100,13 @@ function AssetCreated() {
 
 
     };
+
     function setCategory(selectedCategory) {
         setValue("category", selectedCategory);
         clearErrors("category");
     }
     function setAssetId(assetId) {
-        console.log(assetId)
-        setValue("assetId", assetId);
+        setValue("id", assetId);
 
     }
     function handleOnChangeAddress(address) {
@@ -118,25 +120,22 @@ function AssetCreated() {
             <div >
                 <h1 className="text-3xl font-bold mb-5" > Hình ảnh và Video sản phẩm</h1>
                 <div className="w-full mb-5">
-                    <AssetUploadImage initImages={images} assetId={watch("assetId")} setAssetId={setAssetId} />
+                    <AssetUploadImage initImages={images} assetId={watch("id")} setAssetId={setAssetId} />
                 </div>
                 <div>
-                    <AssetUploadVideo initVideos={videos} />
+                    <AssetUploadVideo assetId={watch("id")} setAssetId={setAssetId} initVideos={videos} />
                 </div>
             </div>
-            <PostCreatedForm
+            <AssetCreatedForm
                 register={register}
                 control={control}
                 errors={errors}
                 watch={watch}
                 setCategory={setCategory}
                 handleOnChangeAddress={handleOnChangeAddress} />
-            <div className="w-full flex justify-center left-0 fixed bottom-0 p-5 border-[0.5px] border-gray-300 bg-white shadow-2xl">
-                <Button variant="secondary" className="w-80 mr-5">
-                    Xem trước
-                </Button>
+            <div className="w-full flex justify-end left-0 fixed bottom-0 p-5 border-[0.5px] border-gray-300 bg-white shadow-2xl">
                 <Button type="submit" form="post-form" variant="primary" className="w-80">
-                    Đăng tin
+                    {watch("id") ? "Cập nhật tài sản" : "Tạo tài sản"}
                 </Button>
             </div>
         </form >

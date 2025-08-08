@@ -38,6 +38,11 @@ export async function uploadAssetImage(assetId, file) {
     return res.data;
 }
 
+export async function deleteAsset(id) {
+    const res = await API.delete(`/asset-service/api/v1/asset/${id}`,);
+    return res.data;
+}
+
 export async function creatAsset(request) {
     const res = await API.put(`/asset-service/api/v1/asset`, request);
 
