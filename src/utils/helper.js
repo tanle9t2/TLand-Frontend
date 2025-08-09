@@ -47,3 +47,11 @@ export const removeDots = (formatted) => {
         return formatted.replace(/\./g, "");
     return formatted;
 };
+export function formatSearchParams(filterValue) {
+    return Object.entries(filterValue)
+        .map(
+            ([key, value]) =>
+                `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+}

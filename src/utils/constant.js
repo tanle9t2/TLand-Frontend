@@ -95,3 +95,5 @@ export const PROPERTIES = {
         label: "Sân vườn: ",
     },
 };
+export const PAGE_SIZE = 5;
+export const PAGE = 1;
