@@ -5,8 +5,8 @@ import useGetProvince from "../features/asset/useGetProvince"
 import { useState } from "react";
 function SearchBar() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [kw, setKw] = useState("");
+  const [searchParams] = useSearchParams();
+  const [kw, setKw] = useState(searchParams.get("keyword") || "");
   const { isLoading, provinces } = useGetProvince()
   function handleOnKeyDown(e) {
     if (e.key === "Enter") {
@@ -14,12 +14,18 @@ function SearchBar() {
     }
   }
   function search() {
-    navigate(`/search?keyword=${encodeURIComponent(kw)}`);
+    navigate(`/search?keyword=${encodeURIComponent(kw)}&type=SELL`);
   }
   const locOption = provinces?.map(p => ({
     value: p.name,
     label: p.name
   }))
+  const selectedItem = searchParams.get("province") || null
+  const option = locOption?.find(o => o.value === selectedItem);
+
+  function handleOnChangeProvince(option) {
+    navigate(`/search?province=${encodeURIComponent(option.value)}&type=SELL`)
+  }
 
   return (
     <div className="flex-[0.9] mx-4">
@@ -42,6 +48,8 @@ function SearchBar() {
           className="absolute right-25 top-1/2 -translate-y-1/2 cursor-pointer text-black z-50 px-8 py-3 rounded-md transition"
         >
           <Select
+            value={option}
+            onChange={handleOnChangeProvince}
             className="text-2xl rounded-2xl w-[200px]"
             classNamePrefix="react-select"
             placeholder="Toàn quốc" options={locOption} />

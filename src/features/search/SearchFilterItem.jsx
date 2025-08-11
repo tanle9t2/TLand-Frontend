@@ -1,9 +1,21 @@
 import { useState } from "react"
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
+import { useSearchParams } from "react-router-dom";
 
-function SearchFilterItem({ title, filter }) {
+function SearchFilterItem({ title, params, filter }) {
     const [isShow, setIsShow] = useState(true)
+    const [searchParams, setSearchParams] = useSearchParams()
     const [isExpand, setIsExpand] = useState(false);
+    function handleOnClick(i) {
+        if (params === "price") {
+            searchParams.set("minPrice", filter[i].minPrice)
+            searchParams.set("maxPrice", filter[i].maxPrice)
+        } else {
+            searchParams.set(params, filter[i].name)
+        }
+        setSearchParams(searchParams)
+
+    }
     return (
         <div className="bg-white text-2xl rounded-lg shadow-sm p-4">
             < div className="flex justify-between text-3xl items-center" >
@@ -15,7 +27,7 @@ function SearchFilterItem({ title, filter }) {
 
             {isShow && <ul className={`space-y-5 overflow-y-hidden ${isExpand ? "h-full" : " h-[120px]"}`}>
                 {filter.map((f, i) => (
-                    <li key={i} className="hover:text-rose-600 cursor-pointer">
+                    <li onClick={() => handleOnClick(i)} key={i} className="hover:text-rose-600 cursor-pointer" >
                         {f.name}
                     </li>
                 ))}

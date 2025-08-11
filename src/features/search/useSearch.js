@@ -10,6 +10,7 @@ function useSearch() {
     const filterValue = {
         keyword: searchParams.get("keyword") || "",
         category: searchParams.get("category") || "",
+        type: searchParams.get("type") || "",
         minPrice: searchParams.get("minPrice") || "",
         maxPrice: searchParams.get("maxPrice") || "",
         province: searchParams.get("province") || "",
@@ -20,10 +21,12 @@ function useSearch() {
         size: +searchParams.get("size") || PAGE_SIZE,
     };
 
+
     const filterParams = formatSearchParams(filterValue);
+
     const { isLoading, data } = useQuery({
         queryKey: ["search", filterParams],
-        queryFn: () => search({ filterParams }),
+        queryFn: () => search({ params: filterParams }),
     });
     const {
         content: posts = [],
@@ -40,7 +43,7 @@ function useSearch() {
         };
         queryClient.prefetchQuery({
             queryKey: ["search", nextPageFilter],
-            queryFn: () => search({ nextPageFilter }),
+            queryFn: () => search({ param: nextPageFilter }),
         });
     }
 
@@ -51,7 +54,7 @@ function useSearch() {
         };
         queryClient.prefetchQuery({
             queryKey: ["search", previousPageFilter],
-            queryFn: () => search({ previousPageFilter }),
+            queryFn: () => search({ params: previousPageFilter }),
         });
     }
 

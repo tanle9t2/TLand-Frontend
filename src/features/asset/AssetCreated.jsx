@@ -29,8 +29,8 @@ function AssetCreated() {
             ...restDraft,
             ...properties,
             ...locationAsset,
-            width: dimension[0],
-            length: dimension[1],
+            width: dimension?.[0] ?? 0,
+            length: dimension?.[1] ?? 0,
             address: {
                 detail: address,
                 province,

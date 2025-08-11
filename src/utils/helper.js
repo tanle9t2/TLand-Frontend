@@ -49,9 +49,11 @@ export const removeDots = (formatted) => {
 };
 export function formatSearchParams(filterValue) {
     return Object.entries(filterValue)
+        .filter(([_, value]) => value != null && value !== "")
         .map(
             ([key, value]) =>
                 `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
         )
         .join("&");
+
 }

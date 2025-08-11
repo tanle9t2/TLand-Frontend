@@ -95,5 +95,96 @@ export const PROPERTIES = {
         label: "Sân vườn: ",
     },
 };
+
+export const FILTER_PRICE_SELL = [
+    {
+        name: "Giá dưới 1 tỷ",
+        minPrice: 0,
+        maxPrice: 1000000000
+    },
+    {
+        name: "Giá 1 - 2 tỷ",
+        minPrice: 1000000000,
+        maxPrice: 2000000000
+    },
+    {
+        name: "Giá 2 - 3 tỷ",
+        minPrice: 2000000000,
+        maxPrice: 3000000000
+    },
+    {
+        name: "Giá 3 - 5 tỷ",
+        minPrice: 3000000000,
+        maxPrice: 5000000000
+    },
+    {
+        name: "Giá 5 - 7 tỷ",
+        minPrice: 5000000000,
+        maxPrice: 7000000000
+    },
+    {
+        name: "Giá 7 - 10 tỷ",
+        minPrice: 7000000000,
+        maxPrice: 10000000000
+    },
+    {
+        name: "Giá trên 10 tỷ",
+        minPrice: 10000000000,
+        maxPrice: null
+    }
+];
+export const FILTER_PRICE_RENT = [
+    {
+        name: "Giá dưới 2 triệu",
+        minPrice: 0,
+        maxPrice: 2000000
+    },
+    {
+        name: "Giá 2 - 3 triệu",
+        minPrice: 2000000,
+        maxPrice: 3000000
+    },
+    {
+        name: "Giá 3 - 5 triệu",
+        minPrice: 3000000,
+        maxPrice: 5000000
+    },
+    {
+        name: "Giá 5 - 10 triệu",
+        minPrice: 5000000,
+        maxPrice: 10000000
+    },
+    {
+        name: "Giá 10 - 15 triệu",
+        minPrice: 10000000,
+        maxPrice: 15000000
+    },
+    {
+        name: "Giá 15 - 20 triệu",
+        minPrice: 15000000,
+        maxPrice: 20000000
+    },
+    {
+        name: "Giá 20 - 30 triệu",
+        minPrice: 20000000,
+        maxPrice: 30000000
+    },
+    {
+        name: "Giá 30 - 50 triệu",
+        minPrice: 30000000,
+        maxPrice: 50000000
+    },
+    {
+        name: "Giá 50 - 70 triệu",
+        minPrice: 50000000,
+        maxPrice: 70000000
+    },
+    {
+        name: "Giá trên 70 triệu",
+        minPrice: 70000000,
+        maxPrice: null
+    }
+];
+
 export const PAGE_SIZE = 5;
 export const PAGE = 1;
