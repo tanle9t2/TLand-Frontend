@@ -2,6 +2,7 @@ import Select from 'react-select';
 import useGetCategories from '../asset/useGetCategories';
 import { useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
+import { PROPERTIES } from '../../utils/constant';
 
 const LOCATION = [
     "Hồ Chí Minh",
@@ -34,21 +35,30 @@ function SearchHeader() {
     const selectedType = POST_TYPE.find(p => p.value === typeParam) || null;
     const selectedCate = cateOption.find(c => c.value === cateParam) || null;
 
-    const handleOnClickProvince = (e) => {
+    function handleOnClickProvince(e) {
         searchParams.set("province", e.target.textContent);
         setSearchParams(searchParams);
     };
 
-    const handleOnChangeCate = (cate) => {
+    function handleOnChangeCate(cate) {
         searchParams.set("category", cate.value);
         setSearchParams(searchParams);
     };
 
-    const handleOnChangeType = (type) => {
+    function handleOnChangeType(type) {
         searchParams.set("type", type.value);
         setSearchParams(searchParams);
     };
 
+    function handleOnDeleteFilter() {
+        const kwValue = searchParams.get("keyword");
+        const newParams = new URLSearchParams();
+
+        if (kwValue) {
+            newParams.set("kw", kwValue);
+        }
+        setSearchParams(newParams);
+    }
     return (
         <div className="bg-white">
             <h1 className="text-3xl font-bold p-4">
@@ -57,7 +67,7 @@ function SearchHeader() {
 
             <div className="p-4 flex items-center">
                 <h1 className="text-3xl font-bold">Lọc: </h1>
-                <div className="flex space-x-5 p-4">
+                <div className=" flex space-x-5 p-4">
                     <Select
                         onChange={handleOnChangeType}
                         value={selectedType}
@@ -66,7 +76,6 @@ function SearchHeader() {
                         placeholder="Loại hình kinh doanh"
                         options={POST_TYPE}
                     />
-
                     <Select
                         onChange={handleOnChangeCate}
                         value={selectedCate}
@@ -76,6 +85,8 @@ function SearchHeader() {
                         options={cateOption}
                     />
                 </div>
+                <p onClick={handleOnDeleteFilter} className='text-2xl ml-auto cursor-pointer text-blue-600'>Xóa bộ lọc</p>
+
             </div>
 
             {!province && (

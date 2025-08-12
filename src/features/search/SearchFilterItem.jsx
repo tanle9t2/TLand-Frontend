@@ -8,14 +8,19 @@ function SearchFilterItem({ title, params, filter }) {
     const [isExpand, setIsExpand] = useState(false);
     function handleOnClick(i) {
         if (params === "price") {
-            searchParams.set("minPrice", filter[i].minPrice)
-            searchParams.set("maxPrice", filter[i].maxPrice)
+            searchParams.delete("minPrice");
+            searchParams.delete("maxPrice");
+            if (filter[i].minPrice)
+                searchParams.set("minPrice", filter[i].minPrice)
+            if (filter[i].maxPrice)
+                searchParams.set("maxPrice", filter[i].maxPrice)
         } else {
-            searchParams.set(params, filter[i].name)
+            searchParams.set(params, filter[i].name || filter[i].label)
         }
         setSearchParams(searchParams)
 
     }
+    if (!filter.length) return null;
     return (
         <div className="bg-white text-2xl rounded-lg shadow-sm p-4">
             < div className="flex justify-between text-3xl items-center" >
@@ -28,14 +33,17 @@ function SearchFilterItem({ title, params, filter }) {
             {isShow && <ul className={`space-y-5 overflow-y-hidden ${isExpand ? "h-full" : " h-[120px]"}`}>
                 {filter.map((f, i) => (
                     <li onClick={() => handleOnClick(i)} key={i} className="hover:text-rose-600 cursor-pointer" >
-                        {f.name}
+                        {f.label || f.name}
                     </li>
                 ))}
             </ul>
             }
-            <div className="text-center text-gray-500 cursor-pointer">
-                {isExpand ? <p onClick={() => setIsExpand(false)}>Thu gon</p> : <p onClick={() => setIsExpand(true)} > Mở rộng</p>}
-            </div>
+            {
+                filter.length > 4 &&
+                <div className="text-center text-gray-500 cursor-pointer">
+                    {isExpand ? <p onClick={() => setIsExpand(false)}>Thu gon</p> : <p onClick={() => setIsExpand(true)} > Mở rộng</p>}
+                </div>
+            }
         </div >
     )
 }

@@ -13,11 +13,7 @@ function useGetFilters() {
         minPrice: searchParams.get("minPrice") || "",
         maxPrice: searchParams.get("maxPrice") || "",
         province: searchParams.get("province") || "",
-        ward: searchParams.get("ward") || "",
-        sortBy: searchParams.get("sortBy") || "",
-        order: searchParams.get("order") || "",
-        page: +searchParams.get("page") || PAGE,
-        size: +searchParams.get("size") || PAGE_SIZE,
+        ward: searchParams.get("ward") || ""
     };
 
 

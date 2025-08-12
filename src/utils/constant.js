@@ -60,27 +60,58 @@ export const POST_STATUS = {
 export const PROPERTIES = {
     bedrooms: {
         icon: IoBedOutline,
+        params: "bedrooms",
         label: "Số phòng ngủ: ",
     },
     floors: {
         icon: TbEscalator,
         label: "Tầng:",
+        params: "floors"
     },
     bathrooms: {
         icon: TbBath,
+        params: "bathrooms",
         label: "Số phòng tắm: ",
     },
     legalDocs: {
         icon: RiContractFill,
         label: "Thông tin pháp lý",
+        params: "legal",
+        items: [
+            "Đã có sổ",
+            "Đang chờ sổ",
+            "Không có sổ",
+            "Sổ chung/ công chứng vi bằng",
+            "Giấy tờ viết tay"
+        ]
     },
     mainDirection: {
         icon: BsDoorOpen,
         label: "Hướng cửa: ",
+        params: "mainDirection",
+        items: [
+            "Bắc",
+            "Đông Bắc",
+            "Đông",
+            "Đông Nam",
+            "Nam",
+            "Tây Nam",
+            "Tây",
+            "Tây Bắc"
+        ]
     },
     houseType: {
         icon: BsBuildings,
         label: "Loại hình căn hộ: ",
+        params: "houseType",
+        items: {
+            house: [
+                "Nhà mặt phố, mặt tiền",
+                "Nhà ngõ, hẻm",
+                "Nhà biệt thự",
+                "Nhà phố liền kề"
+            ]
+        }
     },
     dimension: {
         icon: RxDimensions,
@@ -89,98 +120,110 @@ export const PROPERTIES = {
     interiorStatus: {
         icon: LuPackage2,
         label: "Nội thất: ",
+        items: [
+            "Nội thất cao cấp",
+            "Nội thất đầy đủ",
+            "Hoàn thiện cơ bản",
+            "Bàn giao thô",
+        ],
+        params: "interiorStatus"
     },
     hasGarden: {
         icon: IoFlowerOutline,
         label: "Sân vườn: ",
+        items: [
+            "Có sân vườn",
+            "Không có sân vườn"
+        ],
+        params: "hasGarden"
     },
 };
 
 export const FILTER_PRICE_SELL = [
     {
-        name: "Giá dưới 1 tỷ",
+        label: "Giá dưới 1 tỷ",
         minPrice: 0,
         maxPrice: 1000000000
     },
     {
-        name: "Giá 1 - 2 tỷ",
+        label: "Giá 1 - 2 tỷ",
         minPrice: 1000000000,
         maxPrice: 2000000000
     },
     {
-        name: "Giá 2 - 3 tỷ",
+        label: "Giá 2 - 3 tỷ",
         minPrice: 2000000000,
         maxPrice: 3000000000
     },
     {
-        name: "Giá 3 - 5 tỷ",
+        label: "Giá 3 - 5 tỷ",
         minPrice: 3000000000,
         maxPrice: 5000000000
     },
     {
-        name: "Giá 5 - 7 tỷ",
+        label: "Giá 5 - 7 tỷ",
         minPrice: 5000000000,
         maxPrice: 7000000000
     },
     {
-        name: "Giá 7 - 10 tỷ",
+        label: "Giá 7 - 10 tỷ",
         minPrice: 7000000000,
         maxPrice: 10000000000
     },
     {
-        name: "Giá trên 10 tỷ",
+        label: "Giá trên 10 tỷ",
         minPrice: 10000000000,
         maxPrice: null
     }
 ];
 export const FILTER_PRICE_RENT = [
     {
-        name: "Giá dưới 2 triệu",
+        label: "Giá dưới 2 triệu",
         minPrice: 0,
         maxPrice: 2000000
     },
     {
-        name: "Giá 2 - 3 triệu",
+        label: "Giá 2 - 3 triệu",
         minPrice: 2000000,
         maxPrice: 3000000
     },
     {
-        name: "Giá 3 - 5 triệu",
+        label: "Giá 3 - 5 triệu",
         minPrice: 3000000,
         maxPrice: 5000000
     },
     {
-        name: "Giá 5 - 10 triệu",
+        label: "Giá 5 - 10 triệu",
         minPrice: 5000000,
         maxPrice: 10000000
     },
     {
-        name: "Giá 10 - 15 triệu",
+        label: "Giá 10 - 15 triệu",
         minPrice: 10000000,
         maxPrice: 15000000
     },
     {
-        name: "Giá 15 - 20 triệu",
+        label: "Giá 15 - 20 triệu",
         minPrice: 15000000,
         maxPrice: 20000000
     },
     {
-        name: "Giá 20 - 30 triệu",
+        label: "Giá 20 - 30 triệu",
         minPrice: 20000000,
         maxPrice: 30000000
     },
     {
-        name: "Giá 30 - 50 triệu",
+        label: "Giá 30 - 50 triệu",
         minPrice: 30000000,
         maxPrice: 50000000
     },
     {
-        name: "Giá 50 - 70 triệu",
+        label: "Giá 50 - 70 triệu",
         minPrice: 50000000,
         maxPrice: 70000000
     },
     {
-        name: "Giá trên 70 triệu",
+        label: "Giá trên 70 triệu",
         minPrice: 70000000,
         maxPrice: null
     }
