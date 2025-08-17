@@ -1,11 +1,12 @@
 import MiniSpinner from "../../ui/MiniSpinner";
+import PaginationStack from "../../ui/PaginationStack";
 import EmptySearch from "./EmptySearch";
 import SearchItem from "./SearchItem"
 import useSearch from "./useSearch";
 
 
 function SearchList() {
-    const { isLoading, posts } = useSearch()
+    const { isLoading, posts, page, totalPages } = useSearch()
     if (isLoading) return <div className="col-span-3">
         <MiniSpinner />
     </div>
@@ -17,6 +18,9 @@ function SearchList() {
                     <SearchItem key={item.id} item={item} />
                 ))
                 : <EmptySearch />}
+            <div className="flex justify-center text-3xl">
+                <PaginationStack totalPage={totalPages} currentPage={page} />
+            </div>
         </div>
     )
 }

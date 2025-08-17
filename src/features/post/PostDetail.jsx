@@ -10,7 +10,7 @@ import { PROPERTIES } from "../../utils/constant";
 
 
 function PostDetail({ post }) {
-    const { price, type, createdAt, title, assetDetail } = post;
+    const { price, type, createdAt, title, description, assetDetail } = post;
     const square = caculateSquare(assetDetail.dimension);
     return (
         <Section>
@@ -56,7 +56,7 @@ function PostDetail({ post }) {
                     <h3 className="font-semibold">SĐT Liên hệ: </h3>
                     <p className="ml-4">0935 39 xxxx</p>
                 </div>
-                {assetDetail.description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
+                {description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
             </div>
 
 

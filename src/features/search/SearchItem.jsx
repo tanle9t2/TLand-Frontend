@@ -1,12 +1,13 @@
 import { FaHeart, FaRegHeart } from "react-icons/fa"
 import { IoLocationOutline } from "react-icons/io5"
 import { formatVietnamMoney } from "../../utils/helper";
+import { Link } from "react-router-dom";
 
 function SearchItem({ item }) {
-    const { title, price, assetDetail } = item;
+    const { id, title, price, assetDetail } = item;
     const { province, ward, address, media, landArea } = assetDetail;
     return (
-        <div
+        <Link to={`/post/${id}`}
             className="bg-white p-4 text-3xl rounded-lg shadow-sm flex overflow-hidden hover:shadow-md transition"
         >
             <img src={media.url} alt={title} className="w-[160px] h-[160px] object-cover" />
@@ -31,11 +32,10 @@ function SearchItem({ item }) {
                             <span>{item.authorPosts}</span>
                         </div>
                     </div>
-                    {/* <FaHeart fill="red" /> */}
                     <FaRegHeart />
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

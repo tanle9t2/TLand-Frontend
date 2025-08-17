@@ -7,21 +7,36 @@ import { formatSearchParams } from "../../utils/helper";
 function useSearch() {
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
+
+    const {
+        keyword = "",
+        category = "",
+        type = "",
+        minPrice = "",
+        maxPrice = "",
+        province = "",
+        ward = "",
+        sortBy = "",
+        order = "",
+        page = PAGE,
+        size = PAGE_SIZE,
+        ...rest
+    } = Object.fromEntries(searchParams.entries());
+
     const filterValue = {
-        keyword: searchParams.get("keyword") || "",
-        category: searchParams.get("category") || "",
-        type: searchParams.get("type") || "",
-        minPrice: searchParams.get("minPrice") || "",
-        maxPrice: searchParams.get("maxPrice") || "",
-        province: searchParams.get("province") || "",
-        ward: searchParams.get("ward") || "",
-        sortBy: searchParams.get("sortBy") || "",
-        order: searchParams.get("order") || "",
-        page: +searchParams.get("page") || PAGE,
-        size: +searchParams.get("size") || PAGE_SIZE,
+        keyword,
+        category,
+        type,
+        minPrice,
+        maxPrice,
+        province,
+        ward,
+        sortBy,
+        order,
+        page: +page,
+        size: +size,
+        ...rest
     };
-
-
     const filterParams = formatSearchParams(filterValue);
 
     const { isLoading, data } = useQuery({
@@ -30,8 +45,6 @@ function useSearch() {
     });
     const {
         content: posts = [],
-        size = 4,
-        page,
         totalElements = 0,
         totalPages = 0,
     } = data ?? {};

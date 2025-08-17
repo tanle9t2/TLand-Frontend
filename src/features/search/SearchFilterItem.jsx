@@ -15,11 +15,12 @@ function SearchFilterItem({ title, params, filter }) {
             if (filter[i].maxPrice)
                 searchParams.set("maxPrice", filter[i].maxPrice)
         } else {
-            searchParams.set(params, filter[i].name || filter[i].label)
+            searchParams.set(params, filter[i].name || filter.label || filter[i])
         }
         setSearchParams(searchParams)
 
     }
+    console.log(filter)
     if (!filter.length) return null;
     return (
         <div className="bg-white text-2xl rounded-lg shadow-sm p-4">
@@ -30,16 +31,16 @@ function SearchFilterItem({ title, params, filter }) {
                 </span>
             </ div>
 
-            {isShow && <ul className={`space-y-5 overflow-y-hidden ${isExpand ? "h-full" : " h-[120px]"}`}>
+            {isShow && <ul className={`space-y-5 overflow-y-hidden ${isExpand ? "h-full" : "h-fit max-h-[120px]"}`}>
                 {filter.map((f, i) => (
                     <li onClick={() => handleOnClick(i)} key={i} className="hover:text-rose-600 cursor-pointer" >
-                        {f.label || f.name}
+                        {f.name || f.label || f}
                     </li>
                 ))}
             </ul>
             }
             {
-                filter.length > 4 &&
+                filter.length > 4 && isShow &&
                 <div className="text-center text-gray-500 cursor-pointer">
                     {isExpand ? <p onClick={() => setIsExpand(false)}>Thu gon</p> : <p onClick={() => setIsExpand(true)} > Mở rộng</p>}
                 </div>

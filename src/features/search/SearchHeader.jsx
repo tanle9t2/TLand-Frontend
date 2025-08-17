@@ -2,7 +2,8 @@ import Select from 'react-select';
 import useGetCategories from '../asset/useGetCategories';
 import { useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
-import { PROPERTIES } from '../../utils/constant';
+import { FILTER_NAME, PROPERTIES } from '../../utils/constant';
+import Chip from '@mui/material/Chip';
 
 const LOCATION = [
     "Hồ Chí Minh",
@@ -27,13 +28,12 @@ function SearchHeader() {
     );
 
 
-    const typeParam = searchParams.get("type") || "SELL";
-    const cateParam = searchParams.get("category") || null;
-    const province = searchParams.get("province") || null;
 
 
-    const selectedType = POST_TYPE.find(p => p.value === typeParam) || null;
-    const selectedCate = cateOption.find(c => c.value === cateParam) || null;
+    const paramsObj = Object.fromEntries(searchParams.entries());
+    const { type = "SELL", category, province, keyword, ...rest } = paramsObj
+    const selectedType = POST_TYPE.find(p => p.value === type) || null;
+    const selectedCate = cateOption.find(c => c.value === category) || null;
 
     function handleOnClickProvince(e) {
         searchParams.set("province", e.target.textContent);
@@ -59,15 +59,25 @@ function SearchHeader() {
         }
         setSearchParams(newParams);
     }
+    function handleDeleteFilter(key) {
+        if (key === "minPrice" || key === "maxPrice") {
+            searchParams.delete("maxPrice")
+            searchParams.delete("minPrice")
+        } else
+            searchParams.delete(key)
+        setSearchParams(searchParams)
+    }
     return (
         <div className="bg-white">
             <h1 className="text-3xl font-bold p-4">
                 Mua Bán Bất Động Sản {province} Giá Tốt
             </h1>
 
-            <div className="p-4 flex items-center">
-                <h1 className="text-3xl font-bold">Lọc: </h1>
-                <div className=" flex space-x-5 p-4">
+            <div className="p-4 grid grid-cols-12 items-center gap-4">
+
+                <div className="col-span-11 flex items-center space-x-5">
+                    <h1 className="text-3xl font-bold">Lọc:</h1>
+
                     <Select
                         onChange={handleOnChangeType}
                         value={selectedType}
@@ -84,10 +94,36 @@ function SearchHeader() {
                         placeholder="Loại hình BĐS"
                         options={cateOption}
                     />
-                </div>
-                <p onClick={handleOnDeleteFilter} className='text-2xl ml-auto cursor-pointer text-blue-600'>Xóa bộ lọc</p>
 
+
+                    {/* Active filters */}
+                    <div className="flex items-center text-2xl space-x-2 overflow-x-auto col-span-6">
+                        {Object.entries(rest).map(([k, v]) => (
+                            <Chip
+                                onDelete={() => handleDeleteFilter(k)}
+                                key={k}
+                                variant="outlined"
+                                sx={{ fontSize: "16px" }}
+                                label={
+                                    <span >
+                                        <span className="font-bold">{FILTER_NAME[k]}</span>: {v}
+                                    </span>
+
+                                }
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Reset button */}
+                <p
+                    onClick={handleOnDeleteFilter}
+                    className="col-span-1 text-2xl ml-auto cursor-pointer text-blue-600"
+                >
+                    Xóa bộ lọc
+                </p>
             </div>
+
 
             {!province && (
                 <div className="p-4 text-2xl flex items-center space-x-7">

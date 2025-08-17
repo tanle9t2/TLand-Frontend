@@ -61,17 +61,17 @@ export const PROPERTIES = {
     bedrooms: {
         icon: IoBedOutline,
         params: "bedrooms",
-        label: "Số phòng ngủ: ",
+        label: "Số phòng ngủ",
     },
     floors: {
         icon: TbEscalator,
-        label: "Tầng:",
+        label: "Số tầng",
         params: "floors"
     },
     bathrooms: {
         icon: TbBath,
         params: "bathrooms",
-        label: "Số phòng tắm: ",
+        label: "Số phòng tắm",
     },
     legalDocs: {
         icon: RiContractFill,
@@ -87,7 +87,7 @@ export const PROPERTIES = {
     },
     mainDirection: {
         icon: BsDoorOpen,
-        label: "Hướng cửa: ",
+        label: "Hướng cửa",
         params: "mainDirection",
         items: [
             "Bắc",
@@ -102,7 +102,7 @@ export const PROPERTIES = {
     },
     houseType: {
         icon: BsBuildings,
-        label: "Loại hình căn hộ: ",
+        label: "Loại hình căn hộ",
         params: "houseType",
         items: {
             house: [
@@ -115,11 +115,11 @@ export const PROPERTIES = {
     },
     dimension: {
         icon: RxDimensions,
-        label: "Diện tích: ",
+        label: "Diện tích",
     },
     interiorStatus: {
         icon: LuPackage2,
-        label: "Nội thất: ",
+        label: "Nội thất",
         items: [
             "Nội thất cao cấp",
             "Nội thất đầy đủ",
@@ -138,6 +138,17 @@ export const PROPERTIES = {
         params: "hasGarden"
     },
 };
+export const FILTER_NAME = {
+    floors: "Số tầng",
+    interiorStatus: "Nội thất",
+    houseType: "Loại hình căn hộ",
+    bathrooms: "Số phòng tắm",
+    mainDirection: "Hướng cửa",
+    legalDocs: "Thông tin pháp lý",
+    minPrice: "Giá từ",
+    maxPrice: "Đến",
+    ward: "Phường"
+}
 
 export const FILTER_PRICE_SELL = [
     {
