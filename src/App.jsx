@@ -13,6 +13,10 @@ import AssetCreated from "./features/asset/AssetCreated"
 import PostManagement from "./features/post/PostManagement"
 import PostUpdateFormData from "./features/post/PostUpdateFormData"
 import Search from "./features/search/Search"
+import SignIn from "./features/auth/sign-in/SignInForm"
+import SignUp from "./features/auth/sign-up/SignUp"
+
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,7 +52,8 @@ function App() {
             <Route path="my-ads/update/:postId" element={<PostUpdateFormData />} />
 
           </Route >
-
+          <Route path="auth/login" element={<SignIn />} />
+          <Route path="auth/register" element={<SignUp />} />
         </Routes >
       </BrowserRouter >
       <Toaster position="top-right" autoClose={3000} />
