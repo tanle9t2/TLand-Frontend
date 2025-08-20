@@ -23,6 +23,8 @@ import {
 } from "./components/CustomIcons";
 import { useState } from "react";
 import Logo from "../../../ui/Logo";
+import useLogin from "../useLogin";
+import useLoginWithThirdParty from "../useLoginWithThirdParty";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -73,6 +75,9 @@ export default function SignIn(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
 
+  const { isLoading, defaultLogin } = useLogin()
+  const { thirdPartyLogin } = useLoginWithThirdParty()
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -80,10 +85,13 @@ export default function SignIn(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  function handleLoginWithGoogle() {
+    thirdPartyLogin({ partyName: "google" })
+  }
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     if (emailError || passwordError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
@@ -91,6 +99,11 @@ export default function SignIn(props) {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    defaultLogin({
+      usernameOrEmail: data.get("email"),
+      password: data.get("password")
+    })
   };
 
   const validateInputs = () => {
@@ -99,7 +112,7 @@ export default function SignIn(props) {
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email.value) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
       isValid = false;
@@ -108,7 +121,7 @@ export default function SignIn(props) {
       setEmailErrorMessage("");
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password.value) {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
@@ -219,9 +232,9 @@ export default function SignIn(props) {
           <Divider sx={{ fontSize: "1.5rem" }}>or</Divider>
           <Box sx={{ display: "flex", fontSize: "1.5rem", flexDirection: "column", gap: 2 }}>
             <Button
+              onClick={() => handleLoginWithGoogle()}
               fullWidth
               variant="outlined"
-              onClick={() => alert("Sign in with Google")}
               startIcon={<GoogleIcon />}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >

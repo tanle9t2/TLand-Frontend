@@ -1,3 +1,35 @@
+export const getAccessToken = () => {
+    const token = window.localStorage.getItem("auth_token");
+    if (token == null) return null;
+    return JSON.parse(token).accessToken;
+};
+
+export const getRefreshToken = () => {
+    const token = window.localStorage.getItem("auth_token");
+    if (token == null) return null;
+    return JSON.parse(token).refreshToken;
+};
+
+export const AuthenticationHeader = function () {
+    return {
+        Authorization: `Bearer ${getAccessToken()}`,
+    };
+};
+
+export const setLocalStorageToken = (token) => {
+    window.localStorage.setItem("auth_token", JSON.stringify(token));
+};
+export const setLocalStorageRefreshToken = (token) => {
+    window.localStorage.setItem("refresh_token", JSON.stringify(token));
+};
+
+export const removeLocalStorageToken = () => {
+    window.localStorage.removeItem("auth_token");
+};
+export const removeLocalStorageRefreshToken = () => {
+    window.localStorage.removeItem("refresh_token");
+};
+
 export const caculatePrice = (price, square) => {
     return formatVietnamMoney(price * square)
 };
