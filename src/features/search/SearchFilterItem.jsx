@@ -20,7 +20,6 @@ function SearchFilterItem({ title, params, filter }) {
         setSearchParams(searchParams)
 
     }
-    console.log(filter)
     if (!filter.length) return null;
     return (
         <div className="bg-white text-2xl rounded-lg shadow-sm p-4">

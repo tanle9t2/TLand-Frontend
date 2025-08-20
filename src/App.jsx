@@ -15,9 +15,10 @@ import PostUpdateFormData from "./features/post/PostUpdateFormData"
 import Search from "./features/search/Search"
 import SignIn from "./features/auth/sign-in/SignInForm"
 import SignUp from "./features/auth/sign-up/SignUp"
-import { AuthProvider } from "react-oauth2-code-pkce"
-import { authConfig } from "./utils/authConfig"
+
 import FullPageSpinner from "./ui/FullPageSpinner"
+import ProtectedRoute from "./ui/ProtectedRoute"
+import { AuthProvider } from "./context/AuthContext"
 
 
 
@@ -32,8 +33,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider authConfig={authConfig} loadingComponent={<FullPageSpinner />}>
+      <AuthProvider>
         <BrowserRouter >
+
           <Routes>
             <Route
               element={
@@ -44,13 +46,24 @@ function App() {
               <Route path="search" element={<Search />} />
               <Route path="post/:postId" element={<PostDetailPage />} />
               <Route path="asset/:assetId" element={<AssetPage />} />
-              <Route path="asset" element={<AssetList />} />
+              <Route path="asset" element={
+                <ProtectedRoute>
+                  <AssetList />
+                </ProtectedRoute>} />
 
-              <Route path="create-asset" element={<AssetCreatedPage />} />
-              <Route path="create-asset/draft/:draftId" element={<AssetCreated />} />
+              <Route path="create-asset" element={
+                <ProtectedRoute>
+                  <AssetCreatedPage />
+                </ProtectedRoute>} />
+              <Route path="create-asset/draft/:draftId" element={
+                <ProtectedRoute>
+                  <AssetCreated />
+                </ProtectedRoute>} />
               <Route path="asset/update/:assetId" element={<AssetCreated />} />
               <Route path="create-asset/new" element={<AssetCreated />} />
-              <Route path="create-post" element={<PostCreated />} />
+              <Route path="create-post" element={<ProtectedRoute>
+                <PostCreated />
+              </ProtectedRoute>} />
               <Route path="my-ads" element={<PostManagement />} />
               <Route path="my-ads/:status" element={<PostManagement />} />
               <Route path="my-ads/update/:postId" element={<PostUpdateFormData />} />

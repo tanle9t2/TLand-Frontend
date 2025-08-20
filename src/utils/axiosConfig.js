@@ -1,22 +1,11 @@
 import axios from "axios";
-// import axiosRetry from "axios-retry";
-// import {
-//   getAccessToken,
-//   removeLocalStorageToken,
-//   setLocalStorageToken,
-// } from "./helper";
-// import { refreshToken } from "../services/tokenService";
+
 import { BASE_URL } from "./Url";
+import { getAccessToken, setLocalStorageToken } from "./helper";
+import { refreshToken } from "../services/AuthService";
 
-// let retryQueue = [];
-// let isRefresh = false;
-
-// axiosRetry(axios, {
-//   retries: 0, // Number of retries (Defaults to 3)
-//   retryCondition(err) {
-//     return false;
-//   },
-// });
+let retryQueue = [];
+let isRefresh = false;
 
 export const API = axios.create({
   baseURL: BASE_URL,
@@ -25,61 +14,63 @@ export const ADDRESS_API = axios.create({
   baseURL: "https://tinhthanhpho.com/api/v1/"
 })
 
-// export const AUTH_REQUEST = axios.create({
-//   baseURL: BASE_URL,
-// });
+export const AUTH_REQUEST = axios.create({
+  baseURL: BASE_URL,
+});
 
-// AUTH_REQUEST.interceptors.request.use(
-//   (config) => {
-//     const token = getAccessToken();
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+AUTH_REQUEST.interceptors.request.use(
+  (config) => {
+    const token = getAccessToken();
 
-// AUTH_REQUEST.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error) => {
-//     const { response, config } = error;
-//     if (response.status == 401 || response.status == 403) {
-//       if (!isRefresh) {
-//         isRefresh = true;
-//         try {
-//           const token = await refreshToken();
-//           setLocalStorageToken(token);
 
-//           retryQueue.forEach((req) => {
-//             AUTH_REQUEST.request(req.config)
-//               .then((res) => req.resolve(res))
-//               .catch((err) => req.reject(err));
-//           });
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-//           config.headers["Authorization"] = `Bearer ${token.accessToken}`;
+AUTH_REQUEST.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const { response, config } = error;
+    if (response.status == 401 || response.status == 403) {
+      if (!isRefresh) {
+        isRefresh = true;
+        try {
+          const token = await refreshToken();
+          setLocalStorageToken(token);
 
-//           retryQueue = [];
+          retryQueue.forEach((req) => {
+            AUTH_REQUEST.request(req.config)
+              .then((res) => req.resolve(res))
+              .catch((err) => req.reject(err));
+          });
 
-//           return AUTH_REQUEST(config);
-//         } catch (err) {
-//           retryQueue = [];
-//           removeLocalStorageToken();
-//           window.location.href = "/auth/login";
-//           return Promise.reject(error);
-//         } finally {
-//           isRefresh = false;
-//         }
-//       }
+          config.headers["Authorization"] = `Bearer ${token.accessToken}`;
 
-//       return new Promise((resolve, reject) => {
-//         retryQueue.push({ config: config, resolve, reject });
-//       });
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+          retryQueue = [];
+
+          return AUTH_REQUEST(config);
+        } catch (err) {
+          retryQueue = [];
+
+          window.location.href = "/auth/login";
+          return Promise.reject(error);
+        } finally {
+          isRefresh = false;
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        retryQueue.push({ config: config, resolve, reject });
+      });
+    }
+    return Promise.reject(error);
+  }
+);

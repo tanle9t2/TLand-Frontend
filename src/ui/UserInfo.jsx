@@ -2,11 +2,18 @@ import { useState } from "react";
 import { RiVipDiamondLine } from "react-icons/ri";
 import { MdHistory } from "react-icons/md";
 import { BiBuildingHouse } from "react-icons/bi";
-import { CiSettings } from "react-icons/ci";
+import { CiLogout, CiSettings } from "react-icons/ci";
 import { FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
 function UserInfo() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { logout } = useAuth()
+    function handleLogout() {
+        logout()
+
+    }
     return (
         <div
             onMouseEnter={() => setIsMenuOpen(true)}
@@ -72,6 +79,14 @@ function UserInfo() {
                         </li>
                         <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
                             <span className="mr-2"><MdHistory /></span> Lịch sử giao dịch
+                        </li>
+                    </ul>
+                    <div className="p-4 bg-gray-200">
+                        <h3 className=" text-gray-700 font-bold">Khác</h3>
+                    </div>
+                    <ul className="space-y-2">
+                        <li onClick={() => handleLogout()} className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                            <span className="mr-2"><CiLogout /></span> Đăng xuất
                         </li>
                     </ul>
                 </div>

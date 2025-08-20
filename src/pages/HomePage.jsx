@@ -3,6 +3,7 @@ import PostForSell from "../features/post/PostForSell"
 import Banner from "../ui/Banner"
 import CardCategory from "../ui/CardCategory"
 import Section from "../ui/Section"
+
 const data = [{
     icon: "\\public\\icon-1.png",
     title: "Mua bán",

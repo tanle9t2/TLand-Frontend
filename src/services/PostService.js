@@ -1,20 +1,20 @@
-import { API } from "../utils/axiosConfig";
+import { API, AUTH_REQUEST } from "../utils/axiosConfig";
 
 export async function getPosts(page, size, type) {
-    const res = await API.get('/post-service/api/v1/posts', {
+    const res = await API.get('/post-service/api/v1/public/posts', {
         params: { page, size, type },
     });
     return res.data;
 }
 export async function getPostByStatus({ page, size, status, kw }) {
-    const res = await API.get('/post-service/api/v1/post/status', {
+    const res = await API.get('/post-service/api/v1/public/post/status', {
         params: { page, size, status, kw }
     });
     return res.data;
 }
 
 export async function getPostById(postId) {
-    const res = await API.get(`/post-service/api/v1/post/${postId}`)
+    const res = await API.get(`/post-service/api/v1/public/post/${postId}`)
     return res.data;
 }
 export async function createPost({ request }) {
@@ -30,13 +30,13 @@ export async function deletePost(id) {
     return res.data;
 }
 export async function getHistory({ id, page, size }) {
-    const res = await API.get(`/post-service/api/v1/posts/history/${id}`, {
+    const res = await AUTH_REQUEST.get(`/post-service/api/v1/public/posts/history/${id}`, {
         params: { page, size }
     })
     return res.data;
 }
 
 export async function getSummaryStatusPost() {
-    const res = await API.get(`/post-service/api/v1/posts/status`)
+    const res = await API.get(`/post-service/api/v1/posts/public/status`)
     return res.data;
 }
