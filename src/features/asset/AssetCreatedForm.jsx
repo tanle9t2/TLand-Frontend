@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import ModalSelectAddress from "../../ui/ModalSelectAddress";
-import PostCreateFormDetail from "./AssetCreateFormDetail";
+import AssetCreateFormDetail from "./AssetCreateFormDetail";
 import Button from "../../ui/Button";
 import { Controller } from "react-hook-form";
 import ErrorMessage from "../../ui/ErrorMessage";
@@ -33,7 +33,7 @@ function AssetCreatedForm({ register, errors, handleOnChangeAddress, watch, setC
 
             {/*form detail*/}
             <div>
-                <PostCreateFormDetail register={register} errors={errors} />
+                <AssetCreateFormDetail register={register} errors={errors} />
             </div>
         </div>
 

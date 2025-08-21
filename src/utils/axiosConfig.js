@@ -60,7 +60,7 @@ AUTH_REQUEST.interceptors.response.use(
         } catch (err) {
           retryQueue = [];
 
-          window.location.href = "/auth/login";
+
           return Promise.reject(error);
         } finally {
           isRefresh = false;

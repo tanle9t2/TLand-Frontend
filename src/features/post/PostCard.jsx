@@ -51,25 +51,35 @@ function PostCard({ post }) {
                         </span>
                     </span>
                 </Typography>
-                <div className='flex items-start justify-between mt-2'>
-                    <div>
-                        <Typography variant="body1" sx={{
-                            fontWeight: 'bold',
-                            lineHeight: '1.5rem',
-                            height: '3rem',
-                        }} className='font-bold text-2xl'>
-                            {`${assetDetail.address}, ${assetDetail.ward}, ${assetDetail.province}`}
-                        </Typography>
-                        <Typography variant="body2" className='font-bold text-2xl'>
+                <div className="grid grid-cols-3 items-start mt-2 space-x-3" >
+                    <div className="col-span-2">
+                        <div className="flex items-center justify-between gap-2">
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    fontWeight: 'bold',
+                                    lineHeight: '1.5rem',
+                                    height: '3rem',
+                                    flex: 1,
+                                    width: 0,
+                                }}
+                                className="font-bold text-2xl line-clamp-2"
+                            >
+                                {`${assetDetail.address}, ${assetDetail.ward}, ${assetDetail.province}`}
+                            </Typography>
+                        </div>
+                        <Typography variant="body2" className="text-gray-600 text-sm mt-1">
                             {getTimeDifferenceFromNow(createdAt)}
                         </Typography>
                     </div>
-                    <CardActions>
-                        <Button variant='secondary'>
-                            <CiHeart size={19} fill='black' />
+
+                    <CardActions className="col-span-1 flex justify-end">
+                        <Button variant="secondary">
+                            <CiHeart size={19} fill="black" />
                         </Button>
                     </CardActions>
                 </div>
+
             </CardContent>
         </Card>
     );

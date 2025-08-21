@@ -7,8 +7,9 @@ import Button from "./Button";
 import useGetProvince from "../features/asset/useGetProvince";
 import SyncLoader from "react-spinners/SyncLoader";
 import useGetWards from "../features/asset/useGetWards";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
+import Select from 'react-select'
 
 const style = {
     position: 'absolute',
@@ -30,7 +31,9 @@ function ModalSelectAddress({ address, setAddress }) {
     const [provinceCode, setProvinceCode] = useState(null)
     const {
         register,
+        control,
         getValues,
+        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm({
@@ -53,12 +56,14 @@ function ModalSelectAddress({ address, setAddress }) {
         setOpen(false)
     }
 
-    function handleUpdateProvince(e) {
-        const value = e.target.value;
-        const province = provinces.find(p => `${p.type} ${p.name}` === value);
-        setProvinceCode(province.code)
-    };
-
+    const provinceOption = provinces?.map(p => ({
+        value: p.code,
+        label: p.name
+    }))
+    const wardsOption = wards?.map(p => ({
+        value: p.code,
+        label: p.name
+    }))
 
     return (
         <div>
@@ -87,46 +92,69 @@ function ModalSelectAddress({ address, setAddress }) {
                                     <label htmlFor="province" className="block mb-2 text-2xl font-bold">
                                         Chọn tỉnh, thành phố
                                     </label>
-                                    <select
-                                        onChange={handleUpdateProvince}
-                                        id="province"
-                                        {...register("province", {
-                                            required: "Vui lòng chọn tỉnh",
-                                            onChange: (e) => handleUpdateProvince(e),
-                                        })}
-                                        className="w-full p-6 border border-gray-300 rounded text-2xl"
-                                    >
-                                        <option value="">Chọn tỉnh, thành phố</option>
-                                        {provinces.map((item) => (
-                                            <option key={item.code} value={`${item.type} ${item.name}`}>
-                                                {item.type} {item.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.province && (
-                                        <ErrorMessage message={errors.province.message} />
-                                    )}
+                                    <Controller
+                                        name="province"
+                                        control={control}
+                                        rules={{ required: "Vui lòng chọn tỉnh" }}
+
+                                        render={({ field, fieldState }) => (
+                                            <>
+                                                <Select
+                                                    {...field}
+                                                    options={provinceOption}
+                                                    placeholder="Toàn quốc"
+                                                    className="w-full rounded text-2xl"
+                                                    classNamePrefix="react-select"
+                                                    value={provinceOption.find(opt =>
+
+                                                        opt.label === field.value
+
+                                                    )}
+                                                    onChange={(val) => {
+                                                        field.onChange(val);
+                                                        setProvinceCode(val.value)
+                                                        setValue("province", val.label)
+                                                    }}
+                                                />
+                                                {fieldState.error && (
+                                                    <p className="text-red-500 text-sm">{fieldState.error.message}</p>
+                                                )}
+                                            </>
+                                        )}
+                                    />
                                 </div>
 
                                 <div className="my-5">
                                     <label htmlFor="ward" className="block mb-2 text-2xl font-bold">
                                         Chọn phường, xã
                                     </label>
-                                    <select
-                                        id="ward"
-                                        {...register("ward", { required: "Vui lòng chọn phường/xã" })}
-                                        className="w-full p-6 border border-gray-300 rounded text-2xl"
-                                    >
-                                        <option value="">Chọn phường, xã</option>
-                                        {wards?.map((item, index) => (
-                                            <option key={index} value={`${item.type} ${item.name}`}>
-                                                {`${item.type} ${item.name}`}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.ward && (
-                                        <ErrorMessage message={errors.ward.message} />
-                                    )}
+                                    <Controller
+                                        name="ward"
+                                        control={control}
+                                        rules={{ required: "Vui lòng chọn phường/xã" }}
+                                        render={({ field, fieldState }) => (
+                                            <>
+                                                <Select
+                                                    {...field}
+                                                    options={wardsOption}
+                                                    placeholder="Phường/Xã"
+                                                    className="w-full rounded text-2xl"
+                                                    classNamePrefix="react-select"
+                                                    value={wardsOption?.find(opt =>
+                                                        opt.label === field.value
+                                                    )}
+                                                    onChange={(val) => {
+                                                        field.onChange(val);
+                                                        setValue("ward", val.label)
+                                                    }}
+                                                    isDisabled={!provinceCode}
+                                                />
+                                                {fieldState.error && (
+                                                    <p className="text-red-500 text-sm">{fieldState.error.message}</p>
+                                                )}
+                                            </>
+                                        )}
+                                    />
                                 </div>
 
                                 <div className="my-5">

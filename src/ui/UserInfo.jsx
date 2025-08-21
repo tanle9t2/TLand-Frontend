@@ -9,11 +9,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 function UserInfo() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { logout } = useAuth()
+    const { logout, profile } = useAuth()
     function handleLogout() {
         logout()
-
     }
+    const { avtUrl, firstName, lastName } = profile || {};
     return (
         <div
             onMouseEnter={() => setIsMenuOpen(true)}
@@ -22,11 +22,11 @@ function UserInfo() {
             }}
             className="flex items-center relative">
             <img
-                src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
-                alt="User Avatar"
+                src={avtUrl}
+                alt={`${firstName} ${lastName}`}
                 className="w-10 h-10 rounded-full object-cover"
             />
-            <span className="ml-3 text-xl font-medium text-gray-800">Lê Tân</span>
+            <span className="ml-3 text-xl font-medium text-gray-800">{`${firstName} ${lastName}`}</span>
             {isMenuOpen && <div className="absolute z-20 top-[30px] w-120 right-0 mx-auto bg-white shadow-lg rounded-lg
                     before:content-[''] before:absolute before:-top-3 before:right-4 before:w-[84px]
                     before:border-12 before:border-transparent before:border-b-white before:z-[-1]">
@@ -34,12 +34,12 @@ function UserInfo() {
                 <div className="flex items-center justify-between p-4 mb-4">
                     <div className="flex">
                         <img
-                            src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
-                            alt="User Avatar"
+                            src={avtUrl}
+                            alt={`${firstName} ${lastName}`}
                             className="w-[48px] h-[48px] rounded-[50%] mr-2"
                         />
                         <div>
-                            <h2 className="text-xl font-semibold">Lê Tân</h2>
+                            <h2 className="text-xl font-semibold">{`${firstName} ${lastName}`}</h2>
                             <p className="text-yellow-500 text-xl">0.0 ★★★★ (Chưa có đánh giá)</p>
                             <p className="text-gray-500 text-xl">0 Người theo dõi | 0 Đang theo dõi</p>
                         </div>

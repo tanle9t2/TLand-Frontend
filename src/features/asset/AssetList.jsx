@@ -5,6 +5,8 @@ import MiniSpinner from "../../ui/MiniSpinner";
 import PaginationStack from "../../ui/PaginationStack";
 import { Link, useSearchParams } from "react-router-dom";
 import Button from "../../ui/Button";
+
+import PostCreatedEmpty from "../post/PostCreatedEmpty";
 function AssetList() {
     const { isLoading, assets, totalPages, page } = useGetAssets()
 
@@ -15,6 +17,10 @@ function AssetList() {
     }
     if (isLoading)
         return <MiniSpinner />
+
+    if (!assets.length) return <div className="w-full bg-white  px-4 py-8 space-y-6">
+        <PostCreatedEmpty />
+    </div>
     return (
         <div className="w-full bg-white  px-4 py-8 space-y-6">
             <div className="flex justify-between items-center">

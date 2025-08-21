@@ -3,6 +3,7 @@ import keycloak from "../utils/keycloak";
 import FullPageSpinner from "../ui/FullPageSpinner";
 
 import { setLocalStorageRefreshToken, setLocalStorageToken } from "../utils/helper";
+import useGetUserProfile from "../features/auth/useGetUserProfile";
 
 
 const AuthContext = createContext();
@@ -10,7 +11,8 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
     const [initialized, setInitialized] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
-    console.log(initialized)
+    const [profile, setProfile] = useState(null)
+    const { isLoading, userProfile } = useGetUserProfile()
     useEffect(() => {
         keycloak
             .init({
@@ -23,12 +25,19 @@ function AuthProvider({ children }) {
                     setLocalStorageToken(keycloak.token)
                     setLocalStorageRefreshToken(keycloak.refreshToken)
                 }
+
                 setAuthenticated(auth);
                 setInitialized(true);
             });
     }, []);
 
-    console.log("op")
+    useEffect(() => {
+        if (!isLoading && userProfile) {
+            setProfile(userProfile)
+        }
+    }, [isLoading, userProfile])
+
+    if (isLoading) return <FullPageSpinner />
 
     return (
         <AuthContext.Provider
@@ -36,6 +45,7 @@ function AuthProvider({ children }) {
                 keycloak,
                 authenticated,
                 initialized,
+                profile,
                 login: () => keycloak.login(),
                 logout: () => {
                     localStorage.removeItem("token");

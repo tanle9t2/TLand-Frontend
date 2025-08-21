@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import MiniSpinner from "../../ui/MiniSpinner"
 
 import DraftItem from "./DraftItem"
@@ -8,7 +8,9 @@ import Button from "../../ui/Button"
 function AssetCreateData() {
     const { isLoading, drafts } = useGetAssetDraft()
     if (isLoading) return <MiniSpinner />
-
+    if (!drafts.length) {
+        return <Navigate to="/create-asset/new" />;
+    }
     return (
         <div className="space-y-5">
             <div className="flex justify-between item-center bg-white rounded-lg p-4">

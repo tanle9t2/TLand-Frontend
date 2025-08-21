@@ -9,7 +9,7 @@ import { FaPage4 } from "react-icons/fa";
 import { PROPERTIES } from "../../utils/constant";
 
 
-function PostDetail({ post }) {
+function PostDetail({ phoneNumber, post }) {
     const { price, type, createdAt, title, description, assetDetail } = post;
     const square = caculateSquare(assetDetail.dimension);
     return (
@@ -54,13 +54,10 @@ function PostDetail({ post }) {
                 <h1 className="font-semibold text-3xl mb-2">Mô tả chi tiết</h1>
                 <div className="py-4 px-4 my-4 flex bg-gray-200 w-fit items-center">
                     <h3 className="font-semibold">SĐT Liên hệ: </h3>
-                    <p className="ml-4">0935 39 xxxx</p>
+                    <p className="ml-4">{phoneNumber}</p>
                 </div>
                 {description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
             </div>
-
-
-
         </Section >
     )
 }

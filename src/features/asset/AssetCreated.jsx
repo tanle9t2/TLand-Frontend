@@ -20,7 +20,6 @@ function AssetCreated() {
         register,
         handleSubmit,
         setValue,
-        control,
         watch,
         clearErrors,
         formState: { errors },
@@ -128,7 +127,6 @@ function AssetCreated() {
             </div>
             <AssetCreatedForm
                 register={register}
-                control={control}
                 errors={errors}
                 watch={watch}
                 setCategory={setCategory}

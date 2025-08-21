@@ -8,12 +8,12 @@ import { useEffect, useRef, useState } from "react";
 export default function MyCarousel({ items, handleOnMouseEnter, className }) {
     const swiperRef = useRef(null);
     const [standardItems, setStandardItems] = useState([]);
-    console.log(items)
+
     useEffect(() => {
         async function prepareItems(items) {
             const standardItems = await Promise.all(
                 items.map(async (item) => {
-                    if (item.contentType === "image") {
+                    if (item.type === "IMAGE") {
                         return item;
                     }
                     const thumbnailUrl = await generateVideoThumbnail(item.url);

@@ -189,18 +189,24 @@ function AssetCreateFormDetail({ register, errors }) {
                             placeholder="Diện tích sử dụng"
                         />
                     </div>
-                    <input
-                        type="number"
-                        {...register("width", { valueAsNumber: true })}
-                        className="p-3 border rounded"
-                        placeholder="Chiều ngang"
-                    />
-                    <input
-                        type="number"
-                        {...register("length", { valueAsNumber: true })}
-                        className="p-3 border rounded"
-                        placeholder="Chiều dài"
-                    />
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-3xl font-bold">Chiều ngang: </h2>
+                        <input
+                            type="number"
+                            {...register("width", { valueAsNumber: true })}
+                            className="p-3 border rounded"
+                            placeholder="Chiều ngang"
+                        />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-3xl font-bold">Chiều dài:</h2>
+                        <input
+                            type="number"
+                            {...register("length", { valueAsNumber: true })}
+                            className="p-3 border rounded"
+                            placeholder="Chiều dài"
+                        />
+                    </div>
                 </div>
             </section>
         </>
