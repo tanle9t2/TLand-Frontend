@@ -9,11 +9,12 @@ function PaginationStack({ currentPage, totalPage }) {
         searchParams.set("page", v - 1)
         setSerachParams(searchParams)
     }
+
     return (
         <Stack spacing={2}>
             <Pagination
                 count={totalPage}
-                page={currentPage}
+                page={currentPage + 1}
                 shape="rounded"
                 onChange={(e, v) => handleOnClickPagniation(e, v)}
                 sx={{

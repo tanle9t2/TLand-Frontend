@@ -242,3 +242,4 @@ export const FILTER_PRICE_RENT = [
 
 export const PAGE_SIZE = 5;
 export const PAGE = 1;
+export const COMMENT_SIZE = 5;

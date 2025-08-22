@@ -62,9 +62,11 @@ function UserInfo() {
                                 <span className="mr-2"><BiBuildingHouse /></span> Quản lý tin đăng
                             </li>
                         </Link>
-                        <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
-                            <span className="mr-2"><CiSettings /></span> Chỉnh sửa tài khoản
-                        </li>
+                        <Link to="/user/setting">
+                            <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
+                                <span className="mr-2"><CiSettings /></span> Chỉnh sửa tài khoản
+                            </li>
+                        </Link>
                         <li className="flex items-center cursor-pointer hover:bg-gray-100 px-2 py-4 rounded">
                             <span className="mr-2"><FaRegHeart /></span> Tin đăng đã lưu
                         </li>

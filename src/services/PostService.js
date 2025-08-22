@@ -40,3 +40,17 @@ export async function getSummaryStatusPost() {
     const res = await AUTH_REQUEST.get(`/post-service/api/v1/posts/status`)
     return res.data;
 }
+
+
+export async function getComments({ postId, page, size }) {
+    const res = await API.get(`/post-service/api/v1/public/post/${postId}/comments`, {
+        params: { page, size },
+    });
+    return res.data;
+}
+export async function createComment({ postId, content }) {
+    const res = await AUTH_REQUEST.post(`/post-service/api/v1/post/${postId}/comment`, {
+        content
+    });
+    return res.data;
+}

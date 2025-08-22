@@ -11,9 +11,12 @@ import useGetPostByStatus from "./useGetPostByStatus";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import PostMangementItem from "./PostMangementItem";
 import { useDebounce } from "../../hooks/useDebounce";
+import { useAuth } from "../../context/AuthContext";
 
 function PostManagement() {
     const { status } = useParams();
+    const { profile } = useAuth()
+    const { avtUrl, firstName, lastName } = profile || {};
     const [activeTab, setActiveTab] = useState(status);
     const { isLoading, counts } = useGetCountStatus();
     const [searParams, setSearhParams] = useSearchParams()
@@ -42,11 +45,11 @@ function PostManagement() {
                 <div className="flex justify-between mb-6">
                     <div className="flex items-center">
                         <img
-                            src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png"
-                            alt="User Avatar"
+                            src={avtUrl}
+                            alt={`${firstName} ${lastName}`}
                             className="w-[48px] h-[48px] rounded-[50%] mr-2"
                         />
-                        <span className="ml-3 text-2xl font-bold text-gray-800">Lê Tân</span>
+                        <span className="ml-3 text-2xl font-bold text-gray-800">{`${firstName} ${lastName}`}</span>
                     </div>
                     <div className="flex text-2xl  items-center gap-4">
                         <div className="relative">
