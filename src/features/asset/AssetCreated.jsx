@@ -112,8 +112,6 @@ function AssetCreated() {
         setValue("address", address);
         clearErrors("address");
     }
-
-
     return (
         <form id="post-form" onSubmit={handleSubmit(onSubmit)} className="bg-white grid grid-cols-[0.4fr_0.6fr] gap-2 p-5 space-y-8">
             <div >

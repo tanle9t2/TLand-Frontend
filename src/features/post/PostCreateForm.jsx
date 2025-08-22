@@ -47,10 +47,12 @@ function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
 
     };
 
-    const handleOnClickAsset = (id) => {
-        setValue("assetId", id);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        clearErrors("assetId");
+    const handleOnClickAsset = (asset) => {
+        if (!asset.attachedPost) {
+            setValue("assetId", asset.id);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            clearErrors("assetId");
+        }
     };
 
 
@@ -90,7 +92,10 @@ function PostCreateForm({ assets, fetchNextPage, hasMore, page }) {
                         )}
 
                         {assets.map(asset => (
-                            <div key={asset.id} onClick={() => handleOnClickAsset(asset.id)}>
+                            <div className="relative" key={asset.id} onClick={() => handleOnClickAsset(asset)}>
+                                {asset.attachedPost && <span className="absolute right-3 top-5 border rounded-lg text-xl p-1 bg-green-500 font-bold">
+                                    Đang đăng bán
+                                </span>}
                                 {watch("assetId") !== asset.id && <AssetItem asset={asset} />}
                             </div>
                         ))}

@@ -12,7 +12,7 @@ function AuthProvider({ children }) {
     const [initialized, setInitialized] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
     const [profile, setProfile] = useState(null)
-    const { isLoading, userProfile } = useGetUserProfile()
+    const { isLoading, userProfile } = useGetUserProfile(authenticated)
     useEffect(() => {
         keycloak
             .init({
@@ -37,7 +37,7 @@ function AuthProvider({ children }) {
         }
     }, [isLoading, userProfile])
 
-    if (isLoading) return <FullPageSpinner />
+    if (isLoading || !initialized) return <FullPageSpinner />
 
     return (
         <AuthContext.Provider

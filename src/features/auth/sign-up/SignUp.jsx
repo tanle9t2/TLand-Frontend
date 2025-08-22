@@ -14,14 +14,15 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../shared-theme/AppTheme';
-import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
 
+import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
+import useSignUp from "../useSignUp"
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
   width: '100%',
+  overflow: 'visible',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
@@ -39,6 +40,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
+
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
@@ -62,21 +64,27 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function SignUp(props) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [firstNameError, setFirstNameError] = React.useState(false);
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = React.useState('');
+  const [lastNameError, setLastNameError] = React.useState(false);
+  const [lastNameErrorMessage, setLastNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [usernameError, setUsernameError] = React.useState(false);
+  const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
+  const { isLoading, signUp } = useSignUp()
 
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
-
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const username = document.getElementById('username');
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage('Vui lòng nhập địa chỉ email hợp lệ.');
       isValid = false;
     } else {
       setEmailError(false);
@@ -85,37 +93,55 @@ export default function SignUp(props) {
 
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage('Mật khẩu phải có ít nhất 6 ký tự.');
       isValid = false;
     } else {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
+    if (!firstName.value || firstName.value.length < 1) {
+      setFirstNameError(true);
+      setFirstNameErrorMessage('Vui lòng nhập Họ.');
       isValid = false;
     } else {
-      setNameError(false);
-      setNameErrorMessage('');
+      setFirstNameError(false);
+      setFirstNameErrorMessage('');
+    }
+
+    if (!lastName.value || lastName.value.length < 1) {
+      setLastNameError(true);
+      setLastNameErrorMessage('Vui lòng nhập Tên.');
+      isValid = false;
+    } else {
+      setLastNameError(false);
+      setLastNameErrorMessage('');
+    }
+
+    if (!username.value || username.value.length < 1) {
+      setUsernameError(true);
+      setUsernameErrorMessage('Vui lòng nhập tên đăng nhập.');
+      isValid = false;
+    } else {
+      setUsernameError(false);
+      setUsernameErrorMessage('');
     }
 
     return isValid;
   };
 
   const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
+    event.preventDefault();
+    if (usernameError || firstNameError || lastNameError || emailError || passwordError) {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
+    signUp({
+      firstName: data.get('firstName'),
       lastName: data.get('lastName'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+    })
   };
 
   return (
@@ -128,7 +154,7 @@ export default function SignUp(props) {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign up
+            Đăng ký tài khoản
           </Typography>
           <Box
             component="form"
@@ -136,17 +162,59 @@ export default function SignUp(props) {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name" sx={{ fontSize: "1.5rem" }}>Full name</FormLabel>
+              <FormLabel htmlFor="firstName" sx={{ fontSize: "1.5rem" }}>Họ</FormLabel>
               <TextField
-                autoComplete="name"
-                name="name"
                 required
                 fullWidth
-                id="name"
-                placeholder="Jon Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? 'error' : 'primary'}
+                id="firstName"
+                placeholder="Nguyễn"
+                name="firstName"
+                autoComplete="firstName"
+                variant="outlined"
+                error={firstNameError}
+                helperText={firstNameErrorMessage}
+                color={passwordError ? 'error' : 'primary'}
+                InputProps={{
+                  sx: { fontSize: "1.5rem" },
+                }}
+                FormHelperTextProps={{
+                  sx: { fontSize: "1.5rem" },
+                }}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="lastName" sx={{ fontSize: "1.5rem" }}>Tên</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                placeholder="Văn A"
+                name="lastName"
+                autoComplete="lastName"
+                variant="outlined"
+                error={lastNameError}
+                helperText={lastNameErrorMessage}
+                color={passwordError ? 'error' : 'primary'}
+                InputProps={{
+                  sx: { fontSize: "1.5rem" },
+                }}
+                FormHelperTextProps={{
+                  sx: { fontSize: "1.5rem" },
+                }}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="username" sx={{ fontSize: "1.5rem" }}>Tên đăng nhập</FormLabel>
+              <TextField
+                autoComplete="username"
+                name="username"
+                required
+                fullWidth
+                id="username"
+                placeholder="username"
+                error={usernameError}
+                helperText={usernameErrorMessage}
+                color={usernameError ? 'error' : 'primary'}
                 InputProps={{
                   sx: { fontSize: "1.5rem" },
                 }}
@@ -177,7 +245,7 @@ export default function SignUp(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password" sx={{ fontSize: "1.5rem" }}>Password</FormLabel>
+              <FormLabel htmlFor="password" sx={{ fontSize: "1.5rem" }}>Mật khẩu</FormLabel>
               <TextField
                 required
                 fullWidth
@@ -206,44 +274,44 @@ export default function SignUp(props) {
               onClick={validateInputs}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >
-              Sign up
+              Đăng ký
             </Button>
           </Box>
           <Divider>
-            <Typography sx={{ fontSize: "1.5rem", color: 'text.secondary' }}>or</Typography>
+            <Typography sx={{ fontSize: "1.5rem", color: 'text.secondary' }}>Hoặc</Typography>
           </Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Sign up with Google')}
+              onClick={() => alert('Đăng ký với Google')}
               startIcon={<GoogleIcon />}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >
-              Sign up with Google
+              Đăng ký với Google
             </Button>
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Sign up with Facebook')}
+              onClick={() => alert('Đăng ký với Facebook')}
               startIcon={<FacebookIcon />}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >
-              Sign up with Facebook
+              Đăng ký với Facebook
             </Button>
             <Typography sx={{ fontSize: "1.5rem", textAlign: 'center' }}>
-              Already have an account?{' '}
+              Bạn đã có tài khoản?{' '}
               <Link
                 href="/auth/login"
                 variant="body2"
                 sx={{ fontSize: "1.5rem", alignSelf: 'center' }}
               >
-                Sign in
+                Đăng nhập
               </Link>
             </Typography>
           </Box>
         </Card>
       </SignUpContainer>
-    </AppTheme>
+    </AppTheme >
   );
 }

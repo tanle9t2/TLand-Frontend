@@ -19,6 +19,8 @@ import SignUp from "./features/auth/sign-up/SignUp"
 import FullPageSpinner from "./ui/FullPageSpinner"
 import ProtectedRoute from "./ui/ProtectedRoute"
 import { AuthProvider } from "./context/AuthContext"
+import UserProfile from "./features/auth/UserProfile"
+import UserProfileData from "./features/auth/UserProfileData"
 
 
 
@@ -67,6 +69,11 @@ function App() {
               <Route path="my-ads" element={<PostManagement />} />
               <Route path="my-ads/:status" element={<PostManagement />} />
               <Route path="my-ads/update/:postId" element={<PostUpdateFormData />} />
+              <Route path="user/setting/" element={
+                <ProtectedRoute>
+                  <UserProfileData />
+                </ProtectedRoute>
+              } />
 
             </Route >
             <Route path="auth/login" element={<SignIn />} />
