@@ -12,6 +12,7 @@ import { PROPERTIES } from "../../utils/constant";
 function PostDetail({ phoneNumber, post }) {
     const { price, type, createdAt, title, description, assetDetail } = post;
     const square = caculateSquare(assetDetail.dimension);
+    console.log(description.split("\\n"))
     return (
         <Section>
             <div className="p-5 text-2xl">

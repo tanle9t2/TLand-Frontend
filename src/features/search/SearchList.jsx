@@ -10,7 +10,6 @@ function SearchList() {
     if (isLoading) return <div className="col-span-3">
         <MiniSpinner />
     </div>
-
     return (
         <div className="col-span-3 space-y-4">
             {posts.length ?
@@ -19,7 +18,7 @@ function SearchList() {
                 ))
                 : <EmptySearch />}
             <div className="flex justify-center text-3xl">
-                <PaginationStack totalPage={totalPages} currentPage={page} />
+                <PaginationStack totalPage={totalPages} currentPage={parseInt(page)} />
             </div>
         </div>
     )

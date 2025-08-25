@@ -12,6 +12,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import PostMangementItem from "./PostMangementItem";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 function PostManagement() {
     const { status } = useParams();
@@ -22,6 +23,8 @@ function PostManagement() {
     const [searParams, setSearhParams] = useSearchParams()
     const [kw, setKw] = useState("")
     const debounceKW = useDebounce(kw)
+    const paymentStatus = searParams.get("vnp_TransactionStatus")
+
 
 
     const { isLoading: isLoadingPost, posts, totalPages, page } = useGetPostByStatus();
@@ -30,6 +33,16 @@ function PostManagement() {
         searParams.set("kw", debounceKW)
         setSearhParams(searParams)
     }, [debounceKW, searParams, setSearhParams]);
+
+    useEffect(() => {
+        if (!paymentStatus) return
+
+        if (paymentStatus === "00")
+            toast.success("Tạo bài viết thành công")
+        else
+            toast.error("Thanh toán thất bại. Vui lòng tạo lại bài đăng")
+        setSearhParams({})
+    }, [])
 
     if (isLoading || isLoadingPost) return <MiniSpinner />
     return (

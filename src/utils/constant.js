@@ -141,6 +141,7 @@ export const PROPERTIES = {
 export const FILTER_NAME = {
     floors: "Số tầng",
     interiorStatus: "Nội thất",
+    bedrooms: "Số phòng ngủ",
     houseType: "Loại hình căn hộ",
     bathrooms: "Số phòng tắm",
     mainDirection: "Hướng cửa",
@@ -240,6 +241,7 @@ export const FILTER_PRICE_RENT = [
     }
 ];
 
-export const PAGE_SIZE = 5;
-export const PAGE = 1;
+export const PAGE_SIZE = 10;
+export const PAGE = 0;
 export const COMMENT_SIZE = 5;
+export const PRICE_CREATED = 50000

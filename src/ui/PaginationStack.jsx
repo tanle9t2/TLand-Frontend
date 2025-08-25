@@ -10,6 +10,8 @@ function PaginationStack({ currentPage, totalPage }) {
         setSerachParams(searchParams)
     }
 
+
+
     return (
         <Stack spacing={2}>
             <Pagination

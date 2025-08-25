@@ -24,14 +24,7 @@ function SearchItem({ item }) {
                     <p className="text-gray-500 text-2xl flex items-center"><span><IoLocationOutline /></span>  {`${address}, ${ward}, ${province}`}</p>
                 </div>
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center text-lg space-x-2">
-                        <img src="https://tland-bucket.s3.us-east-1.amazonaws.com/pain.png" className="w-[20px] h-[20px] rounded-[50%]" />
-                        <div>
-                            <span>{item.author}</span>
-                            <span className="mx-1">•</span>
-                            <span>{item.authorPosts}</span>
-                        </div>
-                    </div>
+
                     <FaRegHeart />
                 </div>
             </div>

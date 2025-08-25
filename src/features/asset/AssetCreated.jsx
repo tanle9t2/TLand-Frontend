@@ -48,9 +48,9 @@ function AssetCreated() {
 
     if (isPending)
         return <FullPageSpinner />
-
-    const images = contents?.filter(media => media.contentType === "image").map(media => media.url);
-    const videos = contents?.filter(media => media.contentType === "video").map(media => media.url);
+    console.log(draft)
+    const images = contents?.filter(media => media.type === "IMAGE").map(media => media.url);
+    const videos = contents?.filter(media => media.type === "VIDEO").map(media => media.url);
     const onSubmit = (data) => {
         const {
             id,

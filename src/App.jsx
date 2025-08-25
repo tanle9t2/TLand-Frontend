@@ -22,8 +22,6 @@ import { AuthProvider } from "./context/AuthContext"
 import UserProfile from "./features/auth/UserProfile"
 import UserProfileData from "./features/auth/UserProfileData"
 
-
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -77,11 +75,17 @@ function App() {
 
             </Route >
             <Route path="auth/login" element={<SignIn />} />
+
             <Route path="auth/register" element={<SignUp />} />
           </Routes >
         </BrowserRouter >
       </AuthProvider>
-      <Toaster position="top-right" autoClose={3000} />
+      <Toaster position="top-right" toastOptions={{
+        duration: 3000,
+        style: {
+          fontSize: "16px",
+        },
+      }} />
 
     </QueryClientProvider >
   )

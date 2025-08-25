@@ -26,8 +26,8 @@ function PostCard({ post }) {
                     sx={{
                         fontSize: '16px',
                         fontWeight: 'bold',
-                        lineHeight: '1.5rem', // 24px
-                        height: '3rem',       // 2 lines × 1.5rem = 3rem (48px)
+                        lineHeight: '2.5rem', // 24px
+                        height: '5rem',       // 2 lines × 1.5rem = 3rem (48px)
                     }}
                     gutterBottom
                     component="div"
