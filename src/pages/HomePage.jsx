@@ -3,27 +3,7 @@ import PostForSell from "../features/post/PostForSell"
 import Banner from "../ui/Banner"
 import CardCategory from "../ui/CardCategory"
 import Section from "../ui/Section"
-
-const data = [{
-    icon: "\\public\\icon-1.png",
-    title: "Mua bán",
-    content: "xxxxxxxxxx tin đăng mua bán"
-},
-{
-    icon: "\\public\\icon-2.png",
-    title: "Mua bán",
-    content: "xxxxxxxxxx tin đăng mua bán"
-},
-{
-    icon: "\\public\\icon-3.png",
-    title: "Mua bán",
-    content: "xxxxxxxxxx tinssssssssssssss đăng mua bán"
-},
-{
-    icon: "\\public\\icon-4.png",
-    title: "Mua bán",
-    content: "xxxxxxxxxx tin đăng mua bán"
-}]
+import MiniChatbox from '../features/chatbot/MiniChatbox'
 function HomePage() {
     return (
         <div>
@@ -42,6 +22,7 @@ function HomePage() {
                 <h1 className="font-bold pl-3 py-5 text-3xl">Dự án được quan tâm</h1>
                 <ProjectList />
             </Section> */}
+            <MiniChatbox />
         </div>
     )
 }
