@@ -7,6 +7,7 @@ import { BsBuildings } from "react-icons/bs";
 import { RxDimensions } from "react-icons/rx";
 import { FaPage4 } from "react-icons/fa";
 import { PROPERTIES } from "../../utils/constant";
+import MapboxGeocoding from "../map/MapboxGeocoding";
 
 
 function PostDetail({ phoneNumber, post }) {
@@ -59,6 +60,7 @@ function PostDetail({ phoneNumber, post }) {
                 </div>
                 {description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
             </div>
+
         </Section >
     )
 }

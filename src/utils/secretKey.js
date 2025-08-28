@@ -1,0 +1,1 @@
+export const MAP_BOX_TOKEN = import.meta.env.VITE_MAP_BOX_TOKEN;
