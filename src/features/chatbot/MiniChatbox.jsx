@@ -15,7 +15,7 @@ import Button from "../../ui/Button";
 import { useAuth } from "../../context/AuthContext";
 import useChat from "./useChat";
 import toast from "react-hot-toast";
-
+import SyncLoader from "react-spinners/SyncLoader";
 export default function MiniChatbox() {
     const { authenticated } = useAuth()
     const [messages, setMessages] = useState([
@@ -124,14 +124,14 @@ export default function MiniChatbox() {
                                         sx={{
                                             fontSize: "16px",
                                             bgcolor: "#E0E0E0",
-
+                                            display: "flex",
                                             p: 1,
                                             borderRadius: "8px",
                                             maxWidth: "70%",
                                             wordBreak: "break-word",
                                         }}
                                     >
-                                        Trợ lý ảo: ...
+                                        Trợ lý ảo: <SyncLoader size={8} />
                                     </Typography>
                                 </Box>
 

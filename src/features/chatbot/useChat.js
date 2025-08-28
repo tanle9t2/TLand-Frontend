@@ -8,3 +8,4 @@ export default function useChat() {
 
     return { isPending, createChat }
 }
+

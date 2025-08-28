@@ -23,7 +23,7 @@ export async function getAssetsDraft() {
 
 
 export async function uploadAssetImage(assetId, file) {
-    console.log(file)
+
     const formData = new FormData();
     formData.append('file', file);
     if (assetId)
