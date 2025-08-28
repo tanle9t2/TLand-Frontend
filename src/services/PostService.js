@@ -25,10 +25,19 @@ export async function updatePost({ id, request }) {
     const res = await AUTH_REQUEST.put(`/post-service/api/v1/post/${id}`, { ...request })
     return res.data;
 }
+export async function showPost({ postId }) {
+    const res = await AUTH_REQUEST.post(`/post-service/api/v1/post/${postId}/accept`);
+    return res.data;
+}
 export async function deletePost(id) {
     const res = await AUTH_REQUEST.delete(`/post-service/api/v1/post/${id}`)
     return res.data;
 }
+export async function hidePost({ postId }) {
+    const res = await AUTH_REQUEST.put(`/post-service/api/v1/post/${postId}/hide`);
+    return res.data;
+}
+
 export async function getHistory({ id, page, size }) {
     const res = await AUTH_REQUEST.get(`/post-service/api/v1/posts/history/${id}`, {
         params: { page, size }

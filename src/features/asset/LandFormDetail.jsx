@@ -1,8 +1,7 @@
 import ErrorMessage from "../../ui/ErrorMessage";
 import { DIRECT_ASSET, HOUSE_TYPE, INTERIOR_STATUS, LEGAL_INFO, PROPERTY_FEATURES } from "../../utils/constant";
 
-function AssetCreateFormDetail({ register, errors }) {
-
+function LandFormDetail({ category, register, errors }) {
     return (
         <>
             <section>
@@ -39,14 +38,14 @@ function AssetCreateFormDetail({ register, errors }) {
 
                 {/* Loại hình nhà ở */}
                 <div className="mb-5">
-                    <label className="block font-semibold mb-1">Loại hình nhà ở <span className="text-red-500">*</span></label>
+                    <label className="block font-semibold mb-1">Loại hình đất <span className="text-red-500">*</span></label>
                     <select
                         id="houseType"
-                        {...register("houseType", { required: "Vui lòng chọn loại hình nhà ở" })}
+                        {...register("houseType", { required: "Vui lòng chọn loại hình đất" })}
                         className="w-full p-3 border rounded text-2xl"
                     >
                         <option value="">Loại hình nhà ở</option>
-                        {HOUSE_TYPE.map((item, index) => (
+                        {HOUSE_TYPE[category.name].map((item, index) => (
                             <option key={index} value={item}>
                                 {item}
                             </option>
@@ -56,70 +55,28 @@ function AssetCreateFormDetail({ register, errors }) {
                         <ErrorMessage message={errors.houseType.message} />
                     )}
                 </div>
+                <div>
+                    <label className="block font-semibold mb-1">Hướng đất</label>
+                    <select
+                        id="mainDirection"
+                        {...register("mainDirection")}
+                        className="w-full p-3 border rounded text-2xl"
+                    >
+                        <option value="">Hướng đất</option>
+                        {DIRECT_ASSET.map((item, index) => (
+                            <option key={index} value={item}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* Số phòng ngủ */}
-                    <div>
-                        <label className="block font-semibold mb-1">Số phòng ngủ <span className="text-red-500">*</span></label>
-                        <input
-                            type="number"
-                            min={0}
-                            {...register("bedrooms", { required: "Vui lòng nhập số phòng ngủ" })}
-                            className="w-full p-3 border rounded"
-                            placeholder="0"
-                        />
-                        {errors.bedrooms && (
-                            <ErrorMessage message={errors.bedrooms.message} />
-                        )}
-                    </div>
-
-                    {/* Số phòng vệ sinh */}
-                    <div>
-                        <label className="block font-semibold mb-1">Số phòng vệ sinh</label>
-                        <input
-                            type="number"
-                            min={0}
-                            {...register("bathrooms")}
-                            className="w-full p-3 border rounded"
-                            placeholder="0"
-                        />
-                    </div>
-
-                    {/* Hướng cửa chính */}
-                    <div>
-                        <label className="block font-semibold mb-1">Hướng cửa chính</label>
-                        <select
-                            id="mainDirection"
-                            {...register("mainDirection")}
-                            className="w-full p-3 border rounded text-2xl"
-                        >
-                            <option value="">Hướng cửa chính</option>
-                            {DIRECT_ASSET.map((item, index) => (
-                                <option key={index} value={item}>
-                                    {item}
-                                </option>
-                            ))}
-                        </select>
-
-                    </div>
-                    {/* Tổng số tầng */}
-                    <div>
-                        <label className="block font-semibold mb-1">Tổng số tầng</label>
-                        <input
-                            min={0}
-                            type="number"
-                            {...register("floors")}
-                            className="w-full p-3 border rounded"
-                            placeholder="0"
-                        />
-                    </div>
                 </div>
             </section>
 
             {/* Thông tin khác */}
             <section>
                 <h2 className="text-3xl font-bold mb-4">Thông tin khác</h2>
-                <div className="text-2xl grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="text-2xl gap-5">
                     <div>
                         <select
                             id="legalDocs"
@@ -139,25 +96,12 @@ function AssetCreateFormDetail({ register, errors }) {
                         )}
                     </div>
 
-                    <div>
-                        <select
-                            id="interiorStatus"
-                            {...register("interiorStatus")}
-                            className="w-full p-3 border rounded text-2xl"
-                        >
-                            <option value="">Tình trạng nội thất</option>
-                            {INTERIOR_STATUS.map((item, index) => (
-                                <option key={index} value={item}>
-                                    {item}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+
                 </div>
 
                 {/* Checkbox group */}
                 <div className="grid text-2xl grid-cols-2 gap-3 mt-4">
-                    {PROPERTY_FEATURES.map((label, index) => (
+                    {PROPERTY_FEATURES.LAND.map((label, index) => (
                         <label key={index} className="flex items-center gap-2">
                             <input type="checkbox" {...register("otherInfo")} value={label} />
                             <span>{label}</span>
@@ -214,4 +158,4 @@ function AssetCreateFormDetail({ register, errors }) {
     )
 }
 
-export default AssetCreateFormDetail
+export default LandFormDetail

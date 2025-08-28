@@ -15,7 +15,7 @@ function AssetCreated() {
     const draft = state?.draft || state?.asset || {};
 
     const { properties = {}, dimension, address, province, ward, contents, locationAsset, createdAt, attachedPostShow, userId, ...restDraft } = draft;
-
+    console.log(draft)
     const {
         register,
         handleSubmit,
@@ -48,7 +48,6 @@ function AssetCreated() {
 
     if (isPending)
         return <FullPageSpinner />
-    console.log(draft)
     const images = contents?.filter(media => media.type === "IMAGE").map(media => media.url);
     const videos = contents?.filter(media => media.type === "VIDEO").map(media => media.url);
     const onSubmit = (data) => {
@@ -74,7 +73,7 @@ function AssetCreated() {
         const request = {
             id,
             province: address.province,
-            category: category.id,
+            categoryId: category.id,
             ward: address.ward,
             address: address.detail,
             dimension: width ? [width, length] : null,
@@ -94,7 +93,10 @@ function AssetCreated() {
                 navigate(`/asset/${id}`)
                 toast.success("Successfully creat asset")
             },
-            onError: (error) => toast.error(error.message)
+            onError: ({ response }) => {
+                const { detail } = response.data
+                toast.error(detail)
+            }
         })
 
 

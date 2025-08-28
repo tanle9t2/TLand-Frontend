@@ -4,12 +4,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import ModalSelectAddress from "../../ui/ModalSelectAddress";
-import AssetCreateFormDetail from "./AssetCreateFormDetail";
+import AssetCreateFormDetail from "./HouseFormDetail";
 import Button from "../../ui/Button";
 import { Controller } from "react-hook-form";
 import ErrorMessage from "../../ui/ErrorMessage";
 import ModalSelectCategory from "../../ui/ModalSelectCategory";
-
+import HouseFormDetail from './HouseFormDetail';
+import ApartmentFormDetail from "./ApartmentFormDetail "
+import LandFormDetail from './LandFormDetail';
 function AssetCreatedForm({ register, errors, handleOnChangeAddress, watch, setCategory }) {
 
     return (
@@ -32,9 +34,13 @@ function AssetCreatedForm({ register, errors, handleOnChangeAddress, watch, setC
             </div>
 
             {/*form detail*/}
-            <div>
-                <AssetCreateFormDetail register={register} errors={errors} />
-            </div>
+            {watch("category") && <div className='space-y-3'>
+                {watch("category").name === "Nhà ở" && <HouseFormDetail category={watch("category")} register={register} errors={errors} />}
+                {watch("category").name === "Căn hộ/Chung cư" && <ApartmentFormDetail category={watch("category")} register={register} errors={errors} />}
+                {watch("category").name === "Đất" && <LandFormDetail category={watch("category")} register={register} errors={errors} />}
+
+            </div>}
+
         </div>
 
     )

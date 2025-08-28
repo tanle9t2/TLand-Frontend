@@ -78,7 +78,7 @@ function PostManagement() {
                     </div>
                 </div>
             </div>
-            <ul className="grid grid-cols-7 border-y border-gray-200 justify-around text-xl font-medium">
+            <ul className="grid grid-cols-6 border-y border-gray-200 justify-around text-xl font-medium">
                 {counts.map(({ name, count }) => (
                     <Link key={name} to={`/my-ads/${name}`}>
                         <li

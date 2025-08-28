@@ -61,7 +61,7 @@ function MenuAssetDetail({ asset }) {
                         to={`/asset/update/${asset.id}`}
                         state={{ asset }}
                     >
-                        <Button disabled={attachedPostShow} variant="secondary" className="w-full">
+                        <Button variant="secondary" className="w-full">
                             Chỉnh sửa
                         </Button>
                     </Link>

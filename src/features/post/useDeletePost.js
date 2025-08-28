@@ -12,6 +12,9 @@ function useDeletePost() {
                 queryKey: ["posts", "SHOW"],
                 exact: false,
             });
+            queryClient.invalidateQueries({
+                queryKey: ["counts"],
+            })
         },
     });
 

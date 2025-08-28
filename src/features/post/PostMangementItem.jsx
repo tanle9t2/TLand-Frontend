@@ -1,14 +1,19 @@
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { convertDate, formatVietnamMoney } from "../../utils/helper"
 import { IoMdMore } from "react-icons/io"
 import { CiEdit } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
+import { BiHide } from "react-icons/bi";
 import { useState } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { Box, Modal } from "@mui/material";
 import useDeletePost from "./useDeletePost";
 import toast from "react-hot-toast";
+import useHidePost from "./useHidePost";
+import { POST_STATUS } from "../../utils/constant";
+import useAcceptPost from "./useShowPost";
+import useShowPost from "./useShowPost";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -30,9 +35,12 @@ function PostMangementItem({ post }) {
     const { id, posterUrl, title, createdAt, price } = post
     const [isShowMenu, setIsShowMenu] = useState(false);
     const [isShowDelete, setIsShowdelete] = useState(false)
+    const { status } = useParams()
 
-
+    const { isPending: isHidingPost, hidePost } = useHidePost()
+    const { isPending: isShowingPost, showPost } = useShowPost()
     const { isPending, deletePost } = useDeletePost()
+
     function handleOnClose() {
         setIsShowMenu(false)
     }
@@ -47,6 +55,20 @@ function PostMangementItem({ post }) {
         deletePost({ id },
             {
                 onSuccess: () => toast.success("Xóa bài đăng thành công")
+            }
+        )
+    }
+    function handleOnHidePost() {
+        hidePost({ postId: id },
+            {
+                onSuccess: () => toast.success("Ẩn bài đăng thành công")
+            }
+        )
+    }
+    function handleOnShowPost() {
+        showPost({ postId: id },
+            {
+                onSuccess: () => toast.success("Hiện bài đăng thành công")
             }
         )
     }
@@ -81,6 +103,9 @@ function PostMangementItem({ post }) {
                         <Link to={`update/${id}`}>
                             <p className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><CiEdit /></span> Chỉnh sửa</p>
                         </Link>
+                        {status === "SHOW" && < p onClick={() => handleOnHidePost()} className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><BiHide /></span> Ẩn bài đăng</p>}
+                        {status === "HIDE" && < p onClick={() => handleOnShowPost()} className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><MdOutlineRemoveRedEye /></span> Hiện bài đăng</p>}
+
                         <p onClick={() => handleOnClickDelete()} className="px-2 py-4 flex items-center hover:bg-gray-100"><span className="mr-2"><MdDeleteOutline /></span> Xóa</p>
                     </div>}
                 <Modal
@@ -95,7 +120,7 @@ function PostMangementItem({ post }) {
                 </Modal>
             </div>
 
-        </div>
+        </div >
     )
 }
 

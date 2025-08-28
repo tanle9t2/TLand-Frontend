@@ -7,22 +7,53 @@ import { RxDimensions } from "react-icons/rx";
 import { LuPackage2 } from "react-icons/lu";
 
 export const MAX_IMAGE_UPLOAD = 12
-export const PROPERTY_FEATURES = [
-    "Hầm xe hơi",
-    "Nhà nở hậu",
-    "Nhà tóp hậu",
-    "Nhà dính quy hoạch / lộ giới",
-    "Nhà chưa hoàn công",
-    "Nhà nát",
-    "Đất chưa chuyển thổ",
-    "Hiện trạng khác",
-]
-export const HOUSE_TYPE = [
-    "Nhà mặt phố, mặt tiền",
-    "Nhà ngõ, hẻm",
-    "Nhà biệt thự",
-    "Nhà phố liền kề"
-]
+export const POST_TYPE = {
+    SELL: "SELL",
+    RENT: "RENT"
+}
+export const PROPERTY_FEATURES = {
+    HOUSE: [
+        "Hầm xe hơi",
+        "Nhà nở hậu",
+        "Nhà tóp hậu",
+        "Nhà dính quy hoạch / lộ giới",
+        "Nhà chưa hoàn công",
+        "Nhà nát",
+        "Đất chưa chuyển thổ",
+        "Hiện trạng khác",
+    ],
+    LAND: [
+        "Mặt tiền",
+        "Hẻm xe hơi",
+        "Nở hậu",
+        "Chưa thổ cư",
+        "Thổ cư 1 phần",
+        "Thổ cư toàn phần",
+        "Không có thổ cư"
+    ]
+}
+export const HOUSE_TYPE = {
+    "Nhà ở": [
+        "Nhà mặt phố, mặt tiền",
+        "Nhà ngõ, hẻm",
+        "Nhà biệt thự",
+        "Nhà phố liền kề"
+    ],
+    "Căn hộ/Chung cư": [
+        "Chung cư",
+        "Duplex",
+        "Penthouse",
+        "Căn hộ dịch vụ, mini",
+        "Tập thể, cư xá"
+    ],
+    "Đất": [
+        "Đất thổ cư",
+        "Đất nền dự án",
+        "Đất nông nghiệp",
+        "Đất công nghiệp"
+    ]
+
+}
 export const DIRECT_ASSET = [
     "Bắc",
     "Đông Bắc",
@@ -49,7 +80,6 @@ export const INTERIOR_STATUS = [
 
 export const POST_STATUS = {
     "WAITING_PAYMENT": "Cần thanh toán",
-    "PAYMENT": "Đã thanh toán",
     "HIDE": "Ẩn",
     "SHOW": "Hiển thị",
     "EXPIRED": "Hết hạn",
@@ -102,7 +132,7 @@ export const PROPERTIES = {
     },
     houseType: {
         icon: BsBuildings,
-        label: "Loại hình căn hộ",
+        label: "Loại hình",
         params: "houseType",
         items: {
             house: [
