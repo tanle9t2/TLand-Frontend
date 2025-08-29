@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster } from "react-hot-toast"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AppLayout from "./ui/Applayout"
 import HomePage from "./pages/HomePage"
 
@@ -21,6 +22,7 @@ import ProtectedRoute from "./ui/ProtectedRoute"
 import { AuthProvider } from "./context/AuthContext"
 import UserProfile from "./features/auth/UserProfile"
 import UserProfileData from "./features/auth/UserProfileData"
+import RealEstatePage from "./features/landingPage/RealEstatePage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <AuthProvider>
         <BrowserRouter >
 
@@ -43,6 +46,7 @@ function App() {
               }
             >
               <Route index element={<HomePage />} />
+              <Route path="user/:userId" element={<RealEstatePage />} />
               <Route path="search" element={<Search />} />
               <Route path="post/:postId" element={<PostDetailPage />} />
               <Route path="asset/:assetId" element={<AssetPage />} />

@@ -4,16 +4,17 @@ import { MdHistory } from "react-icons/md";
 import { BiBuildingHouse } from "react-icons/bi";
 import { CiLogout, CiSettings } from "react-icons/ci";
 import { FaRegHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 function UserInfo() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { logout, profile } = useAuth()
+    const navigate = useNavigate()
     function handleLogout() {
         logout()
     }
-    const { avtUrl, firstName, lastName } = profile || {};
+    const { id, avtUrl, firstName, lastName } = profile || {};
     return (
         <div
             onMouseEnter={() => setIsMenuOpen(true)}
@@ -34,6 +35,7 @@ function UserInfo() {
                 <div className="flex items-center justify-between p-4 mb-4">
                     <div className="flex">
                         <img
+                            onClick={() => navigate(`/user/${id}`)}
                             src={avtUrl}
                             alt={`${firstName} ${lastName}`}
                             className="w-[48px] h-[48px] rounded-[50%] mr-2"

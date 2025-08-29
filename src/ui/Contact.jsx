@@ -1,13 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { getTimeDifferenceFromNow } from "../utils/helper";
 import Button from "./Button";
 import Section from "./Section"
 
 function Contact({ userInfo }) {
-    const { avtUrl, firstName, lastName, phoneNumber, createdAt, lastAccess } = userInfo
+    const { id, avtUrl, firstName, lastName, phoneNumber, createdAt, lastAccess } = userInfo
     const fullName = `${firstName} ${lastName}`
+    const navigate = useNavigate()
     return (
         <Section>
-            <div className="flex items-center p-4">
+            <div onClick={() => navigate(`/user/${id}`)} className="flex items-center p-4">
                 <img
                     className="w-24 h-24 rounded-full mr-4"
                     src={avtUrl}

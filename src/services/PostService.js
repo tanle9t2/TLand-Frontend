@@ -13,6 +13,14 @@ export async function getPostByStatus({ page, size, status, kw }) {
     return res.data;
 }
 
+export async function getPostLanding({ page, size, userId }) {
+    const res = await API.get('/post-service/api/v1/public/posts/landing', {
+        params: { page, size, userId }
+    });
+    return res.data;
+}
+
+
 export async function getPostById(postId) {
     const res = await API.get(`/post-service/api/v1/public/post/${postId}`)
     return res.data;
