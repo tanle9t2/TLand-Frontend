@@ -9,7 +9,7 @@ function useDeletePost() {
         mutationFn: ({ id }) => deletePostAPI(id),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["posts", "SHOW"],
+                queryKey: ["posts"],
                 exact: false,
             });
             queryClient.invalidateQueries({

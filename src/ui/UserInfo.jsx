@@ -15,7 +15,6 @@ function UserInfo() {
         logout()
     }
     const { id, avtUrl, firstName, lastName } = profile || {};
-    console.log(avtUrl)
     return (
         <div
             onMouseEnter={() => setIsMenuOpen(true)}

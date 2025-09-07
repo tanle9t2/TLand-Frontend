@@ -47,6 +47,8 @@ function ModalSelectAddress({ address, setAddress }) {
     const { isLoading: isLoadingWard, wards } = useGetWards(provinceCode)
 
     function onSubmit(e) {
+        e.preventDefault();
+        e.stopPropagation();
         const address = {
             province: getValues().province,
             ward: getValues().ward,
@@ -54,7 +56,6 @@ function ModalSelectAddress({ address, setAddress }) {
         }
         setAddress(address)
         setOpen(false)
-        e.stopPropagration();
     }
 
     const provinceOption = provinces?.map(p => ({
@@ -175,7 +176,7 @@ function ModalSelectAddress({ address, setAddress }) {
                                     )}
                                 </div>
 
-                                <Button type="submit" variant="primary" className="w-full">
+                                <Button onClick={(e) => onSubmit(e)} variant="primary" className="w-full">
                                     Xong
                                 </Button>
                             </form>

@@ -31,7 +31,7 @@ function SearchHeader() {
 
 
     const paramsObj = Object.fromEntries(searchParams.entries());
-    const { type = "SELL", category, province, keyword, ...rest } = paramsObj
+    const { type = "SELL", category, province, keyword, page, ...rest } = paramsObj
     const selectedType = POST_TYPE.find(p => p.value === type) || null;
     const selectedCate = cateOption.find(c => c.value === category) || null;
 

@@ -54,21 +54,30 @@ function PostMangementItem({ post }) {
     function hanndleOnConfirm() {
         deletePost({ id },
             {
-                onSuccess: () => toast.success("Xóa bài đăng thành công")
+                onSuccess: () => {
+                    toast.success("Xóa bài đăng thành công")
+                    handleOnCloseDelete()
+                }
             }
         )
     }
     function handleOnHidePost() {
         hidePost({ postId: id },
             {
-                onSuccess: () => toast.success("Ẩn bài đăng thành công")
+                onSuccess: () => {
+                    toast.success("Ẩn bài đăng thành công")
+                    handleOnCloseDelete()
+                }
             }
         )
     }
     function handleOnShowPost() {
         showPost({ postId: id },
             {
-                onSuccess: () => toast.success("Hiện bài đăng thành công")
+                onSuccess: () => {
+                    toast.success("Hiện bài đăng thành công")
+                    handleOnCloseDelete()
+                }
             }
         )
     }
@@ -115,7 +124,7 @@ function PostMangementItem({ post }) {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                        <ConfirmDelete disabled={isPending} onConfirm={(e) => hanndleOnConfirm(e)} />
+                        <ConfirmDelete onCloseModal={() => handleOnCloseDelete()} disabled={isPending} onConfirm={(e) => hanndleOnConfirm(e)} />
                     </Box >
                 </Modal>
             </div>

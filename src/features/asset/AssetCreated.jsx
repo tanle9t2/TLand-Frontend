@@ -15,7 +15,7 @@ function AssetCreated() {
     const draft = state?.draft || state?.asset || {};
 
     const { properties = {}, dimension, address, province, ward, contents, locationAsset, createdAt, attachedPostShow, userId, ...restDraft } = draft;
-    console.log(draft)
+
     const {
         register,
         handleSubmit,
@@ -64,10 +64,12 @@ function AssetCreated() {
             otherInfo,
             ...rest
         } = data;
+
         const cleanedProperties = Object.fromEntries(
             Object.entries(rest).filter(([item, value]) => value !== "" && value !== null
             )
         );
+
 
 
         const request = {
@@ -78,7 +80,7 @@ function AssetCreated() {
             address: address.detail,
             dimension: width ? [width, length] : null,
             type: "PERSIST",
-            otherInfo,
+            otherInfo: otherInfo ? otherInfo : null,
             locationAsset: {
                 apartmentCode,
                 lotName
@@ -87,7 +89,10 @@ function AssetCreated() {
             usableArea,
             properties: cleanedProperties
         };
-
+        if (!id) {
+            toast.error("Vui lòng tải lên ít nhất 1 tấm ảnh")
+            return;
+        }
         createAsset({ request }, {
             onSuccess: () => {
                 navigate(`/asset/${id}`)
