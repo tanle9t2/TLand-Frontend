@@ -17,6 +17,8 @@ import AppTheme from '../shared-theme/AppTheme';
 
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
 import useSignUp from "../useSignUp"
+import useLoginWithThirdParty from '../useLoginWithThirdParty';
+import FullPageSpinner from '../../../ui/FullPageSpinner';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -60,7 +62,9 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
     }),
   },
 }));
-
+const THIRD_PARTY_NAME = {
+  GOOGLE: "google",
+}
 export default function SignUp(props) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
@@ -73,7 +77,12 @@ export default function SignUp(props) {
   const [usernameError, setUsernameError] = React.useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
   const { isLoading, signUp } = useSignUp()
+  const { isPending, loginWithThirdParty } = useLoginWithThirdParty()
+  if (isLoading || isPending) return <FullPageSpinner />
 
+  function handleOnLoginWithThirdParty(partyName) {
+    loginWithThirdParty({ partyName })
+  }
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
@@ -284,20 +293,20 @@ export default function SignUp(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Đăng ký với Google')}
+              onClick={() => handleOnLoginWithThirdParty(THIRD_PARTY_NAME.GOOGLE)}
               startIcon={<GoogleIcon />}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >
-              Đăng ký với Google
+              Đăng nhập với Google
             </Button>
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Đăng ký với Facebook')}
+              onClick={() => handleOnLoginWithThirdParty(THIRD_PARTY_NAME.GOOGLE)}
               startIcon={<FacebookIcon />}
               sx={{ fontSize: "1.5rem", padding: "20px" }}
             >
-              Đăng ký với Facebook
+              Đăng nhập với Facebook
             </Button>
             <Typography sx={{ fontSize: "1.5rem", textAlign: 'center' }}>
               Bạn đã có tài khoản?{' '}

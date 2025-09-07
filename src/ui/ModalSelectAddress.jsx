@@ -46,7 +46,7 @@ function ModalSelectAddress({ address, setAddress }) {
     const { isLoading, provinces } = useGetProvince()
     const { isLoading: isLoadingWard, wards } = useGetWards(provinceCode)
 
-    function onSubmit() {
+    function onSubmit(e) {
         const address = {
             province: getValues().province,
             ward: getValues().ward,
@@ -54,6 +54,7 @@ function ModalSelectAddress({ address, setAddress }) {
         }
         setAddress(address)
         setOpen(false)
+        e.stopPropagration();
     }
 
     const provinceOption = provinces?.map(p => ({

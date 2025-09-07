@@ -9,6 +9,7 @@ function useGetAssets() {
     const { isLoading, data } = useQuery({
         queryKey: ["assets", page],
         queryFn: () => getAssets({ page }),
+        retry: 0
     });
     const {
         content: assets = [],

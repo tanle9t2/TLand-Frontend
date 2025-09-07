@@ -15,6 +15,7 @@ function UserInfo() {
         logout()
     }
     const { id, avtUrl, firstName, lastName } = profile || {};
+    console.log(avtUrl)
     return (
         <div
             onMouseEnter={() => setIsMenuOpen(true)}
@@ -23,7 +24,7 @@ function UserInfo() {
             }}
             className="flex items-center relative">
             <img
-                src={avtUrl}
+                src={avtUrl || `/public/default-avt.png`}
                 alt={`${firstName} ${lastName}`}
                 className="w-10 h-10 rounded-full object-cover"
             />
@@ -33,17 +34,15 @@ function UserInfo() {
                     before:border-12 before:border-transparent before:border-b-white before:z-[-1]">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 mb-4">
-                    <div className="flex">
+                    <div className="flex items-center">
                         <img
                             onClick={() => navigate(`/user/${id}`)}
-                            src={avtUrl}
+                            src={avtUrl || `/public/default-avt.png`}
                             alt={`${firstName} ${lastName}`}
-                            className="w-[48px] h-[48px] rounded-[50%] mr-2"
+                            className="w-[48px] h-[48px] rounded-[50%] mr-2 cursor-pointer"
                         />
                         <div>
-                            <h2 className="text-xl font-semibold">{`${firstName} ${lastName}`}</h2>
-                            <p className="text-yellow-500 text-xl">0.0 ★★★★ (Chưa có đánh giá)</p>
-                            <p className="text-gray-500 text-xl">0 Người theo dõi | 0 Đang theo dõi</p>
+                            <h2 className="text-3xl font-semibold">{`${firstName} ${lastName}`}</h2>
                         </div>
                     </div>
 

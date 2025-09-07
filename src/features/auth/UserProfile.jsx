@@ -65,7 +65,7 @@ function UserProfile({ user }) {
                             src={banner || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmdMaWzjGnnRXb6cvKjMasSO5AiRNHBh1Ybg&s"} />
 
                         <img
-                            src={avatar}
+                            src={avatar || "/public/default-avt.png"}
                             alt="Avatar"
                             className="w-[92px] h-[92px] left-8 bottom-0 translate-y-1/2 absolute rounded-full mb-3"
                         />
