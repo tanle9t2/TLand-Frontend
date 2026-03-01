@@ -1,28 +1,117 @@
 import { CiClock2, CiLocationOn } from "react-icons/ci"
 import Section from "../../ui/Section"
 import { caculatePrice, caculateSquare, formatVietnamMoney, getTimeDifferenceFromNow } from "../../utils/helper";
-import { IoFlowerOutline } from "react-icons/io5";
-import { TbEscalator } from "react-icons/tb";
-import { BsBuildings } from "react-icons/bs";
-import { RxDimensions } from "react-icons/rx";
-import { FaPage4 } from "react-icons/fa";
+
 import { PROPERTIES } from "../../utils/constant";
-import MapboxGeocoding from "../map/MapboxGeocoding";
+
+import usePredictHouse from "./usePredictHouse";
+import { useEffect, useState } from "react";
 
 
 function PostDetail({ phoneNumber, post }) {
     const { price, type, createdAt, title, description, assetDetail } = post;
     const square = caculateSquare(assetDetail.dimension);
-    console.log(description.split("\\n"))
+    const [predictPrice, setPredictPrice] = useState(null)
+    const { isPending, predictHouse } = usePredictHouse()
+
+    useEffect(() => {
+        const {
+            bathrooms,
+            bedrooms,
+            floors,
+            houseType,
+            interiorStatus,
+            legalDocs,
+        } = assetDetail.properties || {};
+
+        predictHouse({
+            address: assetDetail.address,
+            area: assetDetail.landArea,
+            bathrooms,
+            bedrooms,
+            floors,
+            propertyType: houseType,
+            furnitureState: interiorStatus,
+            legalStatus: legalDocs,
+            propertyFeature: assetDetail.otherInfo?.join(","),
+            year: 2026
+        }, {
+            onSuccess: ({ pricePerM2, totalPriceTy }) => {
+                setPredictPrice({ pricePerM2, totalPriceTy })
+            }
+        });
+
+    }, []);
     return (
         <Section>
             <div className="p-5 text-2xl">
                 <h2 className="text-3xl font-bold mb-6">
                     {title}
                 </h2>
-                <p></p>
-                <div className="text-red-600 mb-4 font-bold">
-                    {formatVietnamMoney(price)}{type === "RENT" && '/tháng'} · {square}m²
+                <div className="bg-white tex space-y-4">
+                    <div className="">
+                        <div className="text-4xl font-bold  text-red-600">
+                            {formatVietnamMoney(price)}
+                            {type === "RENT" && <span className="text-xl font-medium"> /tháng</span>}
+                            <p className="text-3xl text-black">
+                                {formatVietnamMoney(price / assetDetail.landArea)}/m² • {square}m²
+                            </p>
+                        </div>
+
+
+                    </div>
+                    {!isPending && predictPrice?.totalPriceTy && (
+                        <div className="bg-gray-50 text-3xl p-4 space-y-3">
+
+                            <div className="font-medium">
+                                Giá tham khảo từ hệ thống: {predictPrice?.pricePerM2.toFixed(2)} triệu/m²
+                            </div>
+
+                            {(() => {
+                                const predictedPrice = predictPrice.totalPriceTy * 1_000_000_000
+                                const diffPercent = ((price - predictedPrice) / predictedPrice) * 100
+                                const absPercent = Math.abs(diffPercent).toFixed(1)
+
+                                const percentWidth = Math.min(Math.abs(diffPercent), 30)
+
+                                let color = "bg-yellow-400"
+                                let textColor = "text-yellow-600"
+                                let message = "Giá đang trong biên độ ±15% so với mức tham khảo."
+
+                                if (diffPercent > 15) {
+                                    color = "bg-red-500"
+                                    textColor = "text-red-600"
+                                    message = `Giá cao hơn mức tham khảo khoảng ${absPercent}%.`
+                                }
+
+                                if (diffPercent < -15) {
+                                    color = "bg-green-500"
+                                    textColor = "text-green-600"
+                                    message = `Giá thấp hơn mức tham khảo khoảng ${absPercent}%.`
+                                }
+
+                                return (
+                                    <div className="space-y-2">
+                                        {/* Thanh hiển thị độ chênh lệch */}
+                                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                            <div
+                                                className={`h-full ${color} transition-all duration-500`}
+                                                style={{ width: `${percentWidth}%` }}
+                                            />
+                                        </div>
+
+                                        <div className={`font-medium ${textColor}`}>
+                                            {message}
+                                        </div>
+
+                                        <div className="text-2xl text-gray-400">
+                                            *Lưu ý: Mức giá tham khảo có sai số khoảng ±15% tùy theo biến động thị trường.
+                                        </div>
+                                    </div>
+                                )
+                            })()}
+                        </div>
+                    )}
                 </div>
                 <div className="text-gray-600 flex items-center">
                     <span className="mr-2"><CiLocationOn /></span>
