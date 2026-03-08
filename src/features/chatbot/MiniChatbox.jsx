@@ -1,171 +1,216 @@
-import React, { useState } from "react";
-import {
-    Card,
-    CardContent,
-    TextField,
-    IconButton,
-    Typography,
-    Collapse,
-    Box,
-    Divider,
-} from "@mui/material";
-import { ExpandLess, ExpandMore, ChatBubbleOutline } from "@mui/icons-material";
-import axios from "axios";
-import Button from "../../ui/Button";
+import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import { useAuth } from "../../context/AuthContext";
 import useChat from "./useChat";
 import toast from "react-hot-toast";
 import SyncLoader from "react-spinners/SyncLoader";
-export default function MiniChatbox() {
-    const { authenticated } = useAuth()
-    const [messages, setMessages] = useState([
+import { IoChatbubblesOutline, IoCloseOutline, IoSendSharp } from "react-icons/io5";
+import { RiRobot2Line } from "react-icons/ri";
+import { BsHouseDoor } from "react-icons/bs";
+import AIAvatar from "./AIAvatar";
 
-    ]);
+const SUGGESTIONS = ["Tui cần hỗ trợ mua nhà", "Tình hình bất động sản TP. Hồ Chí Minh", "Nhà phố mặt tiền quận 1"]
+
+export default function MiniChatbox() {
+    const { authenticated } = useAuth();
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
-    const { isPending, createChat } = useChat()
+    const { isPending, createChat } = useChat();
     const [expanded, setExpanded] = useState(false);
+    const messagesEndRef = useRef(null);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (expanded) {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages, isPending, expanded]);
+
+    useEffect(() => {
+        if (expanded) {
+            setTimeout(() => inputRef.current?.focus(), 300);
+        }
+    }, [expanded]);
 
     const sendMessage = async () => {
         if (!input.trim()) {
-            toast.error("Vui lòng nhập nội dung")
+            toast.error("Vui lòng nhập nội dung");
             return;
-        };
+        }
         createChat({ input, messages }, {
             onSuccess: (data) => {
                 const { answer } = data;
-                const updated = [...messages, { human: input, ai: answer }];
-                setMessages(updated);
-                setInput("")
+                setMessages((prev) => [...prev, { human: input, ai: answer }]);
+                setInput("");
             }
-        })
+        });
     };
+    const handleQuickChat = (ans) => {
+        setInput(ans)
+        inputRef.current?.focus();
+    }
     if (!authenticated) return null;
 
     return (
-        <Box sx={{
-            position: "fixed", bottom: 16, right: expanded ? 16 : -200, zIndex: 1000
-        }}>
-            <Button
-
-                startIcon={<ChatBubbleOutline />}
-                endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-                onClick={() => setExpanded((prev) => !prev)}
+        <div className="fixed bottom-6 text-3xl right-6 z-50 flex flex-col items-end gap-4">
+            <div
+                className={`
+                    w-[480px] bg-white rounded-3xl shadow-2xl border border-gray-100
+                    flex flex-col overflow-hidden
+             
+                    transition-all duration-300 ease-out origin-bottom-right
+                    ${expanded
+                        ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+                    }
+                `}
+                style={{ maxHeight: expanded ? "680px" : "0px", minHeight: expanded ? "680px" : "0px" }}
             >
-                {expanded ? "Đóng chat" : "Tư vấn từ chatbot"}
-            </Button>
 
-            <Collapse in={expanded}>
-                <Card sx={{ width: 450, mt: 2, maxHeight: "100vh", overflow: "hidden" }}>
-                    <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Box
-                            sx={{
-                                overflowY: "auto",
-                                height: 500,
-                                p: 1,
-                            }}
-                        >
-                            {messages.map((msg, idx) => (
-                                <Box key={idx} mb={2}>
-                                    {/* User message */}
-                                    <Box display="flex" justifyContent="flex-end" mb={0.5}>
-                                        <Typography
-                                            sx={{
-                                                fontSize: "16px",
-                                                bgcolor: "#E0E0E0",
-                                                p: 1,
-                                                borderRadius: "8px",
-                                                maxWidth: "70%",
-                                                wordBreak: "break-word",
-                                            }}
-                                        >
-                                            Bạn: {msg.human}
-                                        </Typography>
-                                    </Box>
+                <div className="flex items-center gap-3 px-5 py-4 bg-rose-600 text-white flex-shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center">
+                        <RiRobot2Line size={24} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="font-bold leading-tight">Trợ lý BĐS AI</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                            <span className="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse" />
+                            <p className="text-lg text-rose-100">Đang trực tuyến</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setExpanded(false)}
+                        className="p-2 cursor-pointer rounded-full hover:bg-white/20 transition-colors"
+                    >
+                        <IoCloseOutline size={22} />
+                    </button>
+                </div>
 
-                                    {/* AI message */}
-                                    <Box display="flex" justifyContent="flex-start" mb={0.5}>
-                                        <Typography
-                                            sx={{
-                                                fontSize: "16px",
-                                                bgcolor: "#E0E0E0",
 
-                                                p: 1,
-                                                borderRadius: "8px",
-                                                maxWidth: "70%",
-                                                wordBreak: "break-word",
-                                            }}
-                                        >
-                                            Trợ lý ảo: {msg.ai.split("\n").map((item, index) => item.trim() !== "" && <>
-                                                <br />  <span key={index}>{item}</span>
-                                            </>)}
-                                        </Typography>
-                                    </Box>
+                <div className="flex-1 overflow-y-auto text-2xl  p-5 space-y-5 bg-gray-50" style={{ maxHeight: "520px" }}>
 
-                                    <Divider sx={{ my: 1 }} />
-                                </Box>
-                            ))}
-                            {isPending && <>
-                                <Box display="flex" justifyContent="flex-end" mb={0.5}>
-                                    <Typography
-                                        sx={{
-                                            fontSize: "16px",
-                                            bgcolor: "#E0E0E0",
-                                            p: 1,
-                                            borderRadius: "8px",
-                                            maxWidth: "70%",
-                                            wordBreak: "break-word",
+
+                    {messages.length === 0 && !isPending && (
+                        <div className="flex flex-col items-center justify-center h-full gap-4 py-10 text-center">
+                            <div className="w-20 h-20 rounded-full bg-rose-50 border-2 border-rose-100 flex items-center justify-center text-rose-500">
+                                <BsHouseDoor size={36} />
+                            </div>
+                            <div>
+                                <p className="font-bold text-gray-700 text-lg">Xin chào! 👋</p>
+                                <p className="text-gray-500  mt-2 leading-relaxed">
+                                    Tôi là trợ lý AI chuyên về bất động sản.<br />
+                                    Hỏi tôi về giá cả, vị trí, hay tư vấn tìm nhà!
+                                </p>
+                            </div>
+                            <div className="flex flex-col gap-2 w-full">
+                                {SUGGESTIONS.map((ans) => (
+                                    <button
+                                        key={ans}
+                                        onClick={() => handleQuickChat(ans)}
+                                        className=" text-rose-600 cursor-pointer bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl px-4 py-2 text-left transition-colors"
+                                    >
+                                        {ans}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {messages.map((msg, idx) => (
+                        <div key={idx} className="flex flex-col text-2xl gap-3">
+
+                            <div className="flex justify-end">
+                                <div className="bg-rose-600 text-white px-5 py-3 rounded-3xl rounded-tr-sm max-w-[80%] break-words shadow-sm leading-relaxed">
+                                    {msg.human}
+                                </div>
+                            </div>
+
+                            <div className="flex items-end gap-2.5">
+                                <AIAvatar />
+                                <div className="bg-white text-gray-800 px-5 py-3 rounded-3xl rounded-tl-sm max-w-[80%] break-words shadow-sm border border-gray-100 leading-relaxed">
+                                    <ReactMarkdown
+                                        components={{
+                                            p: ({ children }) => <p className="m-0 leading-relaxed">{children}</p>,
+                                            ul: ({ children }) => <ul className="list-disc pl-4 mt-1.5 space-y-1">{children}</ul>,
+                                            ol: ({ children }) => <ol className="list-decimal pl-4 mt-1.5 space-y-1">{children}</ol>,
+                                            strong: ({ children }) => <strong className="font-semibold text-rose-700">{children}</strong>,
                                         }}
                                     >
-                                        Bạn: {input}
-                                    </Typography>
-                                </Box>
-                                <Box display="flex" justifyContent="flex-start" mb={0.5}>
-                                    <Typography
-                                        sx={{
-                                            fontSize: "16px",
-                                            bgcolor: "#E0E0E0",
-                                            display: "flex",
-                                            p: 1,
-                                            borderRadius: "8px",
-                                            maxWidth: "70%",
-                                            wordBreak: "break-word",
-                                        }}
-                                    >
-                                        Trợ lý ảo: <SyncLoader size={8} />
-                                    </Typography>
-                                </Box>
+                                        {msg.ai}
+                                    </ReactMarkdown>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
 
-                                <Divider sx={{ my: 1 }} />
-                            </>}
+                    {isPending && (
+                        <div className="flex flex-col gap-3">
+                            <div className="flex justify-end">
+                                <div className="bg-rose-500 text-white text-2xl px-5 py-3 rounded-3xl rounded-tr-sm max-w-[80%] break-words shadow-sm opacity-80 leading-relaxed">
+                                    {input}
+                                </div>
+                            </div>
+                            <div className="flex items-end gap-2.5">
+                                <AIAvatar />
+                                <div className="bg-white px-5 py-4 rounded-3xl rounded-tl-sm shadow-sm border border-gray-100 flex items-center gap-1">
+                                    <SyncLoader size={7} color="#e11d48" margin={2} />
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
-                        </Box>
+                    <div ref={messagesEndRef} />
+                </div>
 
-                        <Box display="flex" gap={1}>
-                            <TextField
-                                sx={{
-                                    "& .MuiInputBase-input": {
-                                        fontSize: "16px",
-                                    },
-                                }}
-                                fullWidth
-                                size="lg"
-                                variant="outlined"
-                                placeholder="Type your question..."
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                                disabled={isPending}
-                            />
-                            <Button
-                                onClick={sendMessage}
-                                disabled={isPending}
-                            >
-                                Gửi
-                            </Button>
-                        </Box>
-                    </CardContent>
-                </Card>
-            </Collapse>
-        </Box >
+
+                <div className="flex items-center text-2xl gap-3 px-4 py-4 border-t border-gray-100 bg-white flex-shrink-0">
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        className="
+                            flex-1 px-5 py-3 rounded-2xl
+                            border border-gray-200 bg-gray-50
+                            focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-rose-400 focus:bg-white
+                            disabled:opacity-60 disabled:cursor-not-allowed
+                            transition-all placeholder:text-gray-400
+                        "
+                        placeholder="Nhập câu hỏi của bạn..."
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && !isPending && sendMessage()}
+                        disabled={isPending}
+                    />
+                    <button
+                        onClick={sendMessage}
+                        disabled={isPending}
+                        className="
+                            w-12 h-12 rounded-2xl bg-rose-600 text-white flex-shrink-0
+                            flex items-center justify-center
+                            hover:bg-rose-700 active:scale-95
+                            disabled:opacity-60 disabled:cursor-not-allowed
+                            transition-all shadow-sm
+                            cursor-pointer
+                        "
+                    >
+                        <IoSendSharp size={20} />
+                    </button>
+                </div>
+            </div>
+
+            <button
+                onClick={() => setExpanded((prev) => !prev)}
+                className={`
+                    cursor-pointer
+                    flex items-center gap-2.5 px-6 py-3.5 rounded-full
+                    font-semibold text-base text-white
+                    shadow-xl hover:shadow-2xl
+                    transition-all duration-200 active:scale-95
+                    ${expanded ? "bg-gray-700 hover:bg-gray-800" : "bg-rose-600 hover:bg-rose-700"}
+                `}
+            >
+                <IoChatbubblesOutline size={22} />
+                <span>{expanded ? "Đóng chat" : "Tư vấn AI"}</span>
+            </button>
+        </div>
     );
 }
