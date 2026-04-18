@@ -2,8 +2,8 @@ import Select from 'react-select';
 import useGetCategories from '../asset/useGetCategories';
 import { useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
-import { FILTER_NAME, PROPERTIES } from '../../utils/constant';
-import Chip from '@mui/material/Chip';
+import { FILTER_NAME } from '../../utils/constant';
+import { IoCloseOutline } from 'react-icons/io5';
 
 const LOCATION = [
     "Hồ Chí Minh",
@@ -27,118 +27,121 @@ function SearchHeader() {
         [categories]
     );
 
-
-
-
     const paramsObj = Object.fromEntries(searchParams.entries());
-    const { type = "SELL", category, province, keyword, page, ...rest } = paramsObj
+    const { type = "SELL", category, province, keyword, page, ...rest } = paramsObj;
     const selectedType = POST_TYPE.find(p => p.value === type) || null;
     const selectedCate = cateOption.find(c => c.value === category) || null;
 
     function handleOnClickProvince(e) {
         searchParams.set("province", e.target.textContent);
         setSearchParams(searchParams);
-    };
+    }
 
     function handleOnChangeCate(cate) {
         searchParams.set("category", cate.value);
         setSearchParams(searchParams);
-    };
+    }
 
     function handleOnChangeType(type) {
         searchParams.set("type", type.value);
         setSearchParams(searchParams);
-    };
+    }
 
     function handleOnDeleteFilter() {
         const kwValue = searchParams.get("keyword");
         const newParams = new URLSearchParams();
 
         if (kwValue) {
-            newParams.set("kw", kwValue);
+            newParams.set("keyword", kwValue);
         }
         setSearchParams(newParams);
     }
+
     function handleDeleteFilter(key) {
         if (key === "minPrice" || key === "maxPrice") {
-            searchParams.delete("maxPrice")
-            searchParams.delete("minPrice")
-        } else
-            searchParams.delete(key)
-        setSearchParams(searchParams)
+            searchParams.delete("maxPrice");
+            searchParams.delete("minPrice");
+        } else {
+            searchParams.delete(key);
+        }
+        setSearchParams(searchParams);
     }
+
     return (
-        <div className="bg-white">
-            <h1 className="text-3xl font-bold p-4">
-                Mua Bán Bất Động Sản {province} Giá Tốt
-            </h1>
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+            <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <h1 className="text-3xl font-bold text-gray-900 mb-6">
+                    Mua Bán Bất Động Sản {province} Giá Tốt
+                </h1>
 
-            <div className="p-4 grid grid-cols-12 items-center gap-4">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+                    <div className="flex items-center space-x-4 shrink-0">
+                        <span className="text-2xl font-semibold text-gray-700">Lọc:</span>
+                        <Select
+                            onChange={handleOnChangeType}
+                            value={selectedType}
+                            className="text-xl w-[160px]"
+                            classNamePrefix="react-select"
+                            placeholder="Loại hình"
+                            options={POST_TYPE}
+                        />
+                        <Select
+                            onChange={handleOnChangeCate}
+                            value={selectedCate}
+                            className="text-xl w-[200px]"
+                            classNamePrefix="react-select"
+                            placeholder="Loại BĐS"
+                            options={cateOption}
+                        />
+                    </div>
 
-                <div className="col-span-11 flex items-center space-x-5">
-                    <h1 className="text-3xl font-bold">Lọc:</h1>
 
-                    <Select
-                        onChange={handleOnChangeType}
-                        value={selectedType}
-                        className="text-2xl w-[200px]"
-                        classNamePrefix="react-select"
-                        placeholder="Loại hình kinh doanh"
-                        options={POST_TYPE}
-                    />
-                    <Select
-                        onChange={handleOnChangeCate}
-                        value={selectedCate}
-                        className="text-2xl w-[200px]"
-                        classNamePrefix="react-select"
-                        placeholder="Loại hình BĐS"
-                        options={cateOption}
-                    />
-
-
-                    {/* Active filters */}
-                    <div className="flex items-center text-2xl space-x-2 overflow-x-auto col-span-6">
+                    <div className="flex flex-wrap items-center gap-2 flex-1">
                         {Object.entries(rest).map(([k, v]) => (
-                            <Chip
-                                onDelete={() => handleDeleteFilter(k)}
+                            <div
                                 key={k}
-                                variant="outlined"
-                                sx={{ fontSize: "16px" }}
-                                label={
-                                    <span >
-                                        <span className="font-bold">{FILTER_NAME[k]}</span>: {v}
-                                    </span>
-
-                                }
-                            />
+                                className="flex items-center space-x-2 bg-gray-50 border border-gray-200 rounded-sm px-3 py-1.5 text-xl font-medium shadow-sm transition-colors hover:bg-gray-100"
+                            >
+                                <span>
+                                    <span className="font-semibold text-gray-800">{FILTER_NAME[k] || k}</span>: <span className="text-gray-600">{v}</span>
+                                </span>
+                                <button
+                                    onClick={() => handleDeleteFilter(k)}
+                                    className="text-gray-400 hover:text-red-500 transition-colors focus:outline-none"
+                                >
+                                    <IoCloseOutline size={16} />
+                                </button>
+                            </div>
                         ))}
                     </div>
-                </div>
 
-                {/* Reset button */}
-                <p
-                    onClick={handleOnDeleteFilter}
-                    className="col-span-1 text-2xl ml-auto cursor-pointer text-blue-600"
-                >
-                    Xóa bộ lọc
-                </p>
-            </div>
-
-
-            {!province && (
-                <div className="p-4 text-2xl flex items-center space-x-7">
-                    <h1 className="text-3xl font-bold">Khu vực:</h1>
-                    {LOCATION.map(item => (
-                        <p
-                            onClick={handleOnClickProvince}
-                            key={item}
-                            className="py-3 px-5 rounded-2xl border border-gray-200 hover:bg-gray-100 cursor-pointer"
+                    {Object.keys(rest).length > 0 && (
+                        <button
+                            onClick={handleOnDeleteFilter}
+                            className="text-xl font-medium text-red-600 hover:text-red-800 underline transition-colors shrink-0"
                         >
-                            {item}
-                        </p>
-                    ))}
+                            Xóa bộ lọc
+                        </button>
+                    )}
                 </div>
-            )}
+
+                {!province && (
+                    <div className="flex items-center space-x-4 overflow-x-auto pb-2">
+                        <span className="text-2xl font-semibold text-gray-700 whitespace-nowrap">Khu vực:</span>
+                        <div className="flex flex-nowrap space-x-3">
+                            {LOCATION.map(item => (
+                                <button
+                                    onClick={handleOnClickProvince}
+                                    key={item}
+                                    className="whitespace-nowrap py-1.5 px-4 rounded-sm border border-gray-200 text-2xl font-medium text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-900 transition-all focus:outline-none"
+                                >
+                                    {item}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ function EmptySearch() {
     return (
         <div className="bg-white">
             <div className="flex justify-center p-5">
-                <img className="w-[200px] h-[130px]" src="/public/empty-search.png" />
+                <img className="w-[200px] h-[130px]" src="/empty-search.png" />
             </div>
             <div className="text-center space-y-5 p-5">
                 <p className="font-bold text-3xl">Không tìm thấy kết quả từ khóa đã nhập</p>

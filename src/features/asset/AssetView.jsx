@@ -5,8 +5,10 @@ function AssetView({ asset }) {
     const { contents, ...rest } = asset;
 
     return (
-        <div className="overflow-hidden">
-            <Thumbnail images={contents} />
+        <div className="space-y-6">
+            <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                <Thumbnail images={contents} />
+            </div>
             <AssetDetail asset={rest} />
         </div>
     )

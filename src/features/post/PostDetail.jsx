@@ -1,12 +1,11 @@
-import { CiClock2, CiLocationOn } from "react-icons/ci"
+import { CiLocationOn } from "react-icons/ci"
 import Section from "../../ui/Section"
-import { caculatePrice, caculateSquare, formatVietnamMoney, getTimeDifferenceFromNow } from "../../utils/helper";
-
-import { PROPERTIES } from "../../utils/constant";
-
+import { caculateSquare, formatAddress, formatVietnamMoney, getTimeDifferenceFromNow } from "../../utils/helper";
+import { HCM, PROPERTIES } from "../../utils/constant";
 import usePredictHouse from "./usePredictHouse";
 import { useEffect, useState } from "react";
-
+import PostPredictPrice from "./PostPredictPrice";
+import { HiOutlineClock, HiOutlinePhone } from "react-icons/hi";
 
 function PostDetail({ phoneNumber, post }) {
     const { price, type, createdAt, title, description, assetDetail } = post;
@@ -23,134 +22,121 @@ function PostDetail({ phoneNumber, post }) {
             interiorStatus,
             legalDocs,
         } = assetDetail.properties || {};
-
-        predictHouse({
-            address: assetDetail.address,
-            area: assetDetail.landArea,
-            bathrooms,
-            bedrooms,
-            floors,
-            propertyType: houseType,
-            furnitureState: interiorStatus,
-            legalStatus: legalDocs,
-            propertyFeature: assetDetail.otherInfo?.join(","),
-            year: 2026
-        }, {
-            onSuccess: ({ pricePerM2, totalPriceTy }) => {
-                setPredictPrice({ pricePerM2, totalPriceTy })
-            }
-        });
-
+        if (assetDetail.province === HCM)
+            predictHouse({
+                address: formatAddress(assetDetail),
+                area: assetDetail.landArea,
+                bathrooms: bathrooms ?? 0,
+                bedrooms: bedrooms ?? 0,
+                floors: floors ?? 0,
+                propertyType: houseType,
+                furnitureState: interiorStatus,
+                legalStatus: legalDocs,
+                propertyFeature: assetDetail.otherInfo?.join(","),
+                year: 2026
+            }, {
+                onSuccess: ({ pricePerM2, totalPriceTy }) => {
+                    setPredictPrice({ pricePerM2, totalPriceTy })
+                }
+            });
     }, []);
+
     return (
         <Section>
-            <div className="p-5 text-2xl">
-                <h2 className="text-3xl font-bold mb-6">
+            <div className="p-6">
+                {/* Title */}
+                <h1 className="text-[2.2rem] font-extrabold text-gray-900 leading-tight mb-4">
                     {title}
-                </h2>
-                <div className="bg-white tex space-y-4">
-                    <div className="">
-                        <div className="text-4xl font-bold  text-red-600">
-                            {formatVietnamMoney(price)}
-                            {type === "RENT" && <span className="text-xl font-medium"> /tháng</span>}
-                            <p className="text-3xl text-black">
-                                {formatVietnamMoney(price / assetDetail.landArea)}/m² • {square}m²
-                            </p>
-                        </div>
+                </h1>
 
+                {/* Price Block */}
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-5">
+                    <span className="text-[2.6rem] font-black text-rose-600">
+                        {formatVietnamMoney(price)}
+                    </span>
+                    {type === "RENT" && <span className="text-[1.4rem] font-medium text-gray-400">/tháng</span>}
+                    <span className="text-[1.5rem] font-semibold text-gray-500">
+                        ~ {formatVietnamMoney(price / assetDetail.landArea)}/m²
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-gray-100 text-[1.3rem] font-semibold text-gray-700">
+                        {square} m²
+                    </span>
+                </div>
 
+                {/* Location & Time */}
+                <div className="flex flex-col gap-2.5 mb-6">
+                    <div className="flex items-center gap-2 text-[1.35rem] text-gray-600">
+                        <CiLocationOn className="text-[1.8rem] text-gray-400 flex-shrink-0" />
+                        <span>{formatAddress(assetDetail)}</span>
                     </div>
-                    {!isPending && predictPrice?.totalPriceTy && (
-                        <div className="bg-gray-50 text-3xl p-4 space-y-3">
+                    <div className="flex items-center gap-2 text-[1.35rem] text-gray-500">
+                        <HiOutlineClock className="text-[1.6rem] text-gray-400 flex-shrink-0" />
+                        <span>{getTimeDifferenceFromNow(createdAt)}</span>
+                    </div>
+                </div>
 
-                            <div className="font-medium">
-                                Giá tham khảo từ hệ thống: {predictPrice?.pricePerM2.toFixed(2)} triệu/m²
-                            </div>
+                {/* AI Price Prediction */}
+                {assetDetail.province !== HCM && (
+                    <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        <p className="text-[1.35rem] font-semibold text-gray-600">
+                            ⚡ Thẩm định giá AI chưa khả dụng tại {assetDetail.province}
+                        </p>
+                        <p className="text-[1.25rem] mt-1 text-gray-400">
+                            Chúng tôi đang mở rộng dữ liệu để sớm hỗ trợ khu vực này.
+                        </p>
+                    </div>
+                )}
 
-                            {(() => {
-                                const predictedPrice = predictPrice.totalPriceTy * 1_000_000_000
-                                const diffPercent = ((price - predictedPrice) / predictedPrice) * 100
-                                const absPercent = Math.abs(diffPercent).toFixed(1)
+                {!isPending && predictPrice?.totalPriceTy && (
+                    <div className="mb-6">
+                        <PostPredictPrice
+                            predictPrice={predictPrice}
+                            price={price}
+                            province={assetDetail.province}
+                            landArea={assetDetail.landArea}
+                        />
+                    </div>
+                )}
 
-                                const percentWidth = Math.min(Math.abs(diffPercent), 30)
+                {/* Properties Table */}
+                <div className="mb-6">
+                    <h2 className="text-[1.6rem] font-bold text-gray-900 mb-4">Thông tin chi tiết</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                        {Object.entries(assetDetail.properties).map(([key, value]) => {
+                            const Icon = PROPERTIES[key]?.icon;
+                            return (
+                                <div
+                                    key={key}
+                                    className="flex items-center justify-between py-3.5 border-b border-gray-100 last:border-0"
+                                >
+                                    <span className="flex items-center gap-2.5 text-[1.35rem] text-gray-500">
+                                        {Icon && <Icon className="text-[1.6rem] text-gray-400" />}
+                                        {PROPERTIES[key]?.label}
+                                    </span>
+                                    <span className="text-[1.35rem] font-bold text-gray-800">{value}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
 
-                                let color = "bg-yellow-400"
-                                let textColor = "text-yellow-600"
-                                let message = "Giá đang trong biên độ ±15% so với mức tham khảo."
+            {/* Description Section */}
+            <div className="border-t border-gray-100 p-6">
+                <h2 className="text-[1.6rem] font-bold text-gray-900 mb-4">Mô tả chi tiết</h2>
 
-                                if (diffPercent > 15) {
-                                    color = "bg-red-500"
-                                    textColor = "text-red-600"
-                                    message = `Giá cao hơn mức tham khảo khoảng ${absPercent}%.`
-                                }
+                <div className="inline-flex items-center gap-2.5 bg-rose-50 border border-rose-100 rounded-xl px-4 py-3 mb-5">
+                    <HiOutlinePhone className="text-[1.6rem] text-rose-500" />
+                    <span className="text-[1.35rem] font-semibold text-rose-700">SĐT Liên hệ: {phoneNumber}</span>
+                </div>
 
-                                if (diffPercent < -15) {
-                                    color = "bg-green-500"
-                                    textColor = "text-green-600"
-                                    message = `Giá thấp hơn mức tham khảo khoảng ${absPercent}%.`
-                                }
-
-                                return (
-                                    <div className="space-y-2">
-                                        {/* Thanh hiển thị độ chênh lệch */}
-                                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                                            <div
-                                                className={`h-full ${color} transition-all duration-500`}
-                                                style={{ width: `${percentWidth}%` }}
-                                            />
-                                        </div>
-
-                                        <div className={`font-medium ${textColor}`}>
-                                            {message}
-                                        </div>
-
-                                        <div className="text-2xl text-gray-400">
-                                            *Lưu ý: Mức giá tham khảo có sai số khoảng ±15% tùy theo biến động thị trường.
-                                        </div>
-                                    </div>
-                                )
-                            })()}
-                        </div>
+                <div className="text-[1.4rem] text-gray-700 leading-relaxed space-y-1">
+                    {description.split("\n").map((item, index) =>
+                        item.trim() === "" ? <br key={index} /> : <p key={index}>{item}</p>
                     )}
                 </div>
-                <div className="text-gray-600 flex items-center">
-                    <span className="mr-2"><CiLocationOn /></span>
-                    {`${assetDetail.address}, ${assetDetail.ward}, ${assetDetail.province}`}
-                </div>
-                <div className="text-gray-600 flex items-center">
-                    <span className="mr-2"><CiClock2 /></span>
-                    {getTimeDifferenceFromNow(createdAt)}
-                </div>
-
-                <ul className="text-2xl pt-4">
-                    {Object.entries(assetDetail.properties).map(([key, value]) => {
-                        const Icon = PROPERTIES[key]?.icon;
-                        return (
-                            <li
-                                key={key}
-                                className="grid py-3 grid-cols-[24rem_auto] border-b border-gray-300"
-                            >
-                                <span className="flex items-center gap-2">
-                                    {Icon && <Icon />}
-                                    {PROPERTIES[key]?.label}
-                                </span>
-                                <span className="font-bold">{value}</span>
-                            </li>
-                        );
-                    })}
-                </ul>
             </div>
-
-            <div className="text-2xl p-5 pt-4">
-                <h1 className="font-semibold text-3xl mb-2">Mô tả chi tiết</h1>
-                <div className="py-4 px-4 my-4 flex bg-gray-200 w-fit items-center">
-                    <h3 className="font-semibold">SĐT Liên hệ: </h3>
-                    <p className="ml-4">{phoneNumber}</p>
-                </div>
-                {description.split("\n").map((item, index) => item.trim() === "" ? <br /> : <p key={index}>{item}</p>)}
-            </div>
-
-        </Section >
+        </Section>
     )
 }
 

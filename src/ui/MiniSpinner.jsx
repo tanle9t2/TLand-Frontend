@@ -1,11 +1,11 @@
-import { MoonLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
-function MiniSpinner() {
+function MiniSpinner({ size = 20, color = "#e11d48" }) {
     return (
-        <div className="flex items-center justify-center w-full h-full">
-            <MoonLoader size={20} color="#ec003f" />
+        <div className="inline-flex items-center justify-center">
+            <ClipLoader size={size} color={color} speedMultiplier={0.85} />
         </div>
     );
-};
+}
 
 export default MiniSpinner;

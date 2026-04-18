@@ -1,4 +1,4 @@
-import AssetList from "./PostList"
+import PostList from "./PostList"
 
 import MiniSpinner from "../../ui/MiniSpinner";
 import useGetPostsHome from "./useGetPostsHome";
@@ -8,7 +8,7 @@ function PostForRent() {
     if (isLoading) return <MiniSpinner />
 
     return (
-        <AssetList type={POST_TYPE.RENT} data={content} totalElements={totalElements} />
+        <PostList type={POST_TYPE.RENT} data={content} totalElements={totalElements} />
     )
 }
 

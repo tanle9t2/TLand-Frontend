@@ -31,7 +31,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   [theme.breakpoints.up('sm')]: {
-    width: '450px',
+    width: '600px',
   },
   ...theme.applyStyles('dark', {
     boxShadow:
@@ -42,7 +42,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
-
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
@@ -76,6 +75,8 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [usernameError, setUsernameError] = React.useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
+  const [phoneError, setPhoneError] = React.useState(false);
+  const [phoneErrorMessage, setPhoneErrorMessage] = React.useState('');
   const { isLoading, signUp } = useSignUp()
   const { isPending, loginWithThirdParty } = useLoginWithThirdParty()
   if (isLoading || isPending) return <FullPageSpinner />
@@ -89,6 +90,7 @@ export default function SignUp(props) {
     const firstName = document.getElementById('firstName');
     const lastName = document.getElementById('lastName');
     const username = document.getElementById('username');
+    const phoneNumber = document.getElementById('phone');
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -135,12 +137,21 @@ export default function SignUp(props) {
       setUsernameErrorMessage('');
     }
 
+    if (!phoneNumber.value || phoneNumber.value.length < 1) {
+      setPhoneError(true);
+      setPhoneErrorMessage('Vui lòng nhập tên đăng nhập.');
+      isValid = false;
+    } else {
+      setPhoneError(false);
+      setPhoneErrorMessage('');
+    }
+
     return isValid;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (usernameError || firstNameError || lastNameError || emailError || passwordError) {
+    if (usernameError || phoneError || firstNameError || lastNameError || emailError || passwordError) {
       return;
     }
     const data = new FormData(event.currentTarget);
@@ -149,6 +160,7 @@ export default function SignUp(props) {
       lastName: data.get('lastName'),
       username: data.get('username'),
       email: data.get('email'),
+      phoneNumber: data.get('phone'),
       password: data.get('password'),
     })
   };
@@ -170,48 +182,95 @@ export default function SignUp(props) {
             onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
-            <FormControl>
-              <FormLabel htmlFor="firstName" sx={{ fontSize: "1.5rem" }}>Họ</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="firstName"
-                placeholder="Nguyễn"
-                name="firstName"
-                autoComplete="firstName"
-                variant="outlined"
-                error={firstNameError}
-                helperText={firstNameErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
-                InputProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-                FormHelperTextProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="lastName" sx={{ fontSize: "1.5rem" }}>Tên</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                placeholder="Văn A"
-                name="lastName"
-                autoComplete="lastName"
-                variant="outlined"
-                error={lastNameError}
-                helperText={lastNameErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
-                InputProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-                FormHelperTextProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-              />
-            </FormControl>
+            <div className="grid grid-cols-2 gap-6">
+              <FormControl>
+                <FormLabel htmlFor="firstName" sx={{ fontSize: "1.5rem" }}>Họ</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  id="firstName"
+                  placeholder="Nguyễn"
+                  name="firstName"
+                  autoComplete="firstName"
+                  variant="outlined"
+                  error={firstNameError}
+                  helperText={firstNameErrorMessage}
+                  color={passwordError ? 'error' : 'primary'}
+                  InputProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                  FormHelperTextProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="lastName" sx={{ fontSize: "1.5rem" }}>Tên</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  placeholder="Văn A"
+                  name="lastName"
+                  autoComplete="lastName"
+                  variant="outlined"
+                  error={lastNameError}
+                  helperText={lastNameErrorMessage}
+                  color={passwordError ? 'error' : 'primary'}
+                  InputProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                  FormHelperTextProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                />
+              </FormControl>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <FormControl>
+                <FormLabel htmlFor="email" sx={{ fontSize: "1.5rem" }}>Email</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  placeholder="your@email.com"
+                  name="email"
+                  autoComplete="email"
+                  variant="outlined"
+                  error={emailError}
+                  helperText={emailErrorMessage}
+                  color={emailError ? 'error' : 'primary'}
+                  InputProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                  FormHelperTextProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="email" sx={{ fontSize: "1.5rem" }}>Số điện thoại</FormLabel>
+                <TextField
+                  required
+                  fullWidth
+                  id="phone"
+                  placeholder="09xxxxx"
+                  name="phone"
+                  autoComplete="phone"
+                  variant="outlined"
+                  error={phoneError}
+                  helperText={phoneErrorMessage}
+                  color={phoneError ? 'error' : 'primary'}
+                  InputProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                  FormHelperTextProps={{
+                    sx: { fontSize: "1.5rem" },
+                  }}
+                />
+              </FormControl>
+            </div>
             <FormControl>
               <FormLabel htmlFor="username" sx={{ fontSize: "1.5rem" }}>Tên đăng nhập</FormLabel>
               <TextField
@@ -224,27 +283,6 @@ export default function SignUp(props) {
                 error={usernameError}
                 helperText={usernameErrorMessage}
                 color={usernameError ? 'error' : 'primary'}
-                InputProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-                FormHelperTextProps={{
-                  sx: { fontSize: "1.5rem" },
-                }}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="email" sx={{ fontSize: "1.5rem" }}>Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
                 InputProps={{
                   sx: { fontSize: "1.5rem" },
                 }}

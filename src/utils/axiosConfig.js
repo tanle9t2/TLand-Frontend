@@ -44,7 +44,8 @@ AUTH_REQUEST.interceptors.response.use(
         isRefresh = true;
         try {
           const token = await refreshToken();
-          setLocalStorageToken(token);
+
+          setLocalStorageToken(token.access_token);
 
           retryQueue.forEach((req) => {
             AUTH_REQUEST.request(req.config)

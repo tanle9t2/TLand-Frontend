@@ -1,5 +1,5 @@
 import axios from "axios";
-import { KEYCLOAK_TOKEN_ENDPOINT, KEYCLOAK_URL } from "../utils/Url";
+import { HOME_URL, KEYCLOAK_BASE_URL, KEYCLOAK_TOKEN_ENDPOINT, KEYCLOAK_URL } from "../utils/Url";
 import { getRefreshToken } from "../utils/helper";
 
 export async function refreshToken() {
@@ -13,11 +13,12 @@ export async function refreshToken() {
         params,
         {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
             },
         }
     );
-    if (res.status != 200) throw new Error("Error fetching");
+
+    if (res.status !== 200) throw new Error("Error fetching");
     return res.data;
 }
 
@@ -45,8 +46,8 @@ export async function loginAPI({ usernameOrEmail, password }) {
     }
 };
 export async function loginWithThirdParty({ partyName }) {
-    const redirectUrl = encodeURIComponent("http://localhost:5173/");
-    const url = `http://localhost:8443/realms/TLand/protocol/openid-connect/auth?client_id=tland-react&response_type=code&scope=openid&redirect_uri=${redirectUrl}&kc_idp_hint=${[partyName]}`;
+    const redirectUrl = encodeURIComponent(`${HOME_URL}`);
+    const url = `${KEYCLOAK_BASE_URL}/realms/TLand/protocol/openid-connect/auth?client_id=tland-react&response_type=code&scope=openid&redirect_uri=${redirectUrl}&kc_idp_hint=${[partyName]}`;
     window.location.href = url;
 };
 

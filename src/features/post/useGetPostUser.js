@@ -7,7 +7,7 @@ function useGetPostUser({ page }) {
     const { userId } = useParams()
     const { isLoading, data } = useQuery({
         queryKey: ["postsUser", page, userId],
-        queryFn: () => getPostLanding({ page, size: 9, userId }),
+        queryFn: () => getPostLanding({ page, size: 8, userId }),
     });
     const { content: posts = [],
         size,

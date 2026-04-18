@@ -7,8 +7,8 @@ import { useAuth } from "../../context/AuthContext";
 export default function useSignUp() {
     const { login } = useAuth()
     const { isLoading, mutate: signUp } = useMutation({
-        mutationFn: ({ username, lastName, firstName, email, password }) =>
-            signUpAPI({ username, lastName, firstName, email, password }),
+        mutationFn: ({ username, lastName, firstName, email, phoneNumber, password }) =>
+            signUpAPI({ username, lastName, firstName, email, phoneNumber, password }),
         onSuccess: () => {
             login()
         },

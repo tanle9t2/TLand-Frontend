@@ -94,10 +94,6 @@ export default function SignIn(props) {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
 
     defaultLogin({
       usernameOrEmail: data.get("email"),

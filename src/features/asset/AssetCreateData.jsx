@@ -8,9 +8,11 @@ import Button from "../../ui/Button"
 function AssetCreateData() {
     const { isLoading, drafts } = useGetAssetDraft()
     if (isLoading) return <MiniSpinner />
+    console.log(drafts)
     if (!drafts.length) {
         return <Navigate to="/create-asset/new" />;
     }
+
     return (
         <div className="space-y-5">
             <div className="flex justify-between item-center bg-white rounded-lg p-4">

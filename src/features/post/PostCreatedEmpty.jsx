@@ -5,7 +5,7 @@ function PostCreatedEmpty() {
     return (
         <div className="bg-white ">
             <div className="py-20">
-                <img className="w-[457px] h-[275px] mx-auto" src="/public/post-create-banner.png" />
+                <img className="w-[457px] h-[275px] mx-auto" src="/post-create-banner.png" />
                 <p className="text-4xl font-bold text-center mt-5">ĐĂNG NHANH - BÁN GỌN</p>
                 <p className="text-4xl font-bold text-center mt-5">Bạn chưa có tài sản nào. Hãy tạo tài sản để bắt đầu!</p>
             </div>

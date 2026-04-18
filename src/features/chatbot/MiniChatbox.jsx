@@ -8,6 +8,10 @@ import { IoChatbubblesOutline, IoCloseOutline, IoSendSharp } from "react-icons/i
 import { RiRobot2Line } from "react-icons/ri";
 import { BsHouseDoor } from "react-icons/bs";
 import AIAvatar from "./AIAvatar";
+import PredictPriceCard from "./PredictPriceCard"
+import PropertyCard from "./PropertyCard";
+import BankLoadCard from "./BankLoadCard";
+import FinancialAdviceCard from "./FinancialAdviceCard";
 
 const SUGGESTIONS = ["Tui cần hỗ trợ mua nhà", "Tình hình bất động sản TP. Hồ Chí Minh", "Nhà phố mặt tiền quận 1"]
 
@@ -50,7 +54,12 @@ export default function MiniChatbox() {
         inputRef.current?.focus();
     }
     if (!authenticated) return null;
-
+    const mdComponents = {
+        p: ({ children }) => <p className="m-0 leading-relaxed">{children}</p>,
+        ul: ({ children }) => <ul className="list-disc pl-4 mt-1.5 space-y-1">{children}</ul>,
+        ol: ({ children }) => <ol className="list-decimal pl-4 mt-1.5 space-y-1">{children}</ol>,
+        strong: ({ children }) => <strong className="font-semibold text-rose-700">{children}</strong>,
+    };
     return (
         <div className="fixed bottom-6 text-3xl right-6 z-50 flex flex-col items-end gap-4">
             <div
@@ -64,7 +73,7 @@ export default function MiniChatbox() {
                         : "opacity-0 scale-95 translate-y-4 pointer-events-none"
                     }
                 `}
-                style={{ maxHeight: expanded ? "680px" : "0px", minHeight: expanded ? "680px" : "0px" }}
+                style={{ maxHeight: expanded ? "600px" : "0px", minHeight: expanded ? "600px" : "0px" }}
             >
 
                 <div className="flex items-center gap-3 px-5 py-4 bg-rose-600 text-white flex-shrink-0">
@@ -116,28 +125,73 @@ export default function MiniChatbox() {
                         </div>
                     )}
 
-                    {messages.map((msg, idx) => (
-                        <div key={idx} className="flex flex-col text-2xl gap-3">
+                    {messages.map(({ ai, human }, idx) => (
+                        <div key={idx} className="flex flex-col space-y-6">
 
                             <div className="flex justify-end">
-                                <div className="bg-rose-600 text-white px-5 py-3 rounded-3xl rounded-tr-sm max-w-[80%] break-words shadow-sm leading-relaxed">
-                                    {msg.human}
+                                <div className="max-w-[75%] bg-gray-100 rounded-2xl rounded-tr-sm px-5 py-3 text-gray-800 text-sm leading-relaxed shadow-sm">
+                                    {human}
                                 </div>
                             </div>
 
                             <div className="flex items-end gap-2.5">
                                 <AIAvatar />
-                                <div className="bg-white text-gray-800 px-5 py-3 rounded-3xl rounded-tl-sm max-w-[80%] break-words shadow-sm border border-gray-100 leading-relaxed">
-                                    <ReactMarkdown
-                                        components={{
-                                            p: ({ children }) => <p className="m-0 leading-relaxed">{children}</p>,
-                                            ul: ({ children }) => <ul className="list-disc pl-4 mt-1.5 space-y-1">{children}</ul>,
-                                            ol: ({ children }) => <ol className="list-decimal pl-4 mt-1.5 space-y-1">{children}</ol>,
-                                            strong: ({ children }) => <strong className="font-semibold text-rose-700">{children}</strong>,
-                                        }}
-                                    >
-                                        {msg.ai}
-                                    </ReactMarkdown>
+                                <div className="bg-white text-gray-800 px-5 py-4 rounded-3xl rounded-tl-sm max-w-[85%] sm:max-w-[80%] break-words shadow-sm border border-gray-100 leading-relaxed">
+                                    {typeof ai === 'string' ? (
+                                        <ReactMarkdown components={mdComponents}>
+                                            {ai}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            {ai.message && (
+                                                <ReactMarkdown components={mdComponents}>{ai.message}</ReactMarkdown>
+                                            )}
+                                            {ai.property && (
+                                                <div className="mt-3 mb-3">
+                                                    <PropertyCard property={ai.property} />
+                                                </div>
+                                            )}
+
+                                            {ai.properties && ai.properties.length > 0 && (
+                                                <div className="flex flex-col gap-4 mt-3 mb-3">
+                                                    {ai.properties.map((prop, pIdx) => (
+                                                        <PropertyCard key={prop.propertyId || pIdx} property={prop} />
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {ai.priceEvaluation && (
+                                                <PredictPriceCard priceEvaluation={ai.priceEvaluation} />
+                                            )}
+
+                                            {ai.agentAnalysis && (
+                                                <div className="bg-blue-50/80 border border-blue-100 p-4 rounded-2xl flex items-start gap-3 mt-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                                    <div>
+                                                        <span className="font-bold text-blue-900 block text-sm mb-1 uppercase tracking-wider">Phân tích từ chuyên gia AI</span>
+                                                        <div className="text-blue-800 text-sm leading-relaxed">
+                                                            {ai.agentAnalysis}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {ai.loanPackages && ai.loanPackages.length > 0 && (
+                                                <BankLoadCard loanPackages={ai.loanPackages} />
+                                            )}
+
+
+                                            {ai.financialAdvice && (
+                                                <FinancialAdviceCard financialAdvice={ai.financialAdvice} />
+                                            )}
+
+                                            {ai.followUpQuestion && (
+                                                <div className="pt-2 border-t border-gray-100">
+                                                    <ReactMarkdown components={mdComponents}>{ai.followUpQuestion}</ReactMarkdown>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

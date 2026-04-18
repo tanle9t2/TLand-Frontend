@@ -4,9 +4,17 @@ import UserProfile from "./UserProfile"
 
 function UserProfileData() {
     const { isLoading, user } = useGetUserInfo()
-    if (isLoading) return <MiniSpinner />
+
+    if (isLoading) return (
+        <div className="flex items-center justify-center min-h-[60vh]">
+            <MiniSpinner size={36} />
+        </div>
+    )
+
     return (
-        <UserProfile user={user} />
+        <div className="bg-gray-50 min-h-screen py-8">
+            <UserProfile user={user} />
+        </div>
     )
 }
 

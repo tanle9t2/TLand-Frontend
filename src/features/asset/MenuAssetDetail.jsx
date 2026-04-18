@@ -4,83 +4,110 @@ import Section from "../../ui/Section";
 import useDeleteAsset from "./useDeleteAsset";
 import FullPageSpinner from "../../ui/FullPageSpinner";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import ConfirmDelete from "../../ui/ConfirmDelete";
-const style = {
+import { HiOutlinePencil, HiOutlineTrash, HiOutlineShoppingCart, HiOutlineExclamationCircle } from "react-icons/hi";
+
+const modalStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
-    border: "transparent",
+    width: 480,
+    border: "none",
+    outline: "none",
     bgcolor: 'background.paper',
-    borderRadius: "5px",
-    boxShadow: 24,
+    borderRadius: "16px",
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
     overflow: "hidden",
-    display: "flex",
-    justifyContent: "justify-center",
-    alignItems: "center",
-    padding: "30px"
-
+    padding: "24px"
 };
+
 function MenuAssetDetail({ asset }) {
-    const { attachedPostShow } = asset
-    const { isPending, deleteAsset } = useDeleteAsset()
-    const [isShowDelete, setIsShowDelete] = useState(false)
+    const { attachedPostShow } = asset;
+    const { isPending, deleteAsset } = useDeleteAsset();
+    const [isShowDelete, setIsShowDelete] = useState(false);
     const navigate = useNavigate();
 
-    if (isPending) return <FullPageSpinner />
-    function handleOnCloseDelete() {
+    const handleOnCloseDelete = useCallback(() => {
         setIsShowDelete(false);
-    }
-    function handleOnConfirm() {
+    }, []);
+
+    const handleOnConfirm = useCallback(() => {
         deleteAsset({ id: asset.id }, {
             onSuccess: () => {
-                navigate("/asset")
-                toast.success("Xóa tài sản thành công")
+                navigate("/asset");
+                toast.success("Xóa tài sản thành công");
             }
-        })
-    }
+        });
+    }, [asset.id, deleteAsset, navigate]);
+
+    if (isPending) return <FullPageSpinner />;
+
     return (
         <Section>
-            <div className="p-4">
-                <h1 className="text-3xl font-bold">Thao tác</h1>
-                {attachedPostShow && <p className="text-red-500">
-                    Tài sản hiện tại đang được đăng bán. Bạn không thể chỉnh sửa hay đăng bài mới
-                    <br />
-                    Gỡ bài đăng khỏi tài sản để chỉnh sửa
-                </p>}
-            </div>
-            <div className="flex items-center p-4">
-                <div className="w-full">
-                    <Button disabled={attachedPostShow} variant="primary" className="w-full">
+            <div className="p-6">
+                <h2 className="text-[1.6rem] font-semibold text-gray-900 mb-4">Thao tác</h2>
+
+                {attachedPostShow && (
+                    <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 mb-5">
+                        <HiOutlineExclamationCircle className="text-[1.6rem] text-amber-500 mt-0.5 flex-shrink-0" />
+                        <p className="text-[1.25rem] text-amber-700 leading-relaxed">
+                            Tài sản đang được đăng bán. Gỡ bài đăng để chỉnh sửa hoặc đăng bài mới.
+                        </p>
+                    </div>
+                )}
+
+                <div className="space-y-3">
+                    <Button
+                        onClick={() => navigate("/create-post")}
+                        disabled={attachedPostShow}
+                        variant="primary"
+                        className="!w-full !rounded-xl !py-3 !text-[1.4rem] !flex !items-center !justify-center !gap-2 !shadow-lg !shadow-rose-500/15"
+                    >
+                        <HiOutlineShoppingCart className="text-[1.5rem]" />
                         Đăng bán
                     </Button>
+
                     <Link
                         to={`/asset/update/${asset.id}`}
                         state={{ asset }}
+                        className={attachedPostShow ? 'pointer-events-none' : ''}
                     >
-                        <Button variant="secondary" className="w-full">
+                        <Button
+                            variant="secondary"
+                            disabled={attachedPostShow}
+                            className="!w-full !rounded-xl !py-3 !text-[1.4rem] !flex !items-center !justify-center !gap-2"
+                        >
+                            <HiOutlinePencil className="text-[1.4rem]" />
                             Chỉnh sửa
                         </Button>
                     </Link>
-                    <Modal
-                        open={isShowDelete}
-                        onClose={handleOnCloseDelete}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
+
+                    <button
+                        type="button"
+                        onClick={() => setIsShowDelete(true)}
+                        disabled={attachedPostShow}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-red-200 text-[1.4rem] font-medium text-red-500 hover:bg-red-50 hover:border-red-300 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                     >
-                        <Box sx={style}>
-                            <ConfirmDelete resourceName="tài sản" disabled={isPending} onCloseModal={handleOnCloseDelete} onConfirm={() => handleOnConfirm()} />
-                        </Box >
-                    </Modal>
-                    <Button onClick={() => setIsShowDelete(true)} disabled={attachedPostShow} variant="secondary" className="w-full">
+                        <HiOutlineTrash className="text-[1.4rem]" />
                         Xóa tài sản
-                    </Button>
+                    </button>
                 </div>
             </div>
-        </Section >
+
+            <Modal open={isShowDelete} onClose={handleOnCloseDelete}>
+                <Box sx={modalStyle}>
+                    <ConfirmDelete
+                        resourceName="tài sản"
+                        disabled={isPending}
+                        onCloseModal={handleOnCloseDelete}
+                        onConfirm={handleOnConfirm}
+                    />
+                </Box>
+            </Modal>
+        </Section>
     );
 }
 

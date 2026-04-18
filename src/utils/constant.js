@@ -6,6 +6,9 @@ import { BsDoorOpen, BsBuildings } from "react-icons/bs";
 import { RxDimensions } from "react-icons/rx";
 import { LuPackage2 } from "react-icons/lu";
 
+export const KEYCLOAK_REALM = import.meta.env.VITE_KEYCLOAK_REALM
+export const KEYCLOAK_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID
+
 export const MAX_IMAGE_UPLOAD = 12
 export const POST_TYPE = {
     SELL: "SELL",
@@ -19,7 +22,7 @@ export const PROPERTY_FEATURES = {
         "Nhà dính quy hoạch / lộ giới",
         "Nhà chưa hoàn công",
         "Nhà nát",
-        "Đất chưa chuyển thổ",
+        "Hẻm xe hơi",
         "Hiện trạng khác",
     ],
     LAND: [
@@ -275,3 +278,4 @@ export const PAGE_SIZE = 10;
 export const PAGE = 0;
 export const COMMENT_SIZE = 5;
 export const PRICE_CREATED = 50000
+export const HCM = "Hồ Chí Minh"

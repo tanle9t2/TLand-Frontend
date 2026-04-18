@@ -38,8 +38,8 @@ export async function checkFollow({ followerId }) {
 }
 
 
-export async function signUp({ username, lastName, firstName, email, password }) {
-    const res = await API.post(`/user-service/api/v1/user/sign-up`, { username, lastName, firstName, email, password })
+export async function signUp({ username, lastName, firstName, email, phoneNumber, password }) {
+    const res = await API.post(`/user-service/api/v1/user/sign-up`, { username, lastName, firstName, email, phoneNumber, password })
     return res.data;
 }
 export async function getUserLadingPage({ userId }) {

@@ -15,6 +15,9 @@ export default {
                 'nav': '64px',
             },
             fontFamily: {
+                sans: ['"Be Vietnam Pro"', 'Inter', 'sans-serif'],
+                heading: ['Outfit', 'sans-serif'],
+                serif: ['"Playfair Display"', 'serif'],
                 roboto: ['Roboto', 'sans-serif'],
             },
         },

@@ -5,9 +5,9 @@ export const getAccessToken = () => {
 };
 
 export const getRefreshToken = () => {
-    const token = window.localStorage.getItem("auth_token");
+    const token = window.localStorage.getItem("refresh_token");
     if (token == null) return null;
-    return JSON.parse(token).refreshToken;
+    return JSON.parse(token);
 };
 
 export const AuthenticationHeader = function () {
@@ -24,7 +24,7 @@ export const setLocalStorageRefreshToken = (token) => {
 };
 
 export const removeLocalStorageToken = () => {
-    window.localStorage.removeItem("auth_token");
+    window.localStorage.removeItem("ROCP_token");
 };
 export const removeLocalStorageRefreshToken = () => {
     window.localStorage.removeItem("refresh_token");
@@ -56,12 +56,16 @@ export const getTimeDifferenceFromNow = (createdAt) => {
     const diffMin = Math.floor(diffSec / 60);
     const diffHour = Math.floor(diffMin / 60);
     const diffDay = Math.floor(diffHour / 24);
+    const diffMonth = Math.floor(diffDay / 30);
+    const diffYear = Math.floor(diffDay / 365);
 
+    if (diffYear > 0) return `${diffYear} năm trước`;
+    if (diffMonth > 0) return `${diffMonth} tháng trước`;
     if (diffDay > 0) return `${diffDay} ngày trước`;
     if (diffHour > 0) return `${diffHour} giờ trước`;
     if (diffMin > 0) return `${diffMin} phút trước`;
     return `${diffSec} giây trước`;
-}
+};
 export const convertDate = (date) => {
     const iso = new Date(date);
 
@@ -88,4 +92,13 @@ export function formatSearchParams(filterValue) {
         )
         .join("&");
 
+}
+export function formatAddress(assetDetail) {
+    return [
+        assetDetail?.address,
+        assetDetail?.ward,
+        assetDetail?.province
+    ]
+        .filter(Boolean)
+        .join(', ');
 }
