@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaHome, FaChartLine, FaUserTie, FaProjectDiagram, FaMoneyCheckAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { HiBars3 } from "react-icons/hi2";
+import { HiOutlineSparkles } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import useGetCategories from "../features/asset/useGetCategories";
 
@@ -15,6 +16,11 @@ const menu = [
         label: "Cho thuê",
         icon: <FaMoneyCheckAlt className="text-[1.6rem] text-sky-500" />,
         param: "RENT"
+    },
+    {
+        label: "Định giá AI",
+        icon: <HiOutlineSparkles className="text-[1.6rem] text-blue-500" />,
+        href: "/dinh-gia"
     },
     {
         label: "Dự án",
@@ -60,7 +66,7 @@ function Menu() {
                                     onMouseEnter={() => setOpenMenuIndex(index)}
                                     className="relative group px-2"
                                 >
-                                    <Link to={`/search?type=${item.param}`}>
+                                    <Link to={item.href ?? `/search?type=${item.param}`}>
                                         <div className="flex items-center justify-between px-3 py-3 rounded-xl hover:bg-rose-50/60 cursor-pointer transition-colors">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all duration-200">

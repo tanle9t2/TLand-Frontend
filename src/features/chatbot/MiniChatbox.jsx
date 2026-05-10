@@ -43,8 +43,19 @@ export default function MiniChatbox() {
         }
         createChat({ input, messages }, {
             onSuccess: (data) => {
-                const { answer } = data;
-                setMessages((prev) => [...prev, { human: input, ai: answer }]);
+                let aiResponse = data;
+                if (data.answer) {
+                    if (typeof data.answer === 'string') {
+                        try {
+                            aiResponse = JSON.parse(data.answer);
+                        } catch (e) {
+                            aiResponse = data.answer;
+                        }
+                    } else {
+                        aiResponse = data.answer;
+                    }
+                }
+                setMessages((prev) => [...prev, { human: input, ai: aiResponse }]);
                 setInput("");
             }
         });
@@ -64,7 +75,7 @@ export default function MiniChatbox() {
         <div className="fixed bottom-6 text-3xl right-6 z-50 flex flex-col items-end gap-4">
             <div
                 className={`
-                    w-[480px] bg-white rounded-3xl shadow-2xl border border-gray-100
+                    w-[600px] bg-white rounded-3xl shadow-2xl border border-gray-100
                     flex flex-col overflow-hidden
              
                     transition-all duration-300 ease-out origin-bottom-right
@@ -129,7 +140,7 @@ export default function MiniChatbox() {
                         <div key={idx} className="flex flex-col space-y-6">
 
                             <div className="flex justify-end">
-                                <div className="max-w-[75%] bg-gray-100 rounded-2xl rounded-tr-sm px-5 py-3 text-gray-800 text-sm leading-relaxed shadow-sm">
+                                <div className="max-w-[75%] bg-gray-100 rounded-2xl rounded-tr-sm px-5 py-3 text-gray-800 text-2xl leading-relaxed shadow-sm">
                                     {human}
                                 </div>
                             </div>
@@ -183,6 +194,44 @@ export default function MiniChatbox() {
 
                                             {ai.financialAdvice && (
                                                 <FinancialAdviceCard financialAdvice={ai.financialAdvice} />
+                                            )}
+
+                                            {ai.legalPoints && ai.legalPoints.length > 0 && (
+                                                <div className="bg-emerald-50/80 border border-emerald-100 p-3 rounded-2xl flex flex-col gap-2 mt-2">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                                        </svg>
+                                                        <span className="font-bold text-emerald-900 text-3xl uppercase tracking-wider">Căn cứ pháp lý</span>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        {ai.legalPoints.map((point, i) => (
+                                                            <div key={i} className="bg-white rounded-xl p-2.5 border border-emerald-100 shadow-sm">
+                                                                <h4 className="font-semibold text-emerald-800 text-2xl mb-1">{point.title}</h4>
+                                                                <p className="text-gray-700 text-2xl leading-relaxed">{point.content}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {ai.riskWarnings && ai.riskWarnings.length > 0 && (
+                                                <div className="bg-amber-50/80 border border-amber-100 p-3 rounded-2xl flex flex-col gap-2 mt-2">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                                                        </svg>
+                                                        <span className="font-bold text-amber-900 text-3xl uppercase tracking-wider">Lưu ý rủi ro</span>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        {ai.riskWarnings.map((w, i) => (
+                                                            <div key={i} className="bg-white rounded-xl p-2.5 border border-amber-100 shadow-sm">
+                                                                <h4 className="font-semibold text-amber-800 text-2xl mb-1">{w.title}</h4>
+                                                                <p className="text-gray-700 text-2xl leading-relaxed">{w.content}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
                                             )}
 
                                             {ai.followUpQuestion && (

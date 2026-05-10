@@ -9,6 +9,8 @@ import { LuPackage2 } from "react-icons/lu";
 export const KEYCLOAK_REALM = import.meta.env.VITE_KEYCLOAK_REALM
 export const KEYCLOAK_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID
 
+export const GOONG_API_KEY = import.meta.env.VITE_GOONG_API_KEY
+
 export const MAX_IMAGE_UPLOAD = 12
 export const POST_TYPE = {
     SELL: "SELL",

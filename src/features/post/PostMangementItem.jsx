@@ -4,7 +4,7 @@ import { IoMdMore } from "react-icons/io"
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
 import { BiHide } from "react-icons/bi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { Box, Modal } from "@mui/material";
@@ -12,7 +12,10 @@ import useDeletePost from "./useDeletePost";
 import toast from "react-hot-toast";
 import useHidePost from "./useHidePost";
 import useShowPost from "./useShowPost";
-import { HiOutlineCalendar, HiOutlineTag } from "react-icons/hi";
+import { HiOutlineCalendar, HiOutlineClock, HiOutlineExclamationCircle, HiOutlineTag } from "react-icons/hi";
+import Button from "../../ui/Button";
+import useInitPaymentUrl from "./useInitPaymentUrl";
+import MiniSpinner from "../../ui/MiniSpinner";
 
 const modalStyle = {
     position: 'absolute',
@@ -29,6 +32,43 @@ const modalStyle = {
     padding: "24px"
 };
 
+const PURPOSE_TYPE = "POST"
+const TRANSACTION_TYPE = "CREATED"
+const PAYMENT_WINDOW_MS = 48 * 60 * 60 * 1000
+
+function useCountdown48h(createdAt) {
+    const [remaining, setRemaining] = useState(() => {
+        const deadline = new Date(createdAt).getTime() + PAYMENT_WINDOW_MS
+        return Math.max(0, deadline - Date.now())
+    })
+
+    useEffect(() => {
+        const deadline = new Date(createdAt).getTime() + PAYMENT_WINDOW_MS
+        const tick = () => {
+            const left = Math.max(0, deadline - Date.now())
+            setRemaining(left)
+        }
+
+        tick()
+        const timer = setInterval(tick, 1000)
+        return () => clearInterval(timer)
+    }, [createdAt])
+
+    if (remaining <= 0) return { expired: true, display: null }
+
+    const totalSeconds = Math.floor(remaining / 1000)
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+
+    return {
+        expired: false,
+        display: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`,
+        hours,
+        isUrgent: hours < 6,
+    }
+}
+
 function PostMangementItem({ post }) {
     const { id, posterUrl, title, createdAt, price } = post
     const [isShowMenu, setIsShowMenu] = useState(false);
@@ -38,6 +78,10 @@ function PostMangementItem({ post }) {
     const { hidePost } = useHidePost()
     const { showPost } = useShowPost()
     const { isPending, deletePost } = useDeletePost()
+    const { isPending: initPaymentPending, initPaymentUrl } = useInitPaymentUrl()
+
+    const countdown = useCountdown48h(createdAt)
+    const isWaitingPayment = status === "WAITING_PAYMENT"
 
     function handleOnClose() {
         setIsShowMenu(false)
@@ -51,6 +95,10 @@ function PostMangementItem({ post }) {
 
     function handleOnCloseDelete() {
         setIsShowDelete(false);
+    }
+
+    function handleInitPayment() {
+        initPaymentUrl({ txnRef: id, purposeType: PURPOSE_TYPE, transactionType: TRANSACTION_TYPE })
     }
 
     function handleOnConfirm() {
@@ -81,7 +129,36 @@ function PostMangementItem({ post }) {
     }
 
     return (
-        <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:border-gray-200 transition-all duration-300 w-full mb-4">
+        <div className={`group relative bg-white rounded-2xl border shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 w-full mb-4 ${isWaitingPayment ? 'border-amber-200 hover:border-amber-300' : 'border-gray-100 hover:border-gray-200'}`}>
+
+            {/* WAITING_PAYMENT — top banner */}
+            {isWaitingPayment && (
+                <div className={`flex items-center justify-between px-5 py-2.5 ${countdown.expired ? 'bg-red-50 border-b border-red-100' : countdown.isUrgent ? 'bg-amber-50 border-b border-amber-100' : 'bg-amber-50 border-b border-amber-100'}`}>
+                    <div className="flex items-center gap-2">
+                        <HiOutlineExclamationCircle className={`text-[1.6rem] flex-shrink-0 ${countdown.expired ? 'text-red-500' : 'text-amber-500'}`} />
+                        <span className={`text-[1.25rem] font-semibold ${countdown.expired ? 'text-red-600' : 'text-amber-700'}`}>
+                            {countdown.expired ? 'Hết hạn thanh toán — bài đăng sẽ bị huỷ' : 'Chờ thanh toán — bài chưa được đăng lên'}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                        {!countdown.expired && (
+                            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-mono font-bold text-[1.3rem] ${countdown.isUrgent ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'}`}>
+                                <HiOutlineClock className="text-[1.4rem]" />
+                                {countdown.display}
+                            </div>
+                        )}
+                        <Button
+                            onClick={handleInitPayment}
+                            disabled={initPaymentPending}
+                            className="px-4 py-1.5 text-[1.2rem] rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition font-semibold shadow-sm"
+                        >
+                            {initPaymentPending ? <MiniSpinner /> : "Thanh toán ngay"}
+                        </Button>
+                    </div>
+                </div>
+            )}
+
             <div className="flex flex-col sm:flex-row h-auto sm:h-[150px]">
 
                 <Link to={`/post/${id}`} className="sm:w-56 h-[180px] sm:h-full flex-shrink-0 overflow-hidden relative block">
@@ -93,7 +170,6 @@ function PostMangementItem({ post }) {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10 transition-colors" />
                 </Link>
 
-
                 <div className="flex-1 p-5 lg:p-6 flex flex-col justify-between min-w-0">
                     <div className="flex justify-between items-start gap-4">
                         <Link to={`/post/${id}`} className="flex-1 min-w-0">
@@ -102,7 +178,6 @@ function PostMangementItem({ post }) {
                             </h3>
                         </Link>
 
-                        {/* Dropdown Menu */}
                         <div ref={ref} className="relative z-10 flex-shrink-0">
                             <button
                                 type="button"
@@ -146,17 +221,20 @@ function PostMangementItem({ post }) {
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-50">
-                        <div className="flex items-center gap-2 text-rose-600 font-bold text-[1.4rem]">
-                            <HiOutlineTag className="text-[1.6rem]" />
-                            {formatVietnamMoney(price)}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[1.2rem] text-gray-400">
-                            <HiOutlineCalendar className="text-[1.4rem]" />
-                            {convertDate(createdAt)}
+                    <div className="mt-auto pt-3 border-t border-gray-50">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-rose-600 font-bold text-[1.4rem]">
+                                <HiOutlineTag className="text-[1.6rem]" />
+                                {formatVietnamMoney(price)}
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[1.2rem] text-gray-400">
+                                <HiOutlineCalendar className="text-[1.4rem]" />
+                                {convertDate(createdAt)}
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <Modal open={isShowDelete} onClose={handleOnCloseDelete}>

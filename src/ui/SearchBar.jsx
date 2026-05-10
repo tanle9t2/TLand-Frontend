@@ -78,7 +78,13 @@ function SearchBar() {
   const option = locOption?.find(o => o.value === selectedItem);
 
   const handleOnChangeProvince = useCallback((opt) => {
-    navigate(`/search?province=${encodeURIComponent(opt.value)}&type=SELL`);
+    const removeProvincePrefix = (province) => {
+      return province
+        ?.replace(/^(Tỉnh|Thành phố)\s+/i, "")
+        .trim();
+    };
+
+    navigate(`/search?province=${encodeURIComponent(removeProvincePrefix(opt.value))}&type=SELL`);
   }, [navigate]);
 
   return (

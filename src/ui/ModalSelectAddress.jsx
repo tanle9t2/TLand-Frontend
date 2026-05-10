@@ -102,11 +102,24 @@ function ModalSelectAddress({ address, setAddress }) {
     const onSubmit = useCallback((e) => {
         e.preventDefault();
         e.stopPropagation();
+        const removeProvincePrefix = (province) => {
+            return province
+                ?.replace(/^(Tỉnh|Thành phố)\s+/i, "")
+                .trim();
+        };
+
+        const removeWardPrefix = (ward) => {
+            return ward
+                ?.replace(/^(Phường|Xã|Thị trấn)\s+/i, "")
+                .trim();
+        };
+
         const addr = {
-            province: getValues().province,
-            ward: getValues().ward,
+            province: removeProvincePrefix(getValues().province),
+            ward: removeWardPrefix(getValues().ward),
             detail: getValues().detail
         };
+
         setAddress(addr);
         setOpen(false);
     }, [getValues, setAddress]);

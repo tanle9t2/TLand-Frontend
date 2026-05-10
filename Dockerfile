@@ -17,12 +17,13 @@ RUN echo 'server { \
     listen 80; \
     root /usr/share/nginx/html; \
     index index.html; \
-    location / { \
-        try_files $uri /index.html; \
-    } \
-    location /static/ { \
+    location /assets/ { \
+        try_files $uri =404; \
         expires 1y; \
-        add_header Cache-Control "public"; \
+        add_header Cache-Control "public, immutable"; \
+    } \
+    location / { \
+        try_files $uri $uri/ /index.html; \
     } \
 }' > /etc/nginx/conf.d/default.conf
 

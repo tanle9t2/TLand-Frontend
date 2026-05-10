@@ -22,7 +22,7 @@ export async function predictHouse({
 }) {
     console.log(area)
     const response = await AUTH_REQUEST.post(
-        "/rag-service/api/v1/predict/",
+        "/rag-service/api/v1/pred/pred-hcm",
         {
             area,
             floors,

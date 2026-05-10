@@ -23,6 +23,7 @@ import { AuthProvider } from "./context/AuthContext"
 import UserProfile from "./features/auth/UserProfile"
 import UserProfileData from "./features/auth/UserProfileData"
 import RealEstatePage from "./features/landingPage/RealEstatePage"
+import HousePricePage from "./pages/HousePricePage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -74,6 +75,11 @@ function App() {
               <Route path="user/setting/" element={
                 <ProtectedRoute>
                   <UserProfileData />
+                </ProtectedRoute>
+              } />
+              <Route path="dinh-gia" element={
+                <ProtectedRoute>
+                  <HousePricePage />
                 </ProtectedRoute>
               } />
 

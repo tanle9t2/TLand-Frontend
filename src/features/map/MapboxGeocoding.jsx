@@ -6,21 +6,21 @@ import useGetCoordinates from './useGetCoordinates';
 
 const MapboxGeocoding = ({ address }) => {
     const [viewState, setViewState] = useState({
-        longitude: 106.7009, // default: HCMC
+        longitude: 106.7009,
         latitude: 10.7769,
         zoom: 100,
-        pitch: 60,   // ✅ nghiêng bản đồ để nhìn 3D
+        pitch: 60,
         bearing: -17.6,
     });
     const [showPopup, setShowPopup] = useState(false);
     const [markerLocation, setMarkerLocation] = useState(null);
     const { isLoading, coordinates } = useGetCoordinates(address)
-
+    console.log(coordinates)
     useEffect(() => {
         if (isLoading || !coordinates) return;
 
-        if (coordinates?.features.length > 0) {
-            const [lng, lat] = coordinates.features[0].center;
+        if (coordinates?.raw.status === "OK") {
+            const { lng, lat } = coordinates
             setMarkerLocation({ longitude: lng, latitude: lat });
             setViewState((prev) => ({
                 ...prev,

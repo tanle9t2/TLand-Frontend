@@ -10,7 +10,7 @@ export default function useSignUp() {
         mutationFn: ({ username, lastName, firstName, email, phoneNumber, password }) =>
             signUpAPI({ username, lastName, firstName, email, phoneNumber, password }),
         onSuccess: () => {
-            login()
+            login(window.location.origin + '/');
         },
         onError: (err) => {
             toast.error(err.response.data.detail);

@@ -46,7 +46,7 @@ function AuthProvider({ children }) {
                 authenticated,
                 initialized,
                 profile,
-                login: () => keycloak.login(),
+                login: (redirectUri = window.location.origin + '/') => keycloak.login({ redirectUri }),
                 logout: () => {
                     localStorage.removeItem("token");
                     localStorage.removeItem("refreshToken");

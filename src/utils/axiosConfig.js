@@ -11,7 +11,7 @@ export const API = axios.create({
   baseURL: BASE_URL,
 });
 export const ADDRESS_API = axios.create({
-  baseURL: "https://tinhthanhpho.com/api/v1/"
+  baseURL: "https://provinces.open-api.vn/api/v2/"
 })
 
 export const AUTH_REQUEST = axios.create({
